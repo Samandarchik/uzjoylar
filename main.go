@@ -1,0 +1,3207 @@
+package main
+
+import (
+	"bytes"
+	"crypto/md5"
+	"database/sql"
+	"encoding/json"
+	"fmt"
+	"io"
+	"log"
+	"net/http"
+	"os"
+	"path/filepath"
+	"regexp"
+	"sort"
+	"strconv"
+	"strings"
+	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v4"
+	"github.com/google/uuid"
+	"github.com/gorilla/websocket"
+	_ "github.com/lib/pq"
+)
+
+// Doimiylar
+const (
+	SECRET_KEY                = "restaurant_secret_key_2024"
+	ACCESS_TOKEN_EXPIRE_HOURS = 24
+	TELEGRAM_BOT_TOKEN        = "7609705273:AAH_CsC52AiiZCeZ828HaHzYgHKpJBvSLI0"
+	TELEGRAM_GROUP_ID         = "-1002783983140"
+	UPLOAD_DIR                = "uploads"
+	MAX_FILE_SIZE             = 10 << 20 // 10MB
+)
+
+// Database instance
+var db *sql.DB
+
+// WebSocket upgrader
+var upgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
+	CheckOrigin: func(r *http.Request) bool {
+		return true // CORS uchun
+	},
+}
+
+// WebSocket mijozlari
+var clients = make(map[*websocket.Conn]bool)
+var broadcast = make(chan []byte)
+
+// Enums
+type OrderStatus string
+
+const (
+	OrderPending   OrderStatus = "pending"
+	OrderConfirmed OrderStatus = "confirmed"
+	OrderPreparing OrderStatus = "preparing"
+	OrderReady     OrderStatus = "ready"
+	OrderDelivered OrderStatus = "delivered"
+	OrderCancelled OrderStatus = "cancelled"
+)
+
+type DeliveryType string
+
+const (
+	DeliveryHome       DeliveryType = "delivery"
+	DeliveryPickup     DeliveryType = "own_withdrawal"
+	DeliveryRestaurant DeliveryType = "atTheRestaurant"
+)
+
+type PaymentMethod string
+
+const (
+	PaymentCash  PaymentMethod = "cash"
+	PaymentCard  PaymentMethod = "card"
+	PaymentClick PaymentMethod = "click"
+	PaymentPayme PaymentMethod = "payme"
+)
+
+type PaymentStatus string
+
+const (
+	PaymentPending  PaymentStatus = "pending"
+	PaymentPaid     PaymentStatus = "paid"
+	PaymentFailed   PaymentStatus = "failed"
+	PaymentRefunded PaymentStatus = "refunded"
+)
+
+// Ko'p tilli qo'llab-quvvatlash
+var TRANSLATIONS = map[string]map[string]string{
+	"uz": {
+		"success":                    "Muvaffaqiyatli",
+		"error":                      "Xatolik",
+		"not_found":                  "Topilmadi",
+		"unauthorized":               "Ruxsat etilmagan",
+		"forbidden":                  "Taqiqlangan",
+		"invalid_request":            "Noto'g'ri so'rov",
+		"phone_already_registered":   "Bu telefon raqami allaqachon ro'yxatdan o'tgan",
+		"invalid_credentials":        "Telefon raqami yoki parol noto'g'ri",
+		"user_not_found":             "Foydalanuvchi topilmadi",
+		"token_invalid":              "Token yaroqsiz",
+		"registration_successful":    "Ro'yxatdan o'tish muvaffaqiyatli",
+		"login_successful":           "Tizimga kirish muvaffaqiyatli",
+		"food_not_found":             "Ovqat topilmadi",
+		"food_created":               "Ovqat yaratildi",
+		"food_updated":               "Ovqat ma'lumotlari yangilandi",
+		"food_deleted":               "Ovqat o'chirildi",
+		"only_admin_can_manage_food": "Faqat admin ovqat boshqara oladi",
+		"order_created":              "Buyurtma yaratildi",
+		"order_not_found":            "Buyurtma topilmadi",
+		"order_cancelled":            "Buyurtma bekor qilindi",
+		"order_status_updated":       "Buyurtma holati yangilandi",
+		"food_not_available":         "Ovqat mavjud emas",
+		"invalid_quantity":           "Ovqat miqdori 0 dan katta bo'lishi kerak",
+		"order_confirmed":            "Buyurtmangiz tasdiqlandi!",
+		"new_order":                  "Yangi buyurtma!",
+		"order_id":                   "Buyurtma ID:",
+		"customer":                   "Mijoz:",
+		"phone":                      "Telefon:",
+		"time":                       "Vaqt:",
+		"order_items":                "Buyurtma tarkibi:",
+		"total_amount":               "Umumiy summa:",
+		"delivery_address":           "Yetkazib berish:",
+		"pickup":                     "O'zi olib ketish:",
+		"restaurant_table":           "Restoranda:",
+		"payment_method":             "To'lov usuli:",
+		"preparation_time":           "Tayyorlash vaqti:",
+		"additional_notes":           "Qo'shimcha:",
+		"shashlik":                   "Shashlik",
+		"milliy_taomlar":             "Milliy taomlar",
+		"ichimliklar":                "Ichimliklar",
+		"salatlar":                   "Salatlar",
+		"shirinliklar":               "Shirinliklar",
+		"delivery":                   "Yetkazib berish",
+		"own_withdrawal":             "O'zi olib ketish",
+		"at_restaurant":              "Restoranda",
+		"cash":                       "Naqd",
+		"card":                       "Karta",
+		"click":                      "Click",
+		"payme":                      "Payme",
+		"login_required":             "Buyurtma berish uchun tizimga kiring",
+		"cart_empty":                 "Savatda mahsulot yo'q",
+		"insufficient_stock":         "Yetarli miqdor yo'q",
+		"order_processing":           "Buyurtma qayta ishlanmoqda",
+		"file_uploaded":              "Fayl yuklandi",
+		"invalid_file":               "Noto'g'ri fayl",
+		"file_too_large":             "Fayl hajmi katta",
+		"order_status_pending":       "Buyurtmangiz qabul qilindi",
+		"order_status_confirmed":     "Buyurtmangiz tasdiqlandi!",
+		"order_status_preparing":     "Buyurtmangiz tayyorlanmoqda",
+		"order_status_ready":         "Buyurtmangiz tayyor!",
+		"order_status_delivered":     "Buyurtmangiz yetkazildi",
+		"order_status_cancelled":     "Buyurtmangiz bekor qilindi",
+		"review_created":             "Sharh qo'shildi",
+		"review_updated":             "Sharh yangilandi",
+		"review_deleted":             "Sharh o'chirildi",
+	},
+	"ru": {
+		"success":                    "Успешно",
+		"error":                      "Ошибка",
+		"not_found":                  "Не найдено",
+		"unauthorized":               "Неавторизован",
+		"forbidden":                  "Запрещено",
+		"invalid_request":            "Неверный запрос",
+		"phone_already_registered":   "Этот номер телефона уже зарегистрирован",
+		"invalid_credentials":        "Неверный номер телефона или пароль",
+		"user_not_found":             "Пользователь не найден",
+		"token_invalid":              "Токен недействителен",
+		"registration_successful":    "Регистрация успешна",
+		"login_successful":           "Вход выполнен успешно",
+		"food_not_found":             "Блюдо не найдено",
+		"food_created":               "Блюдо создано",
+		"food_updated":               "Информация о блюде обновлена",
+		"food_deleted":               "Блюдо удалено",
+		"only_admin_can_manage_food": "Только админ может управлять блюдами",
+		"order_created":              "Заказ создан",
+		"order_not_found":            "Заказ не найден",
+		"order_cancelled":            "Заказ отменен",
+		"order_status_updated":       "Статус заказа обновлен",
+		"food_not_available":         "Блюдо недоступно",
+		"invalid_quantity":           "Количество блюда должно быть больше 0",
+		"order_confirmed":            "Ваш заказ подтвержден!",
+		"new_order":                  "Новый заказ!",
+		"order_id":                   "ID заказа:",
+		"customer":                   "Клиент:",
+		"phone":                      "Телефон:",
+		"time":                       "Время:",
+		"order_items":                "Состав заказа:",
+		"total_amount":               "Общая сумма:",
+		"delivery_address":           "Доставка:",
+		"pickup":                     "Самовывоз:",
+		"restaurant_table":           "В ресторане:",
+		"payment_method":             "Способ оплаты:",
+		"preparation_time":           "Время приготовления:",
+		"additional_notes":           "Дополнительно:",
+		"shashlik":                   "Шашлык",
+		"milliy_taomlar":             "Национальные блюда",
+		"ichimliklar":                "Напитки",
+		"salatlar":                   "Салаты",
+		"shirinliklar":               "Десерты",
+		"delivery":                   "Доставка",
+		"own_withdrawal":             "Самовывоз",
+		"at_restaurant":              "В ресторане",
+		"cash":                       "Наличные",
+		"card":                       "Карта",
+		"click":                      "Click",
+		"payme":                      "Payme",
+		"login_required":             "Войдите в систему для оформления заказа",
+		"cart_empty":                 "Корзина пуста",
+		"insufficient_stock":         "Недостаточное количество",
+		"order_processing":           "Заказ обрабатывается",
+		"file_uploaded":              "Файл загружен",
+		"invalid_file":               "Неверный файл",
+		"file_too_large":             "Файл слишком большой",
+		"order_status_pending":       "Ваш заказ принят",
+		"order_status_confirmed":     "Ваш заказ подтвержден!",
+		"order_status_preparing":     "Ваш заказ готовится",
+		"order_status_ready":         "Ваш заказ готов!",
+		"order_status_delivered":     "Ваш заказ доставлен",
+		"order_status_cancelled":     "Ваш заказ отменен",
+		"review_created":             "Отзыв добавлен",
+		"review_updated":             "Отзыв обновлен",
+		"review_deleted":             "Отзыв удален",
+	},
+	"en": {
+		"success":                    "Success",
+		"error":                      "Error",
+		"not_found":                  "Not found",
+		"unauthorized":               "Unauthorized",
+		"forbidden":                  "Forbidden",
+		"invalid_request":            "Invalid request",
+		"phone_already_registered":   "This phone number is already registered",
+		"invalid_credentials":        "Invalid phone number or password",
+		"user_not_found":             "User not found",
+		"token_invalid":              "Token is invalid",
+		"registration_successful":    "Registration successful",
+		"login_successful":           "Login successful",
+		"food_not_found":             "Food not found",
+		"food_created":               "Food created",
+		"food_updated":               "Food information updated",
+		"food_deleted":               "Food deleted",
+		"only_admin_can_manage_food": "Only admin can manage food",
+		"order_created":              "Order created",
+		"order_not_found":            "Order not found",
+		"order_cancelled":            "Order cancelled",
+		"order_status_updated":       "Order status updated",
+		"food_not_available":         "Food not available",
+		"invalid_quantity":           "Food quantity must be greater than 0",
+		"order_confirmed":            "Your order has been confirmed!",
+		"new_order":                  "New order!",
+		"order_id":                   "Order ID:",
+		"customer":                   "Customer:",
+		"phone":                      "Phone:",
+		"time":                       "Time:",
+		"order_items":                "Order items:",
+		"total_amount":               "Total amount:",
+		"delivery_address":           "Delivery:",
+		"pickup":                     "Pickup:",
+		"restaurant_table":           "At restaurant:",
+		"payment_method":             "Payment method:",
+		"preparation_time":           "Preparation time:",
+		"additional_notes":           "Additional:",
+		"shashlik":                   "Barbecue",
+		"milliy_taomlar":             "National dishes",
+		"ichimliklar":                "Drinks",
+		"salatlar":                   "Salads",
+		"shirinliklar":               "Desserts",
+		"delivery":                   "Delivery",
+		"own_withdrawal":             "Pickup",
+		"at_restaurant":              "At restaurant",
+		"cash":                       "Cash",
+		"card":                       "Card",
+		"click":                      "Click",
+		"payme":                      "Payme",
+		"login_required":             "Please login to place an order",
+		"cart_empty":                 "Cart is empty",
+		"insufficient_stock":         "Insufficient stock",
+		"order_processing":           "Order is being processed",
+		"file_uploaded":              "File uploaded",
+		"invalid_file":               "Invalid file",
+		"file_too_large":             "File too large",
+		"order_status_pending":       "Your order has been received",
+		"order_status_confirmed":     "Your order has been confirmed!",
+		"order_status_preparing":     "Your order is being prepared",
+		"order_status_ready":         "Your order is ready!",
+		"order_status_delivered":     "Your order has been delivered",
+		"order_status_cancelled":     "Your order has been cancelled",
+		"review_created":             "Review added",
+		"review_updated":             "Review updated",
+		"review_deleted":             "Review deleted",
+	},
+}
+
+// Strukturalar
+type User struct {
+	ID        string    `json:"id" db:"id"`
+	Number    string    `json:"number" db:"number"`
+	Password  string    `json:"password,omitempty" db:"password"`
+	Role      string    `json:"role" db:"role"`
+	FullName  string    `json:"full_name" db:"full_name"`
+	Email     *string   `json:"email,omitempty" db:"email"`
+	CreatedAt time.Time `json:"created_at" db:"created_at"`
+	IsActive  bool      `json:"is_active" db:"is_active"`
+	TgID      *int64    `json:"tg_id,omitempty" db:"tg_id"`
+	Language  string    `json:"language" db:"language"`
+}
+
+type Food struct {
+	ID              string              `json:"id" db:"id"`
+	Names           map[string]string   `json:"names,omitempty" db:"names"`
+	Name            string              `json:"name" db:"name"`
+	Descriptions    map[string]string   `json:"descriptions,omitempty" db:"descriptions"`
+	Description     string              `json:"description" db:"description"`
+	Category        string              `json:"category" db:"category"`
+	CategoryName    string              `json:"category_name,omitempty"`
+	Price           int                 `json:"price" db:"price"`
+	IsThere         bool                `json:"isThere" db:"is_there"`
+	ImageURL        string              `json:"imageUrl" db:"image_url"`
+	Ingredients     map[string][]string `json:"ingredients" db:"ingredients"`
+	Allergens       map[string][]string `json:"allergens" db:"allergens"`
+	Rating          float64             `json:"rating" db:"rating"`
+	ReviewCount     int                 `json:"review_count" db:"review_count"`
+	PreparationTime int                 `json:"preparation_time" db:"preparation_time"`
+	Stock           int                 `json:"stock" db:"stock"`
+	IsPopular       bool                `json:"is_popular" db:"is_popular"`
+	Discount        int                 `json:"discount" db:"discount"`
+	OriginalPrice   int                 `json:"original_price"`
+	Comment         string              `json:"comment" db:"comment"`
+	CreatedAt       time.Time           `json:"created_at" db:"created_at"`
+	UpdatedAt       time.Time           `json:"updated_at" db:"updated_at"`
+}
+
+type OrderFood struct {
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Category    string `json:"category"`
+	Price       int    `json:"price"`
+	Description string `json:"description"`
+	ImageURL    string `json:"imageUrl"`
+	Count       int    `json:"count"`
+	TotalPrice  int    `json:"total_price"`
+}
+
+type PaymentInfo struct {
+	Method        PaymentMethod `json:"method"`
+	Status        PaymentStatus `json:"status"`
+	Amount        int           `json:"amount"`
+	TransactionID *string       `json:"transaction_id,omitempty"`
+	PaymentTime   *time.Time    `json:"payment_time,omitempty"`
+}
+
+type DeliveryInfo struct {
+	Type       string   `json:"type"`
+	Address    *string  `json:"address,omitempty"`
+	Latitude   *float64 `json:"latitude,omitempty"`
+	Longitude  *float64 `json:"longitude,omitempty"`
+	Phone      *string  `json:"phone,omitempty"`
+	TableID    *string  `json:"table_id,omitempty"`
+	TableName  *string  `json:"table_name,omitempty"`
+	PickupCode *string  `json:"pickup_code,omitempty"`
+}
+
+type Order struct {
+	OrderID             string                 `json:"order_id" db:"order_id"`
+	UserNumber          string                 `json:"user_number" db:"user_number"`
+	UserName            string                 `json:"user_name" db:"user_name"`
+	Foods               []OrderFood            `json:"foods" db:"foods"`
+	TotalPrice          int                    `json:"total_price" db:"total_price"`
+	OrderTime           time.Time              `json:"order_time" db:"order_time"`
+	DeliveryType        string                 `json:"delivery_type" db:"delivery_type"`
+	DeliveryInfo        map[string]interface{} `json:"delivery_info" db:"delivery_info"`
+	Status              OrderStatus            `json:"status" db:"status"`
+	PaymentInfo         PaymentInfo            `json:"payment_info" db:"payment_info"`
+	SpecialInstructions *string                `json:"special_instructions,omitempty" db:"special_instructions"`
+	EstimatedTime       *int                   `json:"estimated_time,omitempty" db:"estimated_time"`
+	DeliveredAt         *time.Time             `json:"delivered_at,omitempty" db:"delivered_at"`
+	StatusHistory       []StatusUpdate         `json:"status_history,omitempty" db:"status_history"`
+	CreatedAt           time.Time              `json:"created_at" db:"created_at"`
+	UpdatedAt           time.Time              `json:"updated_at" db:"updated_at"`
+}
+
+type StatusUpdate struct {
+	Status    OrderStatus `json:"status"`
+	Timestamp time.Time   `json:"timestamp"`
+	Note      string      `json:"note,omitempty"`
+}
+
+type Review struct {
+	ID        string    `json:"id" db:"id"`
+	UserID    string    `json:"user_id" db:"user_id"`
+	UserName  string    `json:"user_name,omitempty"`
+	FoodID    string    `json:"food_id" db:"food_id"`
+	Rating    int       `json:"rating" db:"rating"`
+	Comment   string    `json:"comment" db:"comment"`
+	CreatedAt time.Time `json:"created_at" db:"created_at"`
+	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
+}
+
+type FileUpload struct {
+	ID           string    `json:"id" db:"id"`
+	OriginalName string    `json:"original_name" db:"original_name"`
+	FileName     string    `json:"file_name" db:"file_name"`
+	FilePath     string    `json:"file_path" db:"file_path"`
+	FileSize     int64     `json:"file_size" db:"file_size"`
+	MimeType     string    `json:"mime_type" db:"mime_type"`
+	URL          string    `json:"url" db:"url"`
+	UploadedBy   string    `json:"uploaded_by" db:"uploaded_by"`
+	CreatedAt    time.Time `json:"created_at" db:"created_at"`
+}
+
+// Request/Response strukturalar
+type LoginRequest struct {
+	Number   string `json:"number" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}
+
+type RegisterRequest struct {
+	Number   string  `json:"number" binding:"required"`
+	Password string  `json:"password" binding:"required"`
+	FullName string  `json:"full_name" binding:"required"`
+	Email    *string `json:"email,omitempty"`
+	TgID     *int64  `json:"tg_id,omitempty"`
+	Language string  `json:"language,omitempty"`
+}
+
+type LoginResponse struct {
+	Token    string `json:"token"`
+	Role     string `json:"role"`
+	UserID   string `json:"user_id"`
+	Language string `json:"language"`
+}
+
+type FoodCreate struct {
+	NameUz          string   `json:"nameUz" binding:"required"`
+	NameRu          string   `json:"nameRu" binding:"required"`
+	NameEn          string   `json:"nameEn" binding:"required"`
+	DescriptionUz   string   `json:"descriptionUz" binding:"required"`
+	DescriptionRu   string   `json:"descriptionRu" binding:"required"`
+	DescriptionEn   string   `json:"descriptionEn" binding:"required"`
+	Category        string   `json:"category" binding:"required"`
+	Price           int      `json:"price" binding:"required"`
+	IsThere         bool     `json:"isThere"`
+	ImageURL        string   `json:"imageUrl"`
+	IngredientsUz   []string `json:"ingredientsUz,omitempty"`
+	IngredientsRu   []string `json:"ingredientsRu,omitempty"`
+	IngredientsEn   []string `json:"ingredientsEn,omitempty"`
+	AllergensUz     []string `json:"allergensUz,omitempty"`
+	AllergensRu     []string `json:"allergensRu,omitempty"`
+	AllergensEn     []string `json:"allergensEn,omitempty"`
+	PreparationTime int      `json:"preparation_time,omitempty"`
+	Stock           int      `json:"stock,omitempty"`
+	IsPopular       bool     `json:"is_popular,omitempty"`
+	Discount        int      `json:"discount,omitempty"`
+	Comment         string   `json:"comment,omitempty"`
+}
+
+type CartItem struct {
+	FoodID   string `json:"food_id" binding:"required"`
+	Quantity int    `json:"quantity" binding:"required,min=1"`
+}
+
+type OrderRequest struct {
+	Items               []CartItem             `json:"items" binding:"required"`
+	DeliveryType        DeliveryType           `json:"delivery_type" binding:"required"`
+	DeliveryInfo        map[string]interface{} `json:"delivery_info"`
+	PaymentMethod       PaymentMethod          `json:"payment_method" binding:"required"`
+	SpecialInstructions *string                `json:"special_instructions,omitempty"`
+	CustomerInfo        *CustomerInfo          `json:"customer_info,omitempty"`
+}
+
+type CustomerInfo struct {
+	Name  string `json:"name,omitempty"`
+	Phone string `json:"phone,omitempty"`
+	Email string `json:"email,omitempty"`
+}
+
+type ReviewCreate struct {
+	FoodID  string `json:"food_id" binding:"required"`
+	Rating  int    `json:"rating" binding:"required,min=1,max=5"`
+	Comment string `json:"comment" binding:"required"`
+}
+
+type ReviewUpdate struct {
+	Rating  *int    `json:"rating,omitempty"`
+	Comment *string `json:"comment,omitempty"`
+}
+
+type LanguageRequest struct {
+	Language string `json:"language" binding:"required"`
+}
+
+// Telegram strukturalar
+type TelegramMessage struct {
+	ChatID string `json:"chat_id"`
+	Text   string `json:"text"`
+}
+
+// Claims JWT uchun
+type Claims struct {
+	Number string `json:"sub"`
+	Role   string `json:"role"`
+	UserID string `json:"user_id"`
+	jwt.RegisteredClaims
+}
+
+// Restaurant tables
+var RestaurantTables = map[string]string{
+	"Zal-1 Stol-1": "93e05d01c3304b3b9dc963db187dbb51",
+	"Zal-1 Stol-2": "73d6827a734a43b6ad779b5979bb9c6a",
+	"Zal-1 Stol-3": "dc6e76e87f9e42a08a4e1198fc5f89a0",
+	"Zal-1 Stol-4": "70a53b0ac3264fce88d9a4b7d3a7fa5e",
+}
+
+// Daily order counter
+var DailyOrderCounter = make(map[string]int)
+
+// WebSocket uchun xabar turlari
+type WSMessage struct {
+	Type    string      `json:"type"`
+	Data    interface{} `json:"data"`
+	OrderID string      `json:"order_id,omitempty"`
+}
+
+// ========== DATABASE FUNCTIONS ==========
+
+func initDatabase() error {
+	var err error
+
+	// Database connection string
+	dbHost := os.Getenv("DB_HOST")
+	if dbHost == "" {
+		dbHost = "localhost"
+	}
+	dbPort := os.Getenv("DB_PORT")
+	if dbPort == "" {
+		dbPort = "5432"
+	}
+	dbUser := os.Getenv("DB_USER")
+	if dbUser == "" {
+		dbUser = "postgres"
+	}
+	dbPassword := os.Getenv("DB_PASSWORD")
+	if dbPassword == "" {
+		dbPassword = "password"
+	}
+	dbName := os.Getenv("DB_NAME")
+	if dbName == "" {
+		dbName = "restaurant_db"
+	}
+
+	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		dbHost, dbPort, dbUser, dbPassword, dbName)
+
+	db, err = sql.Open("postgres", connStr)
+	if err != nil {
+		return fmt.Errorf("Ma'lumotlar bazasiga ulanishda xatolik: %v", err)
+	}
+
+	// Test ulanish
+	if err = db.Ping(); err != nil {
+		return fmt.Errorf("Ma'lumotlar bazasini tekshirishda xatolik: %v", err)
+	}
+
+	// Jadvallarni yaratish
+	if err = createTables(); err != nil {
+		return fmt.Errorf("Jadvallarni yaratishda xatolik: %v", err)
+	}
+
+	log.Println("✅ PostgreSQL ma'lumotlar bazasi muvaffaqiyatli ulandi")
+	return nil
+}
+
+func createTables() error {
+	queries := []string{
+		// Users table
+		`CREATE TABLE IF NOT EXISTS users (
+			id VARCHAR(255) PRIMARY KEY,
+			number VARCHAR(20) UNIQUE NOT NULL,
+			password VARCHAR(255) NOT NULL,
+			role VARCHAR(20) DEFAULT 'user',
+			full_name VARCHAR(255) NOT NULL,
+			email VARCHAR(255),
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			is_active BOOLEAN DEFAULT true,
+			tg_id BIGINT,
+			language VARCHAR(5) DEFAULT 'uz'
+		)`,
+
+		// Foods table
+		`CREATE TABLE IF NOT EXISTS foods (
+			id VARCHAR(255) PRIMARY KEY,
+			names JSONB,
+			name VARCHAR(255) NOT NULL,
+			descriptions JSONB,
+			description TEXT,
+			category VARCHAR(100) NOT NULL,
+			price INTEGER NOT NULL,
+			is_there BOOLEAN DEFAULT true,
+			image_url TEXT,
+			ingredients JSONB,
+			allergens JSONB,
+			rating DECIMAL(3,2) DEFAULT 0.0,
+			review_count INTEGER DEFAULT 0,
+			preparation_time INTEGER DEFAULT 15,
+			stock INTEGER DEFAULT 100,
+			is_popular BOOLEAN DEFAULT false,
+			discount INTEGER DEFAULT 0,
+			comment TEXT,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		)`,
+
+		// Orders table
+		`CREATE TABLE IF NOT EXISTS orders (
+			order_id VARCHAR(255) PRIMARY KEY,
+			user_number VARCHAR(20) NOT NULL,
+			user_name VARCHAR(255) NOT NULL,
+			foods JSONB NOT NULL,
+			total_price INTEGER NOT NULL,
+			order_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			delivery_type VARCHAR(50) NOT NULL,
+			delivery_info JSONB,
+			status VARCHAR(20) DEFAULT 'pending',
+			payment_info JSONB NOT NULL,
+			special_instructions TEXT,
+			estimated_time INTEGER,
+			delivered_at TIMESTAMP,
+			status_history JSONB,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		)`,
+
+		// Reviews table
+		`CREATE TABLE IF NOT EXISTS reviews (
+			id VARCHAR(255) PRIMARY KEY,
+			user_id VARCHAR(255) NOT NULL,
+			food_id VARCHAR(255) NOT NULL,
+			rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
+			comment TEXT NOT NULL,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			FOREIGN KEY (food_id) REFERENCES foods(id) ON DELETE CASCADE,
+			UNIQUE(user_id, food_id)
+		)`,
+
+		// File uploads table
+		`CREATE TABLE IF NOT EXISTS file_uploads (
+			id VARCHAR(255) PRIMARY KEY,
+			original_name VARCHAR(255) NOT NULL,
+			file_name VARCHAR(255) NOT NULL,
+			file_path VARCHAR(500) NOT NULL,
+			file_size BIGINT NOT NULL,
+			mime_type VARCHAR(100) NOT NULL,
+			url VARCHAR(500) NOT NULL,
+			uploaded_by VARCHAR(255),
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		)`,
+
+		// Indexes
+		`CREATE INDEX IF NOT EXISTS idx_foods_category ON foods(category)`,
+		`CREATE INDEX IF NOT EXISTS idx_foods_is_there ON foods(is_there)`,
+		`CREATE INDEX IF NOT EXISTS idx_foods_is_popular ON foods(is_popular)`,
+		`CREATE INDEX IF NOT EXISTS idx_orders_user_number ON orders(user_number)`,
+		`CREATE INDEX IF NOT EXISTS idx_orders_status ON orders(status)`,
+		`CREATE INDEX IF NOT EXISTS idx_orders_order_time ON orders(order_time)`,
+		`CREATE INDEX IF NOT EXISTS idx_reviews_food_id ON reviews(food_id)`,
+		`CREATE INDEX IF NOT EXISTS idx_reviews_user_id ON reviews(user_id)`,
+	}
+
+	for _, query := range queries {
+		if _, err := db.Exec(query); err != nil {
+			return fmt.Errorf("Jadval yaratishda xatolik: %v", err)
+		}
+	}
+
+	return nil
+}
+
+// ========== UTILITY FUNCTIONS ==========
+
+func getTranslation(key, lang string) string {
+	if lang == "" {
+		lang = "uz"
+	}
+	if translations, exists := TRANSLATIONS[lang]; exists {
+		if translation, exists := translations[key]; exists {
+			return translation
+		}
+	}
+	// Default o'zbek tilida qaytarish
+	if translations, exists := TRANSLATIONS["uz"]; exists {
+		if translation, exists := translations[key]; exists {
+			return translation
+		}
+	}
+	return key
+}
+
+func getUserLanguage(headers map[string][]string) string {
+	acceptLang := headers["Accept-Language"]
+	if len(acceptLang) > 0 {
+		lang := strings.Split(acceptLang[0], ",")[0]
+		if strings.Contains(lang, "-") {
+			lang = strings.Split(lang, "-")[0]
+		}
+		lang = strings.ToLower(lang)
+		supportedLangs := []string{"uz", "ru", "en"}
+		for _, supported := range supportedLangs {
+			if lang == supported {
+				return lang
+			}
+		}
+	}
+	return "uz"
+}
+
+func createResponse(messageKey, lang string) gin.H {
+	message := getTranslation(messageKey, lang)
+	return gin.H{
+		"message":  message,
+		"language": lang,
+	}
+}
+
+func generateID(prefix string) string {
+	return fmt.Sprintf("%s_%s", prefix, uuid.New().String()[:8])
+}
+
+func generateFoodID() string {
+	// Eng oxirgi ID ni topish
+	var lastID string
+	query := `SELECT id FROM foods WHERE id LIKE 'amur_%' ORDER BY 
+			  CAST(SUBSTRING(id FROM 'amur_(.*)') AS INTEGER) DESC LIMIT 1`
+
+	err := db.QueryRow(query).Scan(&lastID)
+	if err != nil {
+		// Birinchi ovqat bo'lsa
+		return "amur_1"
+	}
+
+	// ID dan raqamni ajratib olish
+	re := regexp.MustCompile(`amur_(\d+)`)
+	matches := re.FindStringSubmatch(lastID)
+	if len(matches) != 2 {
+		return "amur_1"
+	}
+
+	// Raqamni 1 ga oshirish
+	num, err := strconv.Atoi(matches[1])
+	if err != nil {
+		return "amur_1"
+	}
+
+	return fmt.Sprintf("amur_%d", num+1)
+}
+
+func generateOrderID() string {
+	today := time.Now().Format("2006-01-02")
+
+	// Daily counter-ni database dan olish yoki yaratish
+	var count int
+	query := `SELECT COUNT(*) FROM orders WHERE DATE(order_time) = $1`
+	err := db.QueryRow(query, today).Scan(&count)
+	if err != nil {
+		log.Printf("Order count olishda xatolik: %v", err)
+		count = 0
+	}
+
+	count++
+	return fmt.Sprintf("%s-%d", today, count)
+}
+
+func hashPassword(password string) string {
+	hash := md5.Sum([]byte(password))
+	return fmt.Sprintf("%x", hash)
+}
+
+func createToken(user *User) (string, error) {
+	expirationTime := time.Now().Add(ACCESS_TOKEN_EXPIRE_HOURS * time.Hour)
+	claims := &Claims{
+		Number: user.Number,
+		Role:   user.Role,
+		UserID: user.ID,
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(expirationTime),
+		},
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	return token.SignedString([]byte(SECRET_KEY))
+}
+
+func getTableNameByID(tableID string) string {
+	for tableName, id := range RestaurantTables {
+		if id == tableID {
+			return tableName
+		}
+	}
+	return "Noma'lum stol"
+}
+
+func getHostURL(c *gin.Context) string {
+	scheme := "http"
+	if c.Request.TLS != nil {
+		scheme = "https"
+	}
+	return fmt.Sprintf("%s://%s", scheme, c.Request.Host)
+}
+
+func cleanFileName(name string) string {
+	// Fayl nomini tozalash (faqat harflar, raqamlar va - _ .)
+	re := regexp.MustCompile(`[^a-zA-Z0-9\-_.]`)
+	cleaned := re.ReplaceAllString(name, "_")
+
+	// Uzunligini cheklash
+	if len(cleaned) > 50 {
+		ext := filepath.Ext(cleaned)
+		nameWithoutExt := strings.TrimSuffix(cleaned, ext)
+		if len(nameWithoutExt) > 46 {
+			nameWithoutExt = nameWithoutExt[:46]
+		}
+		cleaned = nameWithoutExt + ext
+	}
+
+	return cleaned
+}
+
+// ========== FILE UPLOAD FUNCTIONS ==========
+
+func uploadFile(c *gin.Context) {
+	lang := getUserLanguage(c.Request.Header)
+
+	// Foydalanuvchi tekshiruvi (ixtiyoriy)
+	var uploaderID string
+	if userInterface, exists := c.Get("user"); exists {
+		user := userInterface.(*Claims)
+		uploaderID = user.UserID
+	}
+
+	// Faylni olish
+	file, fileHeader, err := c.Request.FormFile("file")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Fayl tanlanmadi"})
+		return
+	}
+	defer file.Close()
+
+	// Fayl hajmini tekshirish
+	if fileHeader.Size > MAX_FILE_SIZE {
+		c.JSON(http.StatusBadRequest, createResponse("file_too_large", lang))
+		return
+	}
+
+	// Fayl turini tekshirish
+	allowedTypes := map[string]bool{
+		"image/jpeg": true,
+		"image/jpg":  true,
+		"image/png":  true,
+		"image/gif":  true,
+		"image/webp": true,
+	}
+
+	contentType := fileHeader.Header.Get("Content-Type")
+	if !allowedTypes[contentType] {
+		c.JSON(http.StatusBadRequest, createResponse("invalid_file", lang))
+		return
+	}
+
+	// Upload papkasini yaratish
+	if _, err := os.Stat(UPLOAD_DIR); os.IsNotExist(err) {
+		os.MkdirAll(UPLOAD_DIR, 0755)
+	}
+
+	// Ovqat nomi bilan fayl nomi yaratish
+	originalName := strings.TrimSuffix(fileHeader.Filename, filepath.Ext(fileHeader.Filename))
+	cleanedName := cleanFileName(originalName)
+	ext := filepath.Ext(fileHeader.Filename)
+
+	// Noyob fayl nomi yaratish (ovqat nomi + vaqt)
+	fileName := fmt.Sprintf("%s_%d%s", cleanedName, time.Now().Unix(), ext)
+	filePath := filepath.Join(UPLOAD_DIR, fileName)
+
+	// Faylni saqlash
+	dst, err := os.Create(filePath)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Faylni saqlashda xatolik"})
+		return
+	}
+	defer dst.Close()
+
+	if _, err := io.Copy(dst, file); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Faylni nusxalashda xatolik"})
+		return
+	}
+
+	// URL yaratish
+	fileURL := fmt.Sprintf("%s/uploads/%s", getHostURL(c), fileName)
+
+	// Ma'lumotlar bazasiga saqlash
+	fileUpload := &FileUpload{
+		ID:           generateID("file"),
+		OriginalName: fileHeader.Filename,
+		FileName:     fileName,
+		FilePath:     filePath,
+		FileSize:     fileHeader.Size,
+		MimeType:     contentType,
+		URL:          fileURL,
+		UploadedBy:   uploaderID,
+		CreatedAt:    time.Now(),
+	}
+
+	query := `INSERT INTO file_uploads (id, original_name, file_name, file_path, file_size, mime_type, url, uploaded_by, created_at) 
+			  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`
+
+	_, err = db.Exec(query, fileUpload.ID, fileUpload.OriginalName, fileUpload.FileName,
+		fileUpload.FilePath, fileUpload.FileSize, fileUpload.MimeType, fileUpload.URL,
+		fileUpload.UploadedBy, fileUpload.CreatedAt)
+
+	if err != nil {
+		log.Printf("Fayl ma'lumotlarini saqlashda xatolik: %v", err)
+		// Faylni o'chirish
+		os.Remove(filePath)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotni saqlashda xatolik"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message":    getTranslation("file_uploaded", lang),
+		"file":       fileUpload,
+		"url":        fileURL,
+		"public_url": fileURL,
+	})
+}
+
+func getUploadedFiles(c *gin.Context) {
+	page, _ := strconv.Atoi(c.Query("page"))
+	limit, _ := strconv.Atoi(c.Query("limit"))
+	fileType := c.Query("type") // image, document
+
+	if page <= 0 {
+		page = 1
+	}
+	if limit <= 0 {
+		limit = 20
+	}
+
+	offset := (page - 1) * limit
+
+	// Query yaratish
+	query := `SELECT id, original_name, file_name, file_path, file_size, mime_type, url, uploaded_by, created_at 
+			  FROM file_uploads WHERE 1=1`
+	args := []interface{}{}
+	argIndex := 1
+
+	if fileType == "image" {
+		query += fmt.Sprintf(" AND mime_type LIKE 'image/%%' ORDER BY created_at DESC LIMIT $%d OFFSET $%d", argIndex, argIndex+1)
+		args = append(args, limit, offset)
+	} else {
+		query += fmt.Sprintf(" ORDER BY created_at DESC LIMIT $%d OFFSET $%d", argIndex, argIndex+1)
+		args = append(args, limit, offset)
+	}
+
+	rows, err := db.Query(query, args...)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
+		return
+	}
+	defer rows.Close()
+
+	var files []FileUpload
+	for rows.Next() {
+		var file FileUpload
+		err := rows.Scan(&file.ID, &file.OriginalName, &file.FileName, &file.FilePath,
+			&file.FileSize, &file.MimeType, &file.URL, &file.UploadedBy, &file.CreatedAt)
+		if err != nil {
+			continue
+		}
+		files = append(files, file)
+	}
+
+	// Total count
+	countQuery := `SELECT COUNT(*) FROM file_uploads`
+	if fileType == "image" {
+		countQuery += " WHERE mime_type LIKE 'image/%'"
+	}
+
+	var total int
+	db.QueryRow(countQuery).Scan(&total)
+
+	c.JSON(http.StatusOK, gin.H{
+		"files": files,
+		"pagination": gin.H{
+			"page":        page,
+			"limit":       limit,
+			"total":       total,
+			"total_pages": (total + limit - 1) / limit,
+		},
+	})
+}
+
+func deleteFile(c *gin.Context) {
+	fileID := c.Param("file_id")
+	lang := getUserLanguage(c.Request.Header)
+
+	// Faylni ma'lumotlar bazasidan olish
+	var file FileUpload
+	query := `SELECT id, file_path FROM file_uploads WHERE id = $1`
+	err := db.QueryRow(query, fileID).Scan(&file.ID, &file.FilePath)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			c.JSON(http.StatusNotFound, createResponse("not_found", lang))
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
+		return
+	}
+
+	// Faylni disk dan o'chirish
+	if err := os.Remove(file.FilePath); err != nil {
+		log.Printf("Faylni o'chirishda xatolik: %v", err)
+	}
+
+	// Ma'lumotlar bazasidan o'chirish
+	deleteQuery := `DELETE FROM file_uploads WHERE id = $1`
+	_, err = db.Exec(deleteQuery, fileID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotni o'chirishda xatolik"})
+		return
+	}
+
+	c.JSON(http.StatusOK, createResponse("success", lang))
+}
+
+// ========== TELEGRAM BOT FUNCTIONS ==========
+
+func sendTelegramMessage(message string) error {
+	url := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", TELEGRAM_BOT_TOKEN)
+
+	payload := TelegramMessage{
+		ChatID: TELEGRAM_GROUP_ID,
+		Text:   message,
+	}
+
+	jsonData, err := json.Marshal(payload)
+	if err != nil {
+		return err
+	}
+
+	resp, err := http.Post(url, "application/json", bytes.NewBuffer(jsonData))
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return fmt.Errorf("Telegram API xatolik: %s", string(body))
+	}
+
+	return nil
+}
+
+func sendTelegramMessageToUser(userTgID int64, message string) error {
+	url := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", TELEGRAM_BOT_TOKEN)
+
+	payload := TelegramMessage{
+		ChatID: fmt.Sprintf("%d", userTgID),
+		Text:   message,
+	}
+
+	jsonData, err := json.Marshal(payload)
+	if err != nil {
+		return err
+	}
+
+	resp, err := http.Post(url, "application/json", bytes.NewBuffer(jsonData))
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return fmt.Errorf("Telegram API xatolik: %s", string(body))
+	}
+
+	return nil
+}
+
+func formatOrderForTelegram(order *Order, lang string) string {
+	message := fmt.Sprintf("🍽️ %s\n\n", getTranslation("new_order", lang))
+	message += fmt.Sprintf("📋 %s %s\n", getTranslation("order_id", lang), order.OrderID)
+	message += fmt.Sprintf("👤 %s %s\n", getTranslation("customer", lang), order.UserName)
+	message += fmt.Sprintf("📞 %s %s\n", getTranslation("phone", lang), order.UserNumber)
+	message += fmt.Sprintf("🕐 %s %s\n\n", getTranslation("time", lang), order.OrderTime.Format("15:04"))
+
+	message += fmt.Sprintf("🍕 %s\n", getTranslation("order_items", lang))
+	for _, food := range order.Foods {
+		message += fmt.Sprintf("• %s x%d = %d so'm\n", food.Name, food.Count, food.TotalPrice)
+	}
+
+	message += fmt.Sprintf("\n💰 %s %d so'm\n", getTranslation("total_amount", lang), order.TotalPrice)
+
+	// Yetkazib berish ma'lumotlari
+	switch order.DeliveryType {
+	case "delivery":
+		if address, ok := order.DeliveryInfo["address"].(string); ok {
+			message += fmt.Sprintf("🚚 %s %s\n", getTranslation("delivery_address", lang), address)
+		}
+		if lat, ok := order.DeliveryInfo["latitude"].(float64); ok {
+			if lng, ok := order.DeliveryInfo["longitude"].(float64); ok {
+				message += fmt.Sprintf("📍 Koordinatalar: %.6f, %.6f\n", lat, lng)
+			}
+		}
+	case "own_withdrawal":
+		message += fmt.Sprintf("🏪 %s\n", getTranslation("pickup", lang))
+	case "atTheRestaurant":
+		if tableName, ok := order.DeliveryInfo["table_name"].(string); ok {
+			message += fmt.Sprintf("🍽️ %s %s\n", getTranslation("restaurant_table", lang), tableName)
+		}
+	}
+
+	message += fmt.Sprintf("💳 %s %s\n", getTranslation("payment_method", lang),
+		getTranslation(string(order.PaymentInfo.Method), lang))
+
+	if order.EstimatedTime != nil {
+		message += fmt.Sprintf("⏱️ %s %d daqiqa\n", getTranslation("preparation_time", lang), *order.EstimatedTime)
+	}
+
+	if order.SpecialInstructions != nil && *order.SpecialInstructions != "" {
+		message += fmt.Sprintf("📝 %s %s\n", getTranslation("additional_notes", lang), *order.SpecialInstructions)
+	}
+
+	return message
+}
+
+func formatOrderStatusUpdateForUser(order *Order, lang string) string {
+	statusKey := fmt.Sprintf("order_status_%s", string(order.Status))
+	statusMessage := getTranslation(statusKey, lang)
+
+	message := fmt.Sprintf("📋 Buyurtma: %s\n", order.OrderID)
+	message += fmt.Sprintf("📍 Status: %s\n\n", statusMessage)
+
+	if order.Status == OrderReady {
+		message += "🎉 Buyurtmangiz tayyor! Iltimos, olib ketishga keling.\n"
+	} else if order.Status == OrderDelivered {
+		message += "✅ Buyurtmangiz muvaffaqiyatli yetkazildi. Rahmat!\n"
+	} else if order.Status == OrderCancelled {
+		message += "❌ Buyurtmangiz bekor qilindi.\n"
+	}
+
+	return message
+}
+
+// ========== WEBSOCKET FUNCTIONS ==========
+
+func handleWebSocket(c *gin.Context) {
+	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
+	if err != nil {
+		log.Printf("WebSocket upgrade xatoligi: %v", err)
+		return
+	}
+	defer conn.Close()
+
+	clients[conn] = true
+	log.Printf("WebSocket mijoz ulandi. Jami mijozlar: %d", len(clients))
+
+	for {
+		_, _, err := conn.ReadMessage()
+		if err != nil {
+			log.Printf("WebSocket o'qish xatoligi: %v", err)
+			delete(clients, conn)
+			log.Printf("WebSocket mijoz uzildi. Qolgan mijozlar: %d", len(clients))
+			break
+		}
+	}
+}
+
+func broadcastToClients(message WSMessage) {
+	jsonData, _ := json.Marshal(message)
+	for client := range clients {
+		err := client.WriteJSON(message)
+		if err != nil {
+			log.Printf("WebSocket yozish xatoligi: %v", err)
+			client.Close()
+			delete(clients, client)
+		}
+	}
+	log.Printf("WebSocket xabar yuborildi: %s", string(jsonData))
+}
+
+func sendOrderUpdate(orderID string, status OrderStatus, message string) {
+	wsMessage := WSMessage{
+		Type:    "order_update",
+		OrderID: orderID,
+		Data: gin.H{
+			"order_id": orderID,
+			"status":   status,
+			"message":  message,
+			"time":     time.Now(),
+		},
+	}
+	broadcastToClients(wsMessage)
+}
+
+func sendNewOrderNotification(order *Order) {
+	wsMessage := WSMessage{
+		Type:    "new_order",
+		OrderID: order.OrderID,
+		Data:    order,
+	}
+	broadcastToClients(wsMessage)
+
+	// Telegram xabar yuborish (admin gruppasiga)
+	go func() {
+		telegramMessage := formatOrderForTelegram(order, "uz")
+		if err := sendTelegramMessage(telegramMessage); err != nil {
+			log.Printf("Telegram xabar yuborishda xatolik: %v", err)
+		} else {
+			log.Printf("Telegram xabar yuborildi: %s", order.OrderID)
+		}
+	}()
+}
+
+// ========== MIDDLEWARE ==========
+
+func corsMiddleware() gin.HandlerFunc {
+	return gin.HandlerFunc(func(c *gin.Context) {
+		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Access-Control-Allow-Credentials", "true")
+		c.Header("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+		c.Header("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+
+		c.Next()
+	})
+}
+
+func optionalAuthMiddleware() gin.HandlerFunc {
+	return gin.HandlerFunc(func(c *gin.Context) {
+		authHeader := c.GetHeader("Authorization")
+		if authHeader != "" {
+			tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+			if tokenString != authHeader {
+				claims := &Claims{}
+				token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+					return []byte(SECRET_KEY), nil
+				})
+
+				if err == nil && token.Valid {
+					c.Set("user", claims)
+				}
+			}
+		}
+		c.Next()
+	})
+}
+
+func authMiddleware() gin.HandlerFunc {
+	return gin.HandlerFunc(func(c *gin.Context) {
+		authHeader := c.GetHeader("Authorization")
+		if authHeader == "" {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header required"})
+			c.Abort()
+			return
+		}
+
+		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+		if tokenString == authHeader {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Bearer token required"})
+			c.Abort()
+			return
+		}
+
+		claims := &Claims{}
+		token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+			return []byte(SECRET_KEY), nil
+		})
+
+		if err != nil || !token.Valid {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+			c.Abort()
+			return
+		}
+
+		c.Set("user", claims)
+		c.Next()
+	})
+}
+
+func adminMiddleware() gin.HandlerFunc {
+	return gin.HandlerFunc(func(c *gin.Context) {
+		user, exists := c.Get("user")
+		if !exists {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "User not found"})
+			c.Abort()
+			return
+		}
+
+		claims := user.(*Claims)
+		if claims.Role != "admin" {
+			lang := getUserLanguage(c.Request.Header)
+			c.JSON(http.StatusForbidden, createResponse("forbidden", lang))
+			c.Abort()
+			return
+		}
+
+		c.Next()
+	})
+}
+
+// ========== DATABASE HELPER FUNCTIONS ==========
+
+func getUserByNumber(number string) (*User, error) {
+	query := `SELECT id, number, password, role, full_name, email, created_at, is_active, tg_id, language 
+			  FROM users WHERE number = $1`
+
+	var user User
+	err := db.QueryRow(query, number).Scan(
+		&user.ID, &user.Number, &user.Password, &user.Role,
+		&user.FullName, &user.Email, &user.CreatedAt,
+		&user.IsActive, &user.TgID, &user.Language,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
+func createUser(user *User) error {
+	query := `INSERT INTO users (id, number, password, role, full_name, email, created_at, is_active, tg_id, language) 
+			  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`
+
+	_, err := db.Exec(query, user.ID, user.Number, user.Password, user.Role,
+		user.FullName, user.Email, user.CreatedAt, user.IsActive, user.TgID, user.Language)
+
+	return err
+}
+
+func getFoodByID(foodID string) (*Food, error) {
+	query := `SELECT id, names, name, descriptions, description, category, price, is_there, 
+			  image_url, ingredients, allergens, rating, review_count, preparation_time, 
+			  stock, is_popular, discount, comment, created_at, updated_at
+			  FROM foods WHERE id = $1`
+
+	var food Food
+	var namesJSON, descriptionsJSON, ingredientsJSON, allergensJSON []byte
+
+	err := db.QueryRow(query, foodID).Scan(
+		&food.ID, &namesJSON, &food.Name, &descriptionsJSON, &food.Description,
+		&food.Category, &food.Price, &food.IsThere, &food.ImageURL,
+		&ingredientsJSON, &allergensJSON, &food.Rating, &food.ReviewCount,
+		&food.PreparationTime, &food.Stock, &food.IsPopular, &food.Discount,
+		&food.Comment, &food.CreatedAt, &food.UpdatedAt,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// JSON unmarshal
+	if namesJSON != nil {
+		json.Unmarshal(namesJSON, &food.Names)
+	}
+	if descriptionsJSON != nil {
+		json.Unmarshal(descriptionsJSON, &food.Descriptions)
+	}
+	if ingredientsJSON != nil {
+		json.Unmarshal(ingredientsJSON, &food.Ingredients)
+	}
+	if allergensJSON != nil {
+		json.Unmarshal(allergensJSON, &food.Allergens)
+	}
+
+	return &food, nil
+}
+
+func getAllFoods() ([]*Food, error) {
+	// Faqat mavjud ovqatlarni qaytarish (isThere = true va stock > 0)
+	query := `SELECT id, names, name, descriptions, description, category, price, is_there, 
+			  image_url, ingredients, allergens, rating, review_count, preparation_time, 
+			  stock, is_popular, discount, comment, created_at, updated_at
+			  FROM foods WHERE is_there = true AND stock > 0 ORDER BY id ASC`
+
+	rows, err := db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var foods []*Food
+	for rows.Next() {
+		var food Food
+		var namesJSON, descriptionsJSON, ingredientsJSON, allergensJSON []byte
+
+		err := rows.Scan(
+			&food.ID, &namesJSON, &food.Name, &descriptionsJSON, &food.Description,
+			&food.Category, &food.Price, &food.IsThere, &food.ImageURL,
+			&ingredientsJSON, &allergensJSON, &food.Rating, &food.ReviewCount,
+			&food.PreparationTime, &food.Stock, &food.IsPopular, &food.Discount,
+			&food.Comment, &food.CreatedAt, &food.UpdatedAt,
+		)
+
+		if err != nil {
+			continue
+		}
+
+		// JSON unmarshal
+		if namesJSON != nil {
+			json.Unmarshal(namesJSON, &food.Names)
+		}
+		if descriptionsJSON != nil {
+			json.Unmarshal(descriptionsJSON, &food.Descriptions)
+		}
+		if ingredientsJSON != nil {
+			json.Unmarshal(ingredientsJSON, &food.Ingredients)
+		}
+		if allergensJSON != nil {
+			json.Unmarshal(allergensJSON, &food.Allergens)
+		}
+
+		foods = append(foods, &food)
+	}
+
+	return foods, nil
+}
+
+func getAllFoodsForAdmin() ([]*Food, error) {
+	// Admin uchun barcha ovqatlarni ko'rsatish
+	query := `SELECT id, names, name, descriptions, description, category, price, is_there, 
+			  image_url, ingredients, allergens, rating, review_count, preparation_time, 
+			  stock, is_popular, discount, comment, created_at, updated_at
+			  FROM foods ORDER BY id ASC`
+
+	rows, err := db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var foods []*Food
+	for rows.Next() {
+		var food Food
+		var namesJSON, descriptionsJSON, ingredientsJSON, allergensJSON []byte
+
+		err := rows.Scan(
+			&food.ID, &namesJSON, &food.Name, &descriptionsJSON, &food.Description,
+			&food.Category, &food.Price, &food.IsThere, &food.ImageURL,
+			&ingredientsJSON, &allergensJSON, &food.Rating, &food.ReviewCount,
+			&food.PreparationTime, &food.Stock, &food.IsPopular, &food.Discount,
+			&food.Comment, &food.CreatedAt, &food.UpdatedAt,
+		)
+
+		if err != nil {
+			continue
+		}
+
+		// JSON unmarshal
+		if namesJSON != nil {
+			json.Unmarshal(namesJSON, &food.Names)
+		}
+		if descriptionsJSON != nil {
+			json.Unmarshal(descriptionsJSON, &food.Descriptions)
+		}
+		if ingredientsJSON != nil {
+			json.Unmarshal(ingredientsJSON, &food.Ingredients)
+		}
+		if allergensJSON != nil {
+			json.Unmarshal(allergensJSON, &food.Allergens)
+		}
+
+		foods = append(foods, &food)
+	}
+
+	return foods, nil
+}
+
+func createFood(food *Food) error {
+	namesJSON, _ := json.Marshal(food.Names)
+	descriptionsJSON, _ := json.Marshal(food.Descriptions)
+	ingredientsJSON, _ := json.Marshal(food.Ingredients)
+	allergensJSON, _ := json.Marshal(food.Allergens)
+
+	query := `INSERT INTO foods (id, names, name, descriptions, description, category, price, 
+			  is_there, image_url, ingredients, allergens, rating, review_count, 
+			  preparation_time, stock, is_popular, discount, comment, created_at, updated_at) 
+			  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)`
+
+	_, err := db.Exec(query, food.ID, namesJSON, food.Name, descriptionsJSON, food.Description,
+		food.Category, food.Price, food.IsThere, food.ImageURL, ingredientsJSON,
+		allergensJSON, food.Rating, food.ReviewCount, food.PreparationTime,
+		food.Stock, food.IsPopular, food.Discount, food.Comment, food.CreatedAt, food.UpdatedAt)
+
+	return err
+}
+
+func updateFood(food *Food) error {
+	namesJSON, _ := json.Marshal(food.Names)
+	descriptionsJSON, _ := json.Marshal(food.Descriptions)
+	ingredientsJSON, _ := json.Marshal(food.Ingredients)
+	allergensJSON, _ := json.Marshal(food.Allergens)
+
+	query := `UPDATE foods SET names = $2, name = $3, descriptions = $4, description = $5, 
+			  category = $6, price = $7, is_there = $8, image_url = $9, ingredients = $10, 
+			  allergens = $11, rating = $12, review_count = $13, preparation_time = $14, 
+			  stock = $15, is_popular = $16, discount = $17, comment = $18, updated_at = $19 
+			  WHERE id = $1`
+
+	_, err := db.Exec(query, food.ID, namesJSON, food.Name, descriptionsJSON, food.Description,
+		food.Category, food.Price, food.IsThere, food.ImageURL, ingredientsJSON,
+		allergensJSON, food.Rating, food.ReviewCount, food.PreparationTime,
+		food.Stock, food.IsPopular, food.Discount, food.Comment, time.Now())
+
+	return err
+}
+
+func createOrder(order *Order) error {
+	foodsJSON, _ := json.Marshal(order.Foods)
+	deliveryInfoJSON, _ := json.Marshal(order.DeliveryInfo)
+	paymentInfoJSON, _ := json.Marshal(order.PaymentInfo)
+	statusHistoryJSON, _ := json.Marshal(order.StatusHistory)
+
+	query := `INSERT INTO orders (order_id, user_number, user_name, foods, total_price, 
+			  order_time, delivery_type, delivery_info, status, payment_info, 
+			  special_instructions, estimated_time, delivered_at, status_history, 
+			  created_at, updated_at) 
+			  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)`
+
+	_, err := db.Exec(query, order.OrderID, order.UserNumber, order.UserName, foodsJSON,
+		order.TotalPrice, order.OrderTime, order.DeliveryType, deliveryInfoJSON,
+		order.Status, paymentInfoJSON, order.SpecialInstructions, order.EstimatedTime,
+		order.DeliveredAt, statusHistoryJSON, order.CreatedAt, order.UpdatedAt)
+
+	return err
+}
+
+func getOrderByID(orderID string) (*Order, error) {
+	query := `SELECT order_id, user_number, user_name, foods, total_price, order_time, 
+			  delivery_type, delivery_info, status, payment_info, special_instructions, 
+			  estimated_time, delivered_at, status_history, created_at, updated_at
+			  FROM orders WHERE order_id = $1`
+
+	var order Order
+	var foodsJSON, deliveryInfoJSON, paymentInfoJSON, statusHistoryJSON []byte
+
+	err := db.QueryRow(query, orderID).Scan(
+		&order.OrderID, &order.UserNumber, &order.UserName, &foodsJSON,
+		&order.TotalPrice, &order.OrderTime, &order.DeliveryType, &deliveryInfoJSON,
+		&order.Status, &paymentInfoJSON, &order.SpecialInstructions,
+		&order.EstimatedTime, &order.DeliveredAt, &statusHistoryJSON,
+		&order.CreatedAt, &order.UpdatedAt,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// JSON unmarshal
+	json.Unmarshal(foodsJSON, &order.Foods)
+	json.Unmarshal(deliveryInfoJSON, &order.DeliveryInfo)
+	json.Unmarshal(paymentInfoJSON, &order.PaymentInfo)
+	json.Unmarshal(statusHistoryJSON, &order.StatusHistory)
+
+	return &order, nil
+}
+
+func updateOrder(order *Order) error {
+	foodsJSON, _ := json.Marshal(order.Foods)
+	deliveryInfoJSON, _ := json.Marshal(order.DeliveryInfo)
+	paymentInfoJSON, _ := json.Marshal(order.PaymentInfo)
+	statusHistoryJSON, _ := json.Marshal(order.StatusHistory)
+
+	query := `UPDATE orders SET user_number = $2, user_name = $3, foods = $4, total_price = $5, 
+			  order_time = $6, delivery_type = $7, delivery_info = $8, status = $9, 
+			  payment_info = $10, special_instructions = $11, estimated_time = $12, 
+			  delivered_at = $13, status_history = $14, updated_at = $15 
+			  WHERE order_id = $1`
+
+	_, err := db.Exec(query, order.OrderID, order.UserNumber, order.UserName, foodsJSON,
+		order.TotalPrice, order.OrderTime, order.DeliveryType, deliveryInfoJSON,
+		order.Status, paymentInfoJSON, order.SpecialInstructions, order.EstimatedTime,
+		order.DeliveredAt, statusHistoryJSON, time.Now())
+
+	return err
+}
+
+func createReview(review *Review) error {
+	query := `INSERT INTO reviews (id, user_id, food_id, rating, comment, created_at, updated_at)
+			  VALUES ($1, $2, $3, $4, $5, $6, $7)
+			  ON CONFLICT (user_id, food_id) 
+			  DO UPDATE SET rating = $4, comment = $5, updated_at = $7`
+
+	_, err := db.Exec(query, review.ID, review.UserID, review.FoodID, review.Rating,
+		review.Comment, review.CreatedAt, review.UpdatedAt)
+
+	return err
+}
+
+func getReviewsByFoodID(foodID string) ([]*Review, error) {
+	query := `SELECT r.id, r.user_id, r.food_id, r.rating, r.comment, r.created_at, r.updated_at, u.full_name
+			  FROM reviews r 
+			  LEFT JOIN users u ON r.user_id = u.id 
+			  WHERE r.food_id = $1 ORDER BY r.created_at DESC`
+
+	rows, err := db.Query(query, foodID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var reviews []*Review
+	for rows.Next() {
+		var review Review
+		err := rows.Scan(&review.ID, &review.UserID, &review.FoodID, &review.Rating,
+			&review.Comment, &review.CreatedAt, &review.UpdatedAt, &review.UserName)
+		if err != nil {
+			continue
+		}
+		reviews = append(reviews, &review)
+	}
+
+	return reviews, nil
+}
+
+func updateFoodRating(foodID string) error {
+	query := `UPDATE foods SET 
+			  rating = (SELECT AVG(rating)::DECIMAL(3,2) FROM reviews WHERE food_id = $1),
+			  review_count = (SELECT COUNT(*) FROM reviews WHERE food_id = $1),
+			  updated_at = CURRENT_TIMESTAMP
+			  WHERE id = $1`
+
+	_, err := db.Exec(query, foodID)
+	return err
+}
+
+// ========== API HANDLERS ==========
+
+// Test ma'lumotlarini yaratish
+func initializeTestData() error {
+	// Test foydalanuvchilar
+	adminUser := &User{
+		ID:        generateID("user"),
+		Number:    "770451117",
+		Password:  hashPassword("samandar"),
+		Role:      "admin",
+		FullName:  "Samandar Admin",
+		Email:     stringPtr("admin@restaurant.uz"),
+		CreatedAt: time.Now(),
+		IsActive:  true,
+		TgID:      int64Ptr(1713329317),
+		Language:  "uz",
+	}
+
+	// Foydalanuvchi mavjudligini tekshirish
+	existingUser, err := getUserByNumber(adminUser.Number)
+	if err == sql.ErrNoRows {
+		// Foydalanuvchi mavjud emas, yaratish
+		if err := createUser(adminUser); err != nil {
+			log.Printf("Admin foydalanuvchi yaratishda xatolik: %v", err)
+		} else {
+			log.Println("✅ Admin foydalanuvchi yaratildi")
+		}
+	} else if err != nil {
+		log.Printf("Foydalanuvchi tekshirishda xatolik: %v", err)
+	} else {
+		log.Printf("✅ Admin foydalanuvchi mavjud: %s", existingUser.FullName)
+	}
+
+	testUser := &User{
+		ID:        generateID("user"),
+		Number:    "998901234567",
+		Password:  hashPassword("user123"),
+		Role:      "user",
+		FullName:  "Test User",
+		Email:     stringPtr("user@test.uz"),
+		CreatedAt: time.Now(),
+		IsActive:  true,
+		TgID:      int64Ptr(1066137436),
+		Language:  "uz",
+	}
+
+	existingTestUser, err := getUserByNumber(testUser.Number)
+	if err == sql.ErrNoRows {
+		if err := createUser(testUser); err != nil {
+			log.Printf("Test foydalanuvchi yaratishda xatolik: %v", err)
+		} else {
+			log.Println("✅ Test foydalanuvchi yaratildi")
+		}
+	} else if err != nil {
+		log.Printf("Test foydalanuvchi tekshirishda xatolik: %v", err)
+	} else {
+		log.Printf("✅ Test foydalanuvchi mavjud: %s", existingTestUser.FullName)
+	}
+
+	return nil
+}
+
+// Yordamchi funksiyalar
+func stringPtr(s string) *string {
+	return &s
+}
+
+func int64Ptr(i int64) *int64 {
+	return &i
+}
+
+func getLocalizedFood(food *Food, lang string) *Food {
+	localizedFood := *food
+
+	// Ko'p tilli nomni olish
+	if food.Names != nil {
+		if name, exists := food.Names[lang]; exists {
+			localizedFood.Name = name
+		} else if name, exists := food.Names["uz"]; exists {
+			localizedFood.Name = name
+		}
+	}
+
+	// Ko'p tilli tavsifni olish
+	if food.Descriptions != nil {
+		if desc, exists := food.Descriptions[lang]; exists {
+			localizedFood.Description = desc
+		} else if desc, exists := food.Descriptions["uz"]; exists {
+			localizedFood.Description = desc
+		}
+	}
+
+	// Kategoriya nomini tarjima qilish
+	categoryKey := strings.ToLower(strings.ReplaceAll(food.Category, " ", "_"))
+	localizedFood.CategoryName = getTranslation(categoryKey, lang)
+
+	// Chegirma hisoblash
+	if food.Discount > 0 {
+		localizedFood.OriginalPrice = food.Price
+		localizedFood.Price = food.Price - (food.Price * food.Discount / 100)
+	}
+
+	return &localizedFood
+}
+
+func getAllLocalizedFoods(lang string, isAdmin bool) ([]*Food, error) {
+	var foods []*Food
+	var err error
+
+	if isAdmin {
+		foods, err = getAllFoodsForAdmin()
+	} else {
+		foods, err = getAllFoods()
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	var localizedFoods []*Food
+	for _, food := range foods {
+		localizedFood := getLocalizedFood(food, lang)
+		localizedFoods = append(localizedFoods, localizedFood)
+	}
+
+	return localizedFoods, nil
+}
+
+// ========== AUTHENTICATION HANDLERS ==========
+
+func register(c *gin.Context) {
+	var req RegisterRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	lang := req.Language
+	if lang == "" {
+		lang = "uz"
+	}
+
+	// Foydalanuvchi mavjudligini tekshirish
+	_, err := getUserByNumber(req.Number)
+	if err == nil {
+		c.JSON(http.StatusBadRequest, createResponse("phone_already_registered", lang))
+		return
+	}
+
+	user := &User{
+		ID:        generateID("user"),
+		Number:    req.Number,
+		Password:  hashPassword(req.Password),
+		Role:      "user",
+		FullName:  req.FullName,
+		Email:     req.Email,
+		CreatedAt: time.Now(),
+		IsActive:  true,
+		TgID:      req.TgID,
+		Language:  lang,
+	}
+
+	if err := createUser(user); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Foydalanuvchi yaratishda xatolik"})
+		return
+	}
+
+	token, err := createToken(user)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Token yaratishda xatolik"})
+		return
+	}
+
+	response := LoginResponse{
+		Token:    token,
+		Role:     user.Role,
+		UserID:   user.ID,
+		Language: lang,
+	}
+
+	c.JSON(http.StatusOK, response)
+}
+
+func login(c *gin.Context) {
+	var req LoginRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	user, err := getUserByNumber(req.Number)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, createResponse("invalid_credentials", "uz"))
+		return
+	}
+
+	if user.Password != hashPassword(req.Password) {
+		c.JSON(http.StatusUnauthorized, createResponse("invalid_credentials", user.Language))
+		return
+	}
+
+	token, err := createToken(user)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Token yaratishda xatolik"})
+		return
+	}
+
+	response := LoginResponse{
+		Token:    token,
+		Role:     user.Role,
+		UserID:   user.ID,
+		Language: user.Language,
+	}
+
+	c.JSON(http.StatusOK, response)
+}
+
+func getProfile(c *gin.Context) {
+	user := c.MustGet("user").(*Claims)
+
+	userDB, err := getUserByNumber(user.Number)
+	if err != nil {
+		lang := getUserLanguage(c.Request.Header)
+		c.JSON(http.StatusNotFound, createResponse("user_not_found", lang))
+		return
+	}
+
+	// Parolni o'chirish
+	userResponse := *userDB
+	userResponse.Password = ""
+
+	c.JSON(http.StatusOK, userResponse)
+}
+
+// ========== CATEGORY HANDLERS ==========
+
+func getCategories(c *gin.Context) {
+	lang := getUserLanguage(c.Request.Header)
+
+	categories := []gin.H{
+		{"key": "shashlik", "name": getTranslation("shashlik", lang)},
+		{"key": "milliy_taomlar", "name": getTranslation("milliy_taomlar", lang)},
+		{"key": "ichimliklar", "name": getTranslation("ichimliklar", lang)},
+		{"key": "salatlar", "name": getTranslation("salatlar", lang)},
+		{"key": "shirinliklar", "name": getTranslation("shirinliklar", lang)},
+	}
+
+	c.JSON(http.StatusOK, categories)
+}
+
+// ========== FOOD HANDLERS ==========
+
+func getAllFoodsHandler(c *gin.Context) {
+	lang := getUserLanguage(c.Request.Header)
+	category := c.Query("category")
+	search := c.Query("search")
+	popular := c.Query("popular")
+	sortBy := c.Query("sort")
+	page, _ := strconv.Atoi(c.Query("page"))
+	limit, _ := strconv.Atoi(c.Query("limit"))
+
+	if page <= 0 {
+		page = 1
+	}
+	if limit <= 0 {
+		limit = 20
+	}
+
+	// Admin yoki oddiy foydalanuvchi ekanligini tekshirish
+	isAdmin := false
+	if userInterface, exists := c.Get("user"); exists {
+		user := userInterface.(*Claims)
+		isAdmin = (user.Role == "admin")
+	}
+
+	foods, err := getAllLocalizedFoods(lang, isAdmin)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
+		return
+	}
+
+	// Filtrlash
+	if category != "" {
+		filtered := []*Food{}
+		for _, food := range foods {
+			if strings.ToLower(food.Category) == strings.ToLower(category) {
+				filtered = append(filtered, food)
+			}
+		}
+		foods = filtered
+	}
+
+	if search != "" {
+		searchLower := strings.ToLower(search)
+		filtered := []*Food{}
+		for _, food := range foods {
+			if strings.Contains(strings.ToLower(food.Name), searchLower) ||
+				strings.Contains(strings.ToLower(food.Description), searchLower) {
+				filtered = append(filtered, food)
+			}
+		}
+		foods = filtered
+	}
+
+	if popular == "true" {
+		filtered := []*Food{}
+		for _, food := range foods {
+			if food.IsPopular {
+				filtered = append(filtered, food)
+			}
+		}
+		foods = filtered
+	}
+
+	// Saralash
+	switch sortBy {
+	case "price_asc":
+		sort.Slice(foods, func(i, j int) bool {
+			return foods[i].Price < foods[j].Price
+		})
+	case "price_desc":
+		sort.Slice(foods, func(i, j int) bool {
+			return foods[i].Price > foods[j].Price
+		})
+	case "rating":
+		sort.Slice(foods, func(i, j int) bool {
+			return foods[i].Rating > foods[j].Rating
+		})
+	case "popular":
+		sort.Slice(foods, func(i, j int) bool {
+			if foods[i].IsPopular != foods[j].IsPopular {
+				return foods[i].IsPopular
+			}
+			return foods[i].Rating > foods[j].Rating
+		})
+	case "id_asc":
+		sort.Slice(foods, func(i, j int) bool {
+			return foods[i].ID < foods[j].ID
+		})
+	case "id_desc":
+		sort.Slice(foods, func(i, j int) bool {
+			return foods[i].ID > foods[j].ID
+		})
+	case "name":
+		sort.Slice(foods, func(i, j int) bool {
+			return foods[i].Name < foods[j].Name
+		})
+	default:
+		// Default: ID bo'yicha saralash (amur_1, amur_2, amur_3...)
+		sort.Slice(foods, func(i, j int) bool {
+			return foods[i].ID < foods[j].ID
+		})
+	}
+
+	// Sahifalash
+	total := len(foods)
+	start := (page - 1) * limit
+	end := start + limit
+	if start >= total {
+		foods = []*Food{}
+	} else {
+		if end > total {
+			end = total
+		}
+		foods = foods[start:end]
+	}
+
+	// ImageURL-ni to'liq URL qilish
+	hostURL := getHostURL(c)
+	for _, food := range foods {
+		if food.ImageURL != "" && !strings.HasPrefix(food.ImageURL, "http") {
+			food.ImageURL = hostURL + food.ImageURL
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"foods": foods,
+		"pagination": gin.H{
+			"page":        page,
+			"limit":       limit,
+			"total":       total,
+			"total_pages": (total + limit - 1) / limit,
+		},
+	})
+}
+
+func getFoodHandler(c *gin.Context) {
+	foodID := c.Param("food_id")
+	lang := getUserLanguage(c.Request.Header)
+
+	food, err := getFoodByID(foodID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			c.JSON(http.StatusNotFound, createResponse("food_not_found", lang))
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
+		return
+	}
+
+	localizedFood := getLocalizedFood(food, lang)
+
+	// ImageURL-ni to'liq URL qilish
+	if localizedFood.ImageURL != "" && !strings.HasPrefix(localizedFood.ImageURL, "http") {
+		localizedFood.ImageURL = getHostURL(c) + localizedFood.ImageURL
+	}
+
+	c.JSON(http.StatusOK, localizedFood)
+}
+
+func createFoodHandler(c *gin.Context) {
+	var req FoodCreate
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// ID avtomatik generatsiya qilish
+	foodID := generateFoodID()
+
+	if req.PreparationTime == 0 {
+		req.PreparationTime = 15
+	}
+	if req.Stock == 0 {
+		req.Stock = 100
+	}
+
+	// Ko'p tilli nomlarni yaratish
+	names := map[string]string{
+		"uz": req.NameUz,
+		"ru": req.NameRu,
+		"en": req.NameEn,
+	}
+
+	// Ko'p tilli tavsiflarni yaratish
+	descriptions := map[string]string{
+		"uz": req.DescriptionUz,
+		"ru": req.DescriptionRu,
+		"en": req.DescriptionEn,
+	}
+
+	// Ko'p tilli ingredientlarni yaratish
+	ingredients := map[string][]string{
+		"uz": req.IngredientsUz,
+		"ru": req.IngredientsRu,
+		"en": req.IngredientsEn,
+	}
+
+	// Ko'p tilli allergenlarni yaratish
+	allergens := map[string][]string{
+		"uz": req.AllergensUz,
+		"ru": req.AllergensRu,
+		"en": req.AllergensEn,
+	}
+
+	food := &Food{
+		ID:              foodID,
+		Names:           names,
+		Name:            req.NameUz, // Default o'zbek tilida
+		Descriptions:    descriptions,
+		Description:     req.DescriptionUz, // Default o'zbek tilida
+		Category:        req.Category,
+		Price:           req.Price,
+		IsThere:         req.IsThere,
+		ImageURL:        req.ImageURL,
+		Ingredients:     ingredients,
+		Allergens:       allergens,
+		Rating:          0.0,
+		ReviewCount:     0,
+		PreparationTime: req.PreparationTime,
+		Stock:           req.Stock,
+		IsPopular:       req.IsPopular,
+		Discount:        req.Discount,
+		Comment:         req.Comment,
+		CreatedAt:       time.Now(),
+		UpdatedAt:       time.Now(),
+	}
+
+	if err := createFood(food); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ovqat yaratishda xatolik"})
+		return
+	}
+
+	c.JSON(http.StatusCreated, food)
+}
+
+func updateFoodHandler(c *gin.Context) {
+	foodID := c.Param("food_id")
+	lang := getUserLanguage(c.Request.Header)
+
+	food, err := getFoodByID(foodID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			c.JSON(http.StatusNotFound, createResponse("food_not_found", lang))
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
+		return
+	}
+
+	var updates map[string]interface{}
+	if err := c.ShouldBindJSON(&updates); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Ma'lumotlarni yangilash
+	if name, ok := updates["name"].(string); ok {
+		food.Name = name
+	}
+	if category, ok := updates["category"].(string); ok {
+		food.Category = category
+	}
+	if price, ok := updates["price"].(float64); ok {
+		food.Price = int(price)
+	}
+	if description, ok := updates["description"].(string); ok {
+		food.Description = description
+	}
+	if isThere, ok := updates["isThere"].(bool); ok {
+		food.IsThere = isThere
+	}
+	if imageURL, ok := updates["imageUrl"].(string); ok {
+		food.ImageURL = imageURL
+	}
+	if prepTime, ok := updates["preparation_time"].(float64); ok {
+		food.PreparationTime = int(prepTime)
+	}
+	if stock, ok := updates["stock"].(float64); ok {
+		food.Stock = int(stock)
+	}
+	if isPopular, ok := updates["is_popular"].(bool); ok {
+		food.IsPopular = isPopular
+	}
+	if discount, ok := updates["discount"].(float64); ok {
+		food.Discount = int(discount)
+	}
+
+	food.UpdatedAt = time.Now()
+
+	if err := updateFood(food); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ovqat yangilashda xatolik"})
+		return
+	}
+
+	c.JSON(http.StatusOK, food)
+}
+
+func deleteFoodHandler(c *gin.Context) {
+	foodID := c.Param("food_id")
+	lang := getUserLanguage(c.Request.Header)
+
+	// Ovqat mavjudligini tekshirish
+	_, err := getFoodByID(foodID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			c.JSON(http.StatusNotFound, createResponse("food_not_found", lang))
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
+		return
+	}
+
+	// Ovqatni o'chirish
+	query := `DELETE FROM foods WHERE id = $1`
+	_, err = db.Exec(query, foodID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ovqat o'chirishda xatolik"})
+		return
+	}
+
+	c.JSON(http.StatusOK, createResponse("food_deleted", lang))
+}
+
+// ========== ORDER HANDLERS ==========
+
+func createOrderHandler(c *gin.Context) {
+	var req OrderRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	lang := getUserLanguage(c.Request.Header)
+
+	// Foydalanuvchi tekshiruvi
+	var user *Claims
+	if userInterface, exists := c.Get("user"); exists {
+		user = userInterface.(*Claims)
+	} else {
+		c.JSON(http.StatusUnauthorized, createResponse("login_required", lang))
+		return
+	}
+
+	// Savatni tekshirish
+	if len(req.Items) == 0 {
+		c.JSON(http.StatusBadRequest, createResponse("cart_empty", lang))
+		return
+	}
+
+	// Debug log
+	log.Printf("Creating order for user: %s, items count: %d", user.Number, len(req.Items))
+
+	// Ovqatlarni tekshirish va stock-ni tekshirish
+	var orderedFoods []OrderFood
+	totalPrice := 0
+	totalPrepTime := 0
+
+	for _, item := range req.Items {
+		log.Printf("Processing food_id: %s, quantity: %d", item.FoodID, item.Quantity)
+
+		food, err := getFoodByID(item.FoodID)
+		if err != nil {
+			log.Printf("Food not found error: %v", err)
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error":   getTranslation("food_not_available", lang),
+				"food_id": item.FoodID,
+				"details": err.Error(),
+			})
+			return
+		}
+
+		if !food.IsThere || food.Stock <= 0 {
+			log.Printf("Food not available: isThere=%v, stock=%d", food.IsThere, food.Stock)
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error":   getTranslation("food_not_available", lang),
+				"food_id": item.FoodID,
+			})
+			return
+		}
+
+		// Stock tekshiruvi
+		if food.Stock < item.Quantity {
+			log.Printf("Insufficient stock: required=%d, available=%d", item.Quantity, food.Stock)
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error":     getTranslation("insufficient_stock", lang),
+				"food_id":   item.FoodID,
+				"required":  item.Quantity,
+				"available": food.Stock,
+			})
+			return
+		}
+
+		localizedFood := getLocalizedFood(food, lang)
+		foodTotalPrice := localizedFood.Price * item.Quantity
+		prepTime := food.PreparationTime
+		if prepTime > totalPrepTime {
+			totalPrepTime = prepTime
+		}
+
+		orderedFood := OrderFood{
+			ID:          food.ID,
+			Name:        localizedFood.Name,
+			Category:    localizedFood.CategoryName,
+			Price:       localizedFood.Price,
+			Description: localizedFood.Description,
+			ImageURL:    localizedFood.ImageURL,
+			Count:       item.Quantity,
+			TotalPrice:  foodTotalPrice,
+		}
+		orderedFoods = append(orderedFoods, orderedFood)
+		totalPrice += foodTotalPrice
+
+		// Stock-ni kamaytirish
+		food.Stock -= item.Quantity
+		if err := updateFood(food); err != nil {
+			log.Printf("Stock yangilashda xatolik: %v", err)
+		}
+	}
+
+	log.Printf("Order foods processed successfully, total_price: %d", totalPrice)
+
+	// Yetkazib berish ma'lumotlari
+	deliveryInfo := make(map[string]interface{})
+	switch req.DeliveryType {
+	case DeliveryHome:
+		address, addressOk := req.DeliveryInfo["address"].(string)
+		if !addressOk || address == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Delivery address required"})
+			return
+		}
+
+		deliveryInfo = map[string]interface{}{
+			"type":    "delivery",
+			"address": address,
+		}
+
+		// Phone qo'shish
+		if phone, ok := req.DeliveryInfo["phone"].(string); ok {
+			deliveryInfo["phone"] = phone
+		}
+
+		// Koordinatalarni qo'shish (agar mavjud bo'lsa)
+		if lat, ok := req.DeliveryInfo["latitude"].(float64); ok {
+			deliveryInfo["latitude"] = lat
+		}
+		if lng, ok := req.DeliveryInfo["longitude"].(float64); ok {
+			deliveryInfo["longitude"] = lng
+		}
+
+		totalPrepTime += 20 // yetkazib berish vaqti
+	case DeliveryPickup:
+		deliveryInfo = map[string]interface{}{
+			"type":        "own_withdrawal",
+			"pickup_code": generateID("pickup"),
+		}
+	case DeliveryRestaurant:
+		tableID, ok := req.DeliveryInfo["table_id"].(string)
+		if !ok || tableID == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Table ID required"})
+			return
+		}
+		tableName := getTableNameByID(tableID)
+		deliveryInfo = map[string]interface{}{
+			"type":       "atTheRestaurant",
+			"table_id":   tableID,
+			"table_name": tableName,
+		}
+	}
+
+	log.Printf("Delivery info prepared: %+v", deliveryInfo)
+
+	// To'lov ma'lumotlari
+	paymentInfo := PaymentInfo{
+		Method: req.PaymentMethod,
+		Status: PaymentPending,
+		Amount: totalPrice,
+	}
+
+	if req.PaymentMethod != PaymentCash {
+		transactionID := generateID("txn")
+		paymentInfo.TransactionID = &transactionID
+	}
+
+	log.Printf("Payment info prepared: %+v", paymentInfo)
+
+	// Buyurtma yaratish
+	orderID := generateOrderID()
+	orderTime := time.Now()
+
+	userDB, _ := getUserByNumber(user.Number)
+	userName := "Foydalanuvchi"
+	if userDB != nil {
+		userName = userDB.FullName
+	}
+
+	// Customer info ni ishlatish
+	if req.CustomerInfo != nil {
+		if req.CustomerInfo.Name != "" {
+			userName = req.CustomerInfo.Name
+		}
+	}
+
+	log.Printf("Order ID generated: %s", orderID)
+
+	order := &Order{
+		OrderID:             orderID,
+		UserNumber:          user.Number,
+		UserName:            userName,
+		Foods:               orderedFoods,
+		TotalPrice:          totalPrice,
+		OrderTime:           orderTime,
+		DeliveryType:        string(req.DeliveryType),
+		DeliveryInfo:        deliveryInfo,
+		Status:              OrderPending,
+		PaymentInfo:         paymentInfo,
+		SpecialInstructions: req.SpecialInstructions,
+		EstimatedTime:       &totalPrepTime,
+		StatusHistory: []StatusUpdate{
+			{
+				Status:    OrderPending,
+				Timestamp: orderTime,
+				Note:      "Buyurtma yaratildi",
+			},
+		},
+		CreatedAt: orderTime,
+		UpdatedAt: orderTime,
+	}
+
+	log.Printf("Order object created, attempting to save to database...")
+
+	if err := createOrder(order); err != nil {
+		log.Printf("Database error creating order: %v", err)
+
+		// Stock-ni qaytarish (rollback)
+		for _, item := range req.Items {
+			if food, err := getFoodByID(item.FoodID); err == nil {
+				food.Stock += item.Quantity
+				updateFood(food)
+			}
+		}
+
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   "Buyurtma yaratishda xatolik",
+			"details": err.Error(),
+		})
+		return
+	}
+
+	log.Printf("Order created successfully in database: %s", orderID)
+
+	// Real-time yangilanish
+	go func() {
+		sendNewOrderNotification(order)
+		sendOrderUpdate(orderID, OrderPending, getTranslation("order_created", lang))
+	}()
+
+	c.JSON(http.StatusCreated, gin.H{
+		"order":          order,
+		"message":        getTranslation("order_created", lang),
+		"estimated_time": totalPrepTime,
+		"order_tracking": fmt.Sprintf("/api/orders/%s/track", orderID),
+	})
+}
+
+func getOrdersHandler(c *gin.Context) {
+	user := c.MustGet("user").(*Claims)
+	getUserLanguage(c.Request.Header)
+	status := c.Query("status")
+	page, _ := strconv.Atoi(c.Query("page"))
+	limit, _ := strconv.Atoi(c.Query("limit"))
+
+	if page <= 0 {
+		page = 1
+	}
+	if limit <= 0 {
+		limit = 10
+	}
+
+	offset := (page - 1) * limit
+
+	// Query yaratish
+	var query string
+	var args []interface{}
+	argIndex := 1
+
+	if user.Role == "admin" {
+		query = `SELECT order_id, user_number, user_name, foods, total_price, order_time, 
+				 delivery_type, delivery_info, status, payment_info, special_instructions, 
+				 estimated_time, delivered_at, status_history, created_at, updated_at
+				 FROM orders WHERE 1=1`
+		if status != "" {
+			query += fmt.Sprintf(" AND status = $%d", argIndex)
+			args = append(args, status)
+			argIndex++
+		}
+	} else {
+		query = `SELECT order_id, user_number, user_name, foods, total_price, order_time, 
+				 delivery_type, delivery_info, status, payment_info, special_instructions, 
+				 estimated_time, delivered_at, status_history, created_at, updated_at
+				 FROM orders WHERE user_number = $1`
+		args = append(args, user.Number)
+		argIndex++
+		if status != "" {
+			query += fmt.Sprintf(" AND status = $%d", argIndex)
+			args = append(args, status)
+			argIndex++
+		}
+	}
+
+	query += fmt.Sprintf(" ORDER BY order_time DESC LIMIT $%d OFFSET $%d", argIndex, argIndex+1)
+	args = append(args, limit, offset)
+
+	rows, err := db.Query(query, args...)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
+		return
+	}
+	defer rows.Close()
+
+	var orders []*Order
+	for rows.Next() {
+		var order Order
+		var foodsJSON, deliveryInfoJSON, paymentInfoJSON, statusHistoryJSON []byte
+
+		err := rows.Scan(
+			&order.OrderID, &order.UserNumber, &order.UserName, &foodsJSON,
+			&order.TotalPrice, &order.OrderTime, &order.DeliveryType, &deliveryInfoJSON,
+			&order.Status, &paymentInfoJSON, &order.SpecialInstructions,
+			&order.EstimatedTime, &order.DeliveredAt, &statusHistoryJSON,
+			&order.CreatedAt, &order.UpdatedAt,
+		)
+
+		if err != nil {
+			continue
+		}
+
+		// JSON unmarshal
+		json.Unmarshal(foodsJSON, &order.Foods)
+		json.Unmarshal(deliveryInfoJSON, &order.DeliveryInfo)
+		json.Unmarshal(paymentInfoJSON, &order.PaymentInfo)
+		json.Unmarshal(statusHistoryJSON, &order.StatusHistory)
+
+		orders = append(orders, &order)
+	}
+
+	// Total count
+	var countQuery string
+	var countArgs []interface{}
+	if user.Role == "admin" {
+		countQuery = `SELECT COUNT(*) FROM orders`
+		if status != "" {
+			countQuery += " WHERE status = $1"
+			countArgs = append(countArgs, status)
+		}
+	} else {
+		countQuery = `SELECT COUNT(*) FROM orders WHERE user_number = $1`
+		countArgs = append(countArgs, user.Number)
+		if status != "" {
+			countQuery += " AND status = $2"
+			countArgs = append(countArgs, status)
+		}
+	}
+
+	var total int
+	db.QueryRow(countQuery, countArgs...).Scan(&total)
+
+	c.JSON(http.StatusOK, gin.H{
+		"orders": orders,
+		"pagination": gin.H{
+			"page":        page,
+			"limit":       limit,
+			"total":       total,
+			"total_pages": (total + limit - 1) / limit,
+		},
+	})
+}
+
+func getOrderHandler(c *gin.Context) {
+	orderID := c.Param("order_id")
+	user := c.MustGet("user").(*Claims)
+	lang := getUserLanguage(c.Request.Header)
+
+	order, err := getOrderByID(orderID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			c.JSON(http.StatusNotFound, createResponse("order_not_found", lang))
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
+		return
+	}
+
+	// Foydalanuvchi faqat o'z buyurtmasini ko'ra oladi
+	if user.Role != "admin" && order.UserNumber != user.Number {
+		c.JSON(http.StatusForbidden, createResponse("forbidden", lang))
+		return
+	}
+
+	c.JSON(http.StatusOK, order)
+}
+
+func trackOrderHandler(c *gin.Context) {
+	orderID := c.Param("order_id")
+	lang := getUserLanguage(c.Request.Header)
+
+	order, err := getOrderByID(orderID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			c.JSON(http.StatusNotFound, createResponse("order_not_found", lang))
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
+		return
+	}
+
+	// Kuzatuv ma'lumotlari
+	trackingInfo := gin.H{
+		"order_id":       order.OrderID,
+		"status":         order.Status,
+		"estimated_time": order.EstimatedTime,
+		"order_time":     order.OrderTime,
+		"status_history": order.StatusHistory,
+	}
+
+	// Vaqt hisoblash
+	if order.EstimatedTime != nil {
+		elapsed := int(time.Since(order.OrderTime).Minutes())
+		remaining := *order.EstimatedTime - elapsed
+		if remaining < 0 {
+			remaining = 0
+		}
+		trackingInfo["remaining_time"] = remaining
+		trackingInfo["elapsed_time"] = elapsed
+	}
+
+	c.JSON(http.StatusOK, trackingInfo)
+}
+
+func updateOrderStatusHandler(c *gin.Context) {
+	orderID := c.Param("order_id")
+	lang := getUserLanguage(c.Request.Header)
+
+	var req struct {
+		Status OrderStatus `json:"status" binding:"required"`
+		Note   string      `json:"note,omitempty"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	order, err := getOrderByID(orderID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			c.JSON(http.StatusNotFound, createResponse("order_not_found", lang))
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
+		return
+	}
+
+	// Status history-ga qo'shish
+	statusUpdate := StatusUpdate{
+		Status:    req.Status,
+		Timestamp: time.Now(),
+		Note:      req.Note,
+	}
+	order.StatusHistory = append(order.StatusHistory, statusUpdate)
+	order.Status = req.Status
+
+	if req.Status == OrderDelivered {
+		now := time.Now()
+		order.DeliveredAt = &now
+		// To'lovni tasdiqlash
+		if order.PaymentInfo.Method == PaymentCash {
+			order.PaymentInfo.Status = PaymentPaid
+			order.PaymentInfo.PaymentTime = &now
+		}
+	}
+
+	if err := updateOrder(order); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Buyurtma yangilashda xatolik"})
+		return
+	}
+
+	// Real-time yangilanish
+	message := getTranslation("order_status_updated", lang)
+	sendOrderUpdate(orderID, req.Status, message)
+
+	// Foydalanuvchiga Telegram orqali xabar yuborish
+	go func() {
+		if userDB, err := getUserByNumber(order.UserNumber); err == nil && userDB.TgID != nil {
+			userMessage := formatOrderStatusUpdateForUser(order, userDB.Language)
+			if err := sendTelegramMessageToUser(*userDB.TgID, userMessage); err != nil {
+				log.Printf("Telegram foydalanuvchi xabarini yuborishda xatolik: %v", err)
+			} else {
+				log.Printf("Telegram foydalanuvchi xabari yuborildi: %s", order.OrderID)
+			}
+		}
+	}()
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": message,
+		"order":   order,
+	})
+}
+
+func cancelOrderHandler(c *gin.Context) {
+	orderID := c.Param("order_id")
+	user := c.MustGet("user").(*Claims)
+	lang := getUserLanguage(c.Request.Header)
+
+	order, err := getOrderByID(orderID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			c.JSON(http.StatusNotFound, createResponse("order_not_found", lang))
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
+		return
+	}
+
+	// Faqat buyurtma egasi yoki admin bekor qila oladi
+	if order.UserNumber != user.Number && user.Role != "admin" {
+		c.JSON(http.StatusForbidden, createResponse("forbidden", lang))
+		return
+	}
+
+	// Faqat pending yoki confirmed holatdagi buyurtmalarni bekor qilish mumkin
+	if order.Status != OrderPending && order.Status != OrderConfirmed {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Buyurtmani bekor qilib bo'lmaydi",
+		})
+		return
+	}
+
+	// Stock-ni qaytarish
+	for _, orderFood := range order.Foods {
+		if food, err := getFoodByID(orderFood.ID); err == nil {
+			food.Stock += orderFood.Count
+			updateFood(food)
+		}
+	}
+
+	// Status history-ga qo'shish
+	statusUpdate := StatusUpdate{
+		Status:    OrderCancelled,
+		Timestamp: time.Now(),
+		Note:      "Buyurtma bekor qilindi",
+	}
+	order.StatusHistory = append(order.StatusHistory, statusUpdate)
+	order.Status = OrderCancelled
+
+	if err := updateOrder(order); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Buyurtma yangilashda xatolik"})
+		return
+	}
+
+	// Real-time yangilanish
+	sendOrderUpdate(orderID, OrderCancelled, getTranslation("order_cancelled", lang))
+
+	// Foydalanuvchiga Telegram orqali xabar yuborish
+	go func() {
+		if userDB, err := getUserByNumber(order.UserNumber); err == nil && userDB.TgID != nil {
+			userMessage := formatOrderStatusUpdateForUser(order, userDB.Language)
+			if err := sendTelegramMessageToUser(*userDB.TgID, userMessage); err != nil {
+				log.Printf("Telegram foydalanuvchi xabarini yuborishda xatolik: %v", err)
+			}
+		}
+	}()
+
+	c.JSON(http.StatusOK, createResponse("order_cancelled", lang))
+}
+
+// ========== REVIEW HANDLERS ==========
+
+func createReviewHandler(c *gin.Context) {
+	var req ReviewCreate
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	user := c.MustGet("user").(*Claims)
+	lang := getUserLanguage(c.Request.Header)
+
+	// Ovqat mavjudligini tekshirish
+	if _, err := getFoodByID(req.FoodID); err != nil {
+		c.JSON(http.StatusNotFound, createResponse("food_not_found", lang))
+		return
+	}
+
+	review := &Review{
+		ID:        generateID("review"),
+		UserID:    user.UserID,
+		FoodID:    req.FoodID,
+		Rating:    req.Rating,
+		Comment:   req.Comment,
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+	}
+
+	if err := createReview(review); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Sharh yaratishda xatolik"})
+		return
+	}
+
+	// Ovqat reytingini yangilash
+	if err := updateFoodRating(req.FoodID); err != nil {
+		log.Printf("Ovqat reytingini yangilashda xatolik: %v", err)
+	}
+
+	c.JSON(http.StatusCreated, gin.H{
+		"message": getTranslation("review_created", lang),
+		"review":  review,
+	})
+}
+
+func getFoodReviewsHandler(c *gin.Context) {
+	foodID := c.Param("food_id")
+	page, _ := strconv.Atoi(c.Query("page"))
+	limit, _ := strconv.Atoi(c.Query("limit"))
+
+	if page <= 0 {
+		page = 1
+	}
+	if limit <= 0 {
+		limit = 10
+	}
+
+	reviews, err := getReviewsByFoodID(foodID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
+		return
+	}
+
+	// Sahifalash
+	total := len(reviews)
+	start := (page - 1) * limit
+	end := start + limit
+	if start >= total {
+		reviews = []*Review{}
+	} else {
+		if end > total {
+			end = total
+		}
+		reviews = reviews[start:end]
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"reviews": reviews,
+		"pagination": gin.H{
+			"page":        page,
+			"limit":       limit,
+			"total":       total,
+			"total_pages": (total + limit - 1) / limit,
+		},
+	})
+}
+
+// ========== SEARCH HANDLER ==========
+
+func searchHandler(c *gin.Context) {
+	query := c.Query("q")
+	category := c.Query("category")
+	lang := getUserLanguage(c.Request.Header)
+	minPrice, _ := strconv.Atoi(c.Query("min_price"))
+	maxPrice, _ := strconv.Atoi(c.Query("max_price"))
+	minRating, _ := strconv.ParseFloat(c.Query("min_rating"), 64)
+
+	if query == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Query parameter required"})
+		return
+	}
+
+	// Admin yoki oddiy foydalanuvchi ekanligini tekshirish
+	isAdmin := false
+	if userInterface, exists := c.Get("user"); exists {
+		user := userInterface.(*Claims)
+		isAdmin = (user.Role == "admin")
+	}
+
+	foods, err := getAllLocalizedFoods(lang, isAdmin)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
+		return
+	}
+
+	// Qidiruv
+	searchLower := strings.ToLower(query)
+	var results []*Food
+
+	for _, food := range foods {
+		// Nom, tavsif va ingredientlarda qidirish
+		if strings.Contains(strings.ToLower(food.Name), searchLower) ||
+			strings.Contains(strings.ToLower(food.Description), searchLower) {
+			results = append(results, food)
+			continue
+		}
+
+		// Ingredientlarda qidirish
+		if food.Ingredients != nil {
+			if ingredientsList, ok := food.Ingredients[lang]; ok {
+				for _, ingredient := range ingredientsList {
+					if strings.Contains(strings.ToLower(ingredient), searchLower) {
+						results = append(results, food)
+						break
+					}
+				}
+			} else if ingredientsList, ok := food.Ingredients["uz"]; ok {
+				for _, ingredient := range ingredientsList {
+					if strings.Contains(strings.ToLower(ingredient), searchLower) {
+						results = append(results, food)
+						break
+					}
+				}
+			}
+		}
+	}
+
+	// Filtrlar
+	if category != "" {
+		filtered := []*Food{}
+		for _, food := range results {
+			if food.Category == category {
+				filtered = append(filtered, food)
+			}
+		}
+		results = filtered
+	}
+
+	if minPrice > 0 || maxPrice > 0 {
+		filtered := []*Food{}
+		for _, food := range results {
+			if (minPrice == 0 || food.Price >= minPrice) &&
+				(maxPrice == 0 || food.Price <= maxPrice) {
+				filtered = append(filtered, food)
+			}
+		}
+		results = filtered
+	}
+
+	if minRating > 0 {
+		filtered := []*Food{}
+		for _, food := range results {
+			if food.Rating >= minRating {
+				filtered = append(filtered, food)
+			}
+		}
+		results = filtered
+	}
+
+	// ImageURL-ni to'liq URL qilish
+	hostURL := getHostURL(c)
+	for _, food := range results {
+		if food.ImageURL != "" && !strings.HasPrefix(food.ImageURL, "http") {
+			food.ImageURL = hostURL + food.ImageURL
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"query":    query,
+		"language": lang,
+		"results":  results,
+		"total":    len(results),
+		"filters": gin.H{
+			"category":   category,
+			"min_price":  minPrice,
+			"max_price":  maxPrice,
+			"min_rating": minRating,
+		},
+	})
+}
+
+// ========== STATISTICS HANDLER ==========
+
+func getStatisticsHandler(c *gin.Context) {
+	// Buyurtmalar statistikasi
+	var totalOrders, pendingOrders, completedOrders, cancelledOrders, totalRevenue int
+	var todayOrders, todayRevenue int
+
+	// Umumiy statistika
+	db.QueryRow("SELECT COUNT(*) FROM orders").Scan(&totalOrders)
+	db.QueryRow("SELECT COUNT(*) FROM orders WHERE status IN ('pending', 'confirmed', 'preparing')").Scan(&pendingOrders)
+	db.QueryRow("SELECT COUNT(*) FROM orders WHERE status = 'delivered'").Scan(&completedOrders)
+	db.QueryRow("SELECT COUNT(*) FROM orders WHERE status = 'cancelled'").Scan(&cancelledOrders)
+	db.QueryRow("SELECT COALESCE(SUM(total_price), 0) FROM orders WHERE status = 'delivered'").Scan(&totalRevenue)
+
+	// Bugungi statistika
+	today := time.Now().Format("2006-01-02")
+	db.QueryRow("SELECT COUNT(*) FROM orders WHERE DATE(order_time) = $1", today).Scan(&todayOrders)
+	db.QueryRow("SELECT COALESCE(SUM(total_price), 0) FROM orders WHERE status = 'delivered' AND DATE(order_time) = $1", today).Scan(&todayRevenue)
+
+	// Ovqatlar statistikasi
+	var totalFoods, popularFoods int
+	db.QueryRow("SELECT COUNT(*) FROM foods").Scan(&totalFoods)
+	db.QueryRow("SELECT COUNT(*) FROM foods WHERE is_popular = true OR rating >= 4.0").Scan(&popularFoods)
+
+	// Foydalanuvchilar statistikasi
+	var totalUsers int
+	db.QueryRow("SELECT COUNT(*) FROM users").Scan(&totalUsers)
+
+	c.JSON(http.StatusOK, gin.H{
+		"total_orders":     totalOrders,
+		"pending_orders":   pendingOrders,
+		"completed_orders": completedOrders,
+		"cancelled_orders": cancelledOrders,
+		"total_revenue":    totalRevenue,
+		"today_orders":     todayOrders,
+		"today_revenue":    todayRevenue,
+		"total_foods":      totalFoods,
+		"total_users":      totalUsers,
+		"popular_foods":    popularFoods,
+	})
+}
+
+// ========== ROOT HANDLER ==========
+
+func rootHandler(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"message":             "Restaurant API - To'liq Funksional Versiya",
+		"version":             "5.0.0",
+		"supported_languages": []string{"uz", "ru", "en"},
+		"features": []string{
+			"PostgreSQL Database",
+			"File Upload with Food Names",
+			"Telegram Bot Integration with User Notifications",
+			"Auto-incremental Food IDs (amur_1, amur_2, etc.)",
+			"GPS Coordinates for Delivery",
+			"Stock Management (hide unavailable foods)",
+			"Public Foods API",
+			"Real-time Order Tracking",
+			"WebSocket Support",
+			"Advanced Search",
+			"Review System",
+			"Multi-language Support",
+		},
+		"endpoints": gin.H{
+			"foods":      "/api/foods (PUBLIC)",
+			"categories": "/api/categories (PUBLIC)",
+			"search":     "/api/search (PUBLIC)",
+			"upload":     "/api/upload (PUBLIC/AUTH)",
+			"orders":     "/api/orders (AUTH)",
+			"reviews":    "/api/reviews (AUTH)",
+			"websocket":  "/ws",
+			"statistics": "/api/admin/statistics (ADMIN)",
+		},
+		"database": gin.H{
+			"type":   "PostgreSQL",
+			"status": "connected",
+		},
+		"integrations": gin.H{
+			"telegram_bot":       "enabled",
+			"user_notifications": "enabled",
+			"file_upload":        "enabled",
+			"gps_tracking":       "enabled",
+		},
+	})
+}
+
+// ========== SETUP ROUTES ==========
+
+func setupRoutes() *gin.Engine {
+	gin.SetMode(gin.ReleaseMode)
+	r := gin.Default()
+
+	// Middleware
+	r.Use(corsMiddleware())
+
+	// Static fayllar (CORS bilan)
+	if _, err := os.Stat(UPLOAD_DIR); os.IsNotExist(err) {
+		os.MkdirAll(UPLOAD_DIR, 0755)
+	}
+
+	// Static files with proper headers for web access
+	r.Static("/uploads", "./"+UPLOAD_DIR)
+	r.StaticFile("/favicon.ico", "./favicon.ico")
+
+	// WebSocket endpoint
+	r.GET("/ws", handleWebSocket)
+
+	// Root endpoint
+	r.GET("/", rootHandler)
+
+	// API group
+	api := r.Group("/api")
+
+	// PUBLIC ENDPOINTS (login not required)
+	public := api.Group("/")
+	{
+		// Categories
+		public.GET("/categories", getCategories)
+
+		// Foods (public - faqat mavjud ovqatlar)
+		public.GET("/foods", optionalAuthMiddleware(), getAllFoodsHandler)
+		public.GET("/foods/:food_id", getFoodHandler)
+
+		// Search
+		public.GET("/search", optionalAuthMiddleware(), searchHandler)
+
+		// Order tracking (public)
+		public.GET("/orders/:order_id/track", trackOrderHandler)
+
+		// Reviews (public read)
+		public.GET("/foods/:food_id/reviews", getFoodReviewsHandler)
+
+		// File uploads (public but can be authenticated)
+		public.POST("/upload", optionalAuthMiddleware(), uploadFile)
+		public.GET("/files", optionalAuthMiddleware(), getUploadedFiles)
+	}
+
+	// Authentication endpoints
+	auth := api.Group("/")
+	{
+		auth.POST("/register", register)
+		auth.POST("/login", login)
+	}
+
+	// Protected endpoints
+	protected := api.Group("/")
+	protected.Use(authMiddleware())
+	{
+		// Profile
+		protected.GET("/profile", getProfile)
+
+		// Orders
+		protected.POST("/orders", createOrderHandler)
+		protected.GET("/orders", getOrdersHandler)
+		protected.GET("/orders/:order_id", getOrderHandler)
+		protected.DELETE("/orders/:order_id", cancelOrderHandler)
+
+		// Reviews
+		protected.POST("/reviews", createReviewHandler)
+
+		// File management
+		protected.DELETE("/files/:file_id", deleteFile)
+	}
+
+	// Admin endpoints
+	admin := protected.Group("/admin")
+	admin.Use(adminMiddleware())
+	{
+		// Food management
+		admin.POST("/foods", createFoodHandler)
+		admin.PUT("/foods/:food_id", updateFoodHandler)
+		admin.DELETE("/foods/:food_id", deleteFoodHandler)
+
+		// Order management
+		admin.PUT("/orders/:order_id/status", updateOrderStatusHandler)
+
+		// Statistics
+		admin.GET("/statistics", getStatisticsHandler)
+	}
+
+	return r
+}
+
+// ========== MAIN FUNCTION ==========
+
+func main() {
+	// Database initialization
+	if err := initDatabase(); err != nil {
+		log.Fatalf("❌ Ma'lumotlar bazasi xatoligi: %v", err)
+	}
+
+	// Test data initialization
+	if err := initializeTestData(); err != nil {
+		log.Printf("⚠️ Test ma'lumotlari yaratishda xatolik: %v", err)
+	}
+
+	// WebSocket handler
+	go func() {
+		for {
+			select {
+			case msg := <-broadcast:
+				for client := range clients {
+					if err := client.WriteMessage(websocket.TextMessage, msg); err != nil {
+						log.Printf("WebSocket xatolik: %v", err)
+						client.Close()
+						delete(clients, client)
+					}
+				}
+			}
+		}
+	}()
+
+	// Server setup
+	r := setupRoutes()
+
+	// Server port
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8000"
+	}
+
+	log.Printf("🚀 Restaurant API - To'liq Funksional Versiya ishlamoqda:")
+	log.Printf("📍 Server: http://localhost:%s", port)
+	log.Printf("🔗 WebSocket: ws://localhost:%s/ws", port)
+	log.Printf("📚 API Docs: http://localhost:%s/", port)
+	log.Printf("🍽️ Public Foods: http://localhost:%s/api/foods", port)
+	log.Printf("🔍 Search: http://localhost:%s/api/search", port)
+	log.Printf("📤 File Upload: http://localhost:%s/api/upload", port)
+	log.Printf("📊 Admin Stats: http://localhost:%s/api/admin/statistics", port)
+	log.Printf("🖼️ Static Files: http://localhost:%s/uploads/", port)
+	log.Printf("⭐ Reviews: http://localhost:%s/api/foods/:id/reviews", port)
+	log.Printf("🗄️ Database: PostgreSQL")
+	log.Printf("🤖 Telegram Bot: Admin + User Notifications")
+	log.Printf("📍 GPS: Delivery Coordinates Support")
+	log.Printf("🔢 Auto ID: amur_1, amur_2, amur_3...")
+	log.Printf("👁️ Visibility: Only available foods (isThere=true, stock>0)")
+
+	log.Fatal(r.Run(":" + port))
+}

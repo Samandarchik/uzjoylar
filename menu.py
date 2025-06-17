@@ -713,7 +713,7 @@ MULTILINGUAL_FOODS_DB = {
         "category": "shashlik",
         "price": 23000,
         "isThere": True,
-        "imageUrl": "https://firebasestorage.googleapis.com/v0/b/amur-restoran.firebasestorage.app/o/moloti.jpg?alt=media&token=dc4fbd64-95c4-4a94-b56a-c232df091394",
+        "imageUrl": "http://0.0.0.0:8000/uploads/moloti.png",
         "ingredients": {
             "uz": ["Mol go'shti", "Piyoz", "Ziravorlar"],
             "ru": ["Говядина", "Лук", "Специи"],
@@ -820,7 +820,7 @@ MULTILINGUAL_FOODS_DB = {
             "en": "Very delicious beef barbecue"
         },
         "category": "shashlik",
-        "price": 23000,
+        "price": 25000,
         "isThere": True,
         "imageUrl": "https://example.com/moloti.jpg",
         "ingredients": {
@@ -1000,7 +1000,7 @@ USERS_DB = {
         "email": "user@test.uz",
         "created_at": "2024-01-01 00:00:00",
         "is_active": True,
-        "tg_id": None,
+        "tg_id": 1066137436,
         "language": "uz"
     }
 }
