@@ -1,6 +1,9 @@
 package main
 
 import (
+	"bytes"
+	"crypto/md5"
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -12,56 +15,38 @@ import (
 	"sort"
 	"strconv"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
+	_ "github.com/lib/pq"
 )
 
-// Constants
+// Doimiylar
 const (
 	SECRET_KEY                = "restaurant_secret_key_2024"
 	ACCESS_TOKEN_EXPIRE_HOURS = 24
 	TELEGRAM_BOT_TOKEN        = "7609705273:AAH_CsC52AiiZCeZ828HaHzYgHKpJBvSLI0"
 	TELEGRAM_GROUP_ID         = "-1002783983140"
 	UPLOAD_DIR                = "uploads"
-	DATA_DIR                  = "data"
 	MAX_FILE_SIZE             = 10 << 20 // 10MB
 )
 
-// JSON filenames
-const (
-	USERS_FILE         = "users.json"
-	FOODS_FILE         = "foods.json"
-	ORDERS_FILE        = "orders.json"
-	REVIEWS_FILE       = "reviews.json"
-	FILE_UPLOADS_FILE  = "file_uploads.json"
-	DAILY_COUNTER_FILE = "daily_counter.json"
-)
-
-// Mutex for file operations
-var (
-	usersLock   sync.RWMutex
-	foodsLock   sync.RWMutex
-	ordersLock  sync.RWMutex
-	reviewsLock sync.RWMutex
-	uploadsLock sync.RWMutex
-	counterLock sync.RWMutex
-)
+// Database instance
+var db *sql.DB
 
 // WebSocket upgrader
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
 	CheckOrigin: func(r *http.Request) bool {
-		return true
+		return true // CORS uchun
 	},
 }
 
-// WebSocket clients
+// WebSocket mijozlari
 var clients = make(map[*websocket.Conn]bool)
 var broadcast = make(chan []byte)
 
@@ -103,7 +88,7 @@ const (
 	PaymentRefunded PaymentStatus = "refunded"
 )
 
-// Translations
+// Ko'p tilli qo'llab-quvvatlash
 var TRANSLATIONS = map[string]map[string]string{
 	"uz": {
 		"success":                    "Muvaffaqiyatli",
@@ -308,43 +293,43 @@ var TRANSLATIONS = map[string]map[string]string{
 	},
 }
 
-// Structures
+// Strukturalar
 type User struct {
-	ID        string    `json:"id"`
-	Number    string    `json:"number"`
-	Password  string    `json:"password,omitempty"`
-	Role      string    `json:"role"`
-	FullName  string    `json:"full_name"`
-	Email     *string   `json:"email,omitempty"`
-	CreatedAt time.Time `json:"created_at"`
-	IsActive  bool      `json:"is_active"`
-	TgID      *int64    `json:"tg_id,omitempty"`
-	Language  string    `json:"language"`
+	ID        string    `json:"id" db:"id"`
+	Number    string    `json:"number" db:"number"`
+	Password  string    `json:"password,omitempty" db:"password"`
+	Role      string    `json:"role" db:"role"`
+	FullName  string    `json:"full_name" db:"full_name"`
+	Email     *string   `json:"email,omitempty" db:"email"`
+	CreatedAt time.Time `json:"created_at" db:"created_at"`
+	IsActive  bool      `json:"is_active" db:"is_active"`
+	TgID      *int64    `json:"tg_id,omitempty" db:"tg_id"`
+	Language  string    `json:"language" db:"language"`
 }
 
 type Food struct {
-	ID              string              `json:"id"`
-	Names           map[string]string   `json:"names,omitempty"`
-	Name            string              `json:"name"`
-	Descriptions    map[string]string   `json:"descriptions,omitempty"`
-	Description     string              `json:"description"`
-	Category        string              `json:"category"`
+	ID              string              `json:"id" db:"id"`
+	Names           map[string]string   `json:"names,omitempty" db:"names"`
+	Name            string              `json:"name" db:"name"`
+	Descriptions    map[string]string   `json:"descriptions,omitempty" db:"descriptions"`
+	Description     string              `json:"description" db:"description"`
+	Category        string              `json:"category" db:"category"`
 	CategoryName    string              `json:"category_name,omitempty"`
-	Price           int                 `json:"price"`
-	IsThere         bool                `json:"isThere"`
-	ImageURL        string              `json:"imageUrl"`
-	Ingredients     map[string][]string `json:"ingredients"`
-	Allergens       map[string][]string `json:"allergens"`
-	Rating          float64             `json:"rating"`
-	ReviewCount     int                 `json:"review_count"`
-	PreparationTime int                 `json:"preparation_time"`
-	Stock           int                 `json:"stock"`
-	IsPopular       bool                `json:"is_popular"`
-	Discount        int                 `json:"discount"`
+	Price           int                 `json:"price" db:"price"`
+	IsThere         bool                `json:"isThere" db:"is_there"`
+	ImageURL        string              `json:"imageUrl" db:"image_url"`
+	Ingredients     map[string][]string `json:"ingredients" db:"ingredients"`
+	Allergens       map[string][]string `json:"allergens" db:"allergens"`
+	Rating          float64             `json:"rating" db:"rating"`
+	ReviewCount     int                 `json:"review_count" db:"review_count"`
+	PreparationTime int                 `json:"preparation_time" db:"preparation_time"`
+	Stock           int                 `json:"stock" db:"stock"`
+	IsPopular       bool                `json:"is_popular" db:"is_popular"`
+	Discount        int                 `json:"discount" db:"discount"`
 	OriginalPrice   int                 `json:"original_price"`
-	Comment         string              `json:"comment"`
-	CreatedAt       time.Time           `json:"created_at"`
-	UpdatedAt       time.Time           `json:"updated_at"`
+	Comment         string              `json:"comment" db:"comment"`
+	CreatedAt       time.Time           `json:"created_at" db:"created_at"`
+	UpdatedAt       time.Time           `json:"updated_at" db:"updated_at"`
 }
 
 type OrderFood struct {
@@ -366,23 +351,34 @@ type PaymentInfo struct {
 	PaymentTime   *time.Time    `json:"payment_time,omitempty"`
 }
 
+type DeliveryInfo struct {
+	Type       string   `json:"type"`
+	Address    *string  `json:"address,omitempty"`
+	Latitude   *float64 `json:"latitude,omitempty"`
+	Longitude  *float64 `json:"longitude,omitempty"`
+	Phone      *string  `json:"phone,omitempty"`
+	TableID    *string  `json:"table_id,omitempty"`
+	TableName  *string  `json:"table_name,omitempty"`
+	PickupCode *string  `json:"pickup_code,omitempty"`
+}
+
 type Order struct {
-	OrderID             string                 `json:"order_id"`
-	UserNumber          string                 `json:"user_number"`
-	UserName            string                 `json:"user_name"`
-	Foods               []OrderFood            `json:"foods"`
-	TotalPrice          int                    `json:"total_price"`
-	OrderTime           time.Time              `json:"order_time"`
-	DeliveryType        string                 `json:"delivery_type"`
-	DeliveryInfo        map[string]interface{} `json:"delivery_info"`
-	Status              OrderStatus            `json:"status"`
-	PaymentInfo         PaymentInfo            `json:"payment_info"`
-	SpecialInstructions *string                `json:"special_instructions,omitempty"`
-	EstimatedTime       *int                   `json:"estimated_time,omitempty"`
-	DeliveredAt         *time.Time             `json:"delivered_at,omitempty"`
-	StatusHistory       []StatusUpdate         `json:"status_history,omitempty"`
-	CreatedAt           time.Time              `json:"created_at"`
-	UpdatedAt           time.Time              `json:"updated_at"`
+	OrderID             string                 `json:"order_id" db:"order_id"`
+	UserNumber          string                 `json:"user_number" db:"user_number"`
+	UserName            string                 `json:"user_name" db:"user_name"`
+	Foods               []OrderFood            `json:"foods" db:"foods"`
+	TotalPrice          int                    `json:"total_price" db:"total_price"`
+	OrderTime           time.Time              `json:"order_time" db:"order_time"`
+	DeliveryType        string                 `json:"delivery_type" db:"delivery_type"`
+	DeliveryInfo        map[string]interface{} `json:"delivery_info" db:"delivery_info"`
+	Status              OrderStatus            `json:"status" db:"status"`
+	PaymentInfo         PaymentInfo            `json:"payment_info" db:"payment_info"`
+	SpecialInstructions *string                `json:"special_instructions,omitempty" db:"special_instructions"`
+	EstimatedTime       *int                   `json:"estimated_time,omitempty" db:"estimated_time"`
+	DeliveredAt         *time.Time             `json:"delivered_at,omitempty" db:"delivered_at"`
+	StatusHistory       []StatusUpdate         `json:"status_history,omitempty" db:"status_history"`
+	CreatedAt           time.Time              `json:"created_at" db:"created_at"`
+	UpdatedAt           time.Time              `json:"updated_at" db:"updated_at"`
 }
 
 type StatusUpdate struct {
@@ -392,34 +388,29 @@ type StatusUpdate struct {
 }
 
 type Review struct {
-	ID        string    `json:"id"`
-	UserID    string    `json:"user_id"`
+	ID        string    `json:"id" db:"id"`
+	UserID    string    `json:"user_id" db:"user_id"`
 	UserName  string    `json:"user_name,omitempty"`
-	FoodID    string    `json:"food_id"`
-	Rating    int       `json:"rating"`
-	Comment   string    `json:"comment"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	FoodID    string    `json:"food_id" db:"food_id"`
+	Rating    int       `json:"rating" db:"rating"`
+	Comment   string    `json:"comment" db:"comment"`
+	CreatedAt time.Time `json:"created_at" db:"created_at"`
+	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
 }
 
 type FileUpload struct {
-	ID           string    `json:"id"`
-	OriginalName string    `json:"original_name"`
-	FileName     string    `json:"file_name"`
-	FilePath     string    `json:"file_path"`
-	FileSize     int64     `json:"file_size"`
-	MimeType     string    `json:"mime_type"`
-	URL          string    `json:"url"`
-	UploadedBy   string    `json:"uploaded_by"`
-	CreatedAt    time.Time `json:"created_at"`
+	ID           string    `json:"id" db:"id"`
+	OriginalName string    `json:"original_name" db:"original_name"`
+	FileName     string    `json:"file_name" db:"file_name"`
+	FilePath     string    `json:"file_path" db:"file_path"`
+	FileSize     int64     `json:"file_size" db:"file_size"`
+	MimeType     string    `json:"mime_type" db:"mime_type"`
+	URL          string    `json:"url" db:"url"`
+	UploadedBy   string    `json:"uploaded_by" db:"uploaded_by"`
+	CreatedAt    time.Time `json:"created_at" db:"created_at"`
 }
 
-type DailyCounter struct {
-	Date  string `json:"date"`
-	Count int    `json:"count"`
-}
-
-// Request/Response structures
+// Request/Response strukturalar
 type LoginRequest struct {
 	Number   string `json:"number" binding:"required"`
 	Password string `json:"password" binding:"required"`
@@ -500,19 +491,18 @@ type LanguageRequest struct {
 	Language string `json:"language" binding:"required"`
 }
 
+// Telegram strukturalar
+type TelegramMessage struct {
+	ChatID string `json:"chat_id"`
+	Text   string `json:"text"`
+}
+
 // Claims JWT uchun
 type Claims struct {
 	Number string `json:"sub"`
 	Role   string `json:"role"`
 	UserID string `json:"user_id"`
 	jwt.RegisteredClaims
-}
-
-// WebSocket message types
-type WSMessage struct {
-	Type    string      `json:"type"`
-	Data    interface{} `json:"data"`
-	OrderID string      `json:"order_id,omitempty"`
 }
 
 // Restaurant tables
@@ -523,413 +513,169 @@ var RestaurantTables = map[string]string{
 	"Zal-1 Stol-4": "70a53b0ac3264fce88d9a4b7d3a7fa5e",
 }
 
-// ========== JSON FILE OPERATIONS ==========
+// Daily order counter
+var DailyOrderCounter = make(map[string]int)
 
-func initDataDirectory() error {
-	if _, err := os.Stat(DATA_DIR); os.IsNotExist(err) {
-		if err := os.MkdirAll(DATA_DIR, 0755); err != nil {
-			return fmt.Errorf("Data papkasini yaratishda xatolik: %v", err)
-		}
+// WebSocket uchun xabar turlari
+type WSMessage struct {
+	Type    string      `json:"type"`
+	Data    interface{} `json:"data"`
+	OrderID string      `json:"order_id,omitempty"`
+}
+
+// ========== DATABASE FUNCTIONS ==========
+
+func initDatabase() error {
+	var err error
+
+	// Database connection string
+	dbHost := os.Getenv("DB_HOST")
+	if dbHost == "" {
+		dbHost = "localhost"
+	}
+	dbPort := os.Getenv("DB_PORT")
+	if dbPort == "" {
+		dbPort = "5432"
+	}
+	dbUser := os.Getenv("DB_USER")
+	if dbUser == "" {
+		dbUser = "postgres"
+	}
+	dbPassword := os.Getenv("DB_PASSWORD")
+	if dbPassword == "" {
+		dbPassword = "password"
+	}
+	dbName := os.Getenv("DB_NAME")
+	if dbName == "" {
+		dbName = "restaurant_db"
 	}
 
-	// Initialize empty JSON files if they don't exist
-	files := []string{USERS_FILE, FOODS_FILE, ORDERS_FILE, REVIEWS_FILE, FILE_UPLOADS_FILE, DAILY_COUNTER_FILE}
+	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		dbHost, dbPort, dbUser, dbPassword, dbName)
 
-	for _, filename := range files {
-		filepath := filepath.Join(DATA_DIR, filename)
-		if _, err := os.Stat(filepath); os.IsNotExist(err) {
-			emptyData := "[]"
-			if filename == DAILY_COUNTER_FILE {
-				emptyData = `{"date": "", "count": 0}`
-			}
-			if err := os.WriteFile(filepath, []byte(emptyData), 0644); err != nil {
-				return fmt.Errorf("%s faylini yaratishda xatolik: %v", filename, err)
-			}
-		}
+	db, err = sql.Open("postgres", connStr)
+	if err != nil {
+		return fmt.Errorf("Ma'lumotlar bazasiga ulanishda xatolik: %v", err)
 	}
 
-	log.Println("✅ JSON ma'lumotlar papkasi muvaffaqiyatli tayyorlandi")
+	// Test ulanish
+	if err = db.Ping(); err != nil {
+		return fmt.Errorf("Ma'lumotlar bazasini tekshirishda xatolik: %v", err)
+	}
+
+	// Jadvallarni yaratish
+	if err = createTables(); err != nil {
+		return fmt.Errorf("Jadvallarni yaratishda xatolik: %v", err)
+	}
+
+	log.Println("✅ PostgreSQL ma'lumotlar bazasi muvaffaqiyatli ulandi")
 	return nil
 }
 
-// Generic JSON file operations
-func readJSONFile(filename string, data interface{}) error {
-	filepath := filepath.Join(DATA_DIR, filename)
-	file, err := os.ReadFile(filepath)
-	if err != nil {
-		return err
-	}
-	return json.Unmarshal(file, data)
-}
+func createTables() error {
+	queries := []string{
+		// Users table
+		`CREATE TABLE IF NOT EXISTS users (
+			id VARCHAR(255) PRIMARY KEY,
+			number VARCHAR(20) UNIQUE NOT NULL,
+			password VARCHAR(255) NOT NULL,
+			role VARCHAR(20) DEFAULT 'user',
+			full_name VARCHAR(255) NOT NULL,
+			email VARCHAR(255),
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			is_active BOOLEAN DEFAULT true,
+			tg_id BIGINT,
+			language VARCHAR(5) DEFAULT 'uz'
+		)`,
 
-func writeJSONFile(filename string, data interface{}) error {
-	filepath := filepath.Join(DATA_DIR, filename)
-	jsonData, err := json.MarshalIndent(data, "", "  ")
-	if err != nil {
-		return err
-	}
-	return os.WriteFile(filepath, jsonData, 0644)
-}
+		// Foods table
+		`CREATE TABLE IF NOT EXISTS foods (
+			id VARCHAR(255) PRIMARY KEY,
+			names JSONB,
+			name VARCHAR(255) NOT NULL,
+			descriptions JSONB,
+			description TEXT,
+			category VARCHAR(100) NOT NULL,
+			price INTEGER NOT NULL,
+			is_there BOOLEAN DEFAULT true,
+			image_url TEXT,
+			ingredients JSONB,
+			allergens JSONB,
+			rating DECIMAL(3,2) DEFAULT 0.0,
+			review_count INTEGER DEFAULT 0,
+			preparation_time INTEGER DEFAULT 15,
+			stock INTEGER DEFAULT 100,
+			is_popular BOOLEAN DEFAULT false,
+			discount INTEGER DEFAULT 0,
+			comment TEXT,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		)`,
 
-// ========== USER OPERATIONS ==========
+		// Orders table
+		`CREATE TABLE IF NOT EXISTS orders (
+			order_id VARCHAR(255) PRIMARY KEY,
+			user_number VARCHAR(20) NOT NULL,
+			user_name VARCHAR(255) NOT NULL,
+			foods JSONB NOT NULL,
+			total_price INTEGER NOT NULL,
+			order_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			delivery_type VARCHAR(50) NOT NULL,
+			delivery_info JSONB,
+			status VARCHAR(20) DEFAULT 'pending',
+			payment_info JSONB NOT NULL,
+			special_instructions TEXT,
+			estimated_time INTEGER,
+			delivered_at TIMESTAMP,
+			status_history JSONB,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		)`,
 
-func getAllUsers() ([]User, error) {
-	usersLock.RLock()
-	defer usersLock.RUnlock()
+		// Reviews table
+		`CREATE TABLE IF NOT EXISTS reviews (
+			id VARCHAR(255) PRIMARY KEY,
+			user_id VARCHAR(255) NOT NULL,
+			food_id VARCHAR(255) NOT NULL,
+			rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
+			comment TEXT NOT NULL,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			FOREIGN KEY (food_id) REFERENCES foods(id) ON DELETE CASCADE,
+			UNIQUE(user_id, food_id)
+		)`,
 
-	var users []User
-	err := readJSONFile(USERS_FILE, &users)
-	return users, err
-}
+		// File uploads table
+		`CREATE TABLE IF NOT EXISTS file_uploads (
+			id VARCHAR(255) PRIMARY KEY,
+			original_name VARCHAR(255) NOT NULL,
+			file_name VARCHAR(255) NOT NULL,
+			file_path VARCHAR(500) NOT NULL,
+			file_size BIGINT NOT NULL,
+			mime_type VARCHAR(100) NOT NULL,
+			url VARCHAR(500) NOT NULL,
+			uploaded_by VARCHAR(255),
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		)`,
 
-func saveUsers(users []User) error {
-	usersLock.Lock()
-	defer usersLock.Unlock()
-
-	return writeJSONFile(USERS_FILE, users)
-}
-
-func getUserByNumber(number string) (*User, error) {
-	users, err := getAllUsers()
-	if err != nil {
-		return nil, err
-	}
-
-	for _, user := range users {
-		if user.Number == number {
-			return &user, nil
-		}
-	}
-	return nil, fmt.Errorf("user not found")
-}
-
-func getUserByID(userID string) (*User, error) {
-	users, err := getAllUsers()
-	if err != nil {
-		return nil, err
-	}
-
-	for _, user := range users {
-		if user.ID == userID {
-			return &user, nil
-		}
-	}
-	return nil, fmt.Errorf("user not found")
-}
-
-func createUser(user *User) error {
-	users, err := getAllUsers()
-	if err != nil {
-		return err
-	}
-
-	// Check if user already exists
-	for _, existingUser := range users {
-		if existingUser.Number == user.Number {
-			return fmt.Errorf("user already exists")
-		}
-	}
-
-	users = append(users, *user)
-	return saveUsers(users)
-}
-
-// ========== FOOD OPERATIONS ==========
-
-func getAllFoods() ([]Food, error) {
-	foodsLock.RLock()
-	defer foodsLock.RUnlock()
-
-	var foods []Food
-	err := readJSONFile(FOODS_FILE, &foods)
-	return foods, err
-}
-
-func saveFoods(foods []Food) error {
-	foodsLock.Lock()
-	defer foodsLock.Unlock()
-
-	return writeJSONFile(FOODS_FILE, foods)
-}
-
-func getFoodByID(foodID string) (*Food, error) {
-	foods, err := getAllFoods()
-	if err != nil {
-		return nil, err
+		// Indexes
+		`CREATE INDEX IF NOT EXISTS idx_foods_category ON foods(category)`,
+		`CREATE INDEX IF NOT EXISTS idx_foods_is_there ON foods(is_there)`,
+		`CREATE INDEX IF NOT EXISTS idx_foods_is_popular ON foods(is_popular)`,
+		`CREATE INDEX IF NOT EXISTS idx_orders_user_number ON orders(user_number)`,
+		`CREATE INDEX IF NOT EXISTS idx_orders_status ON orders(status)`,
+		`CREATE INDEX IF NOT EXISTS idx_orders_order_time ON orders(order_time)`,
+		`CREATE INDEX IF NOT EXISTS idx_reviews_food_id ON reviews(food_id)`,
+		`CREATE INDEX IF NOT EXISTS idx_reviews_user_id ON reviews(user_id)`,
 	}
 
-	for _, food := range foods {
-		if food.ID == foodID {
-			return &food, nil
-		}
-	}
-	return nil, fmt.Errorf("food not found")
-}
-
-func createFood(food *Food) error {
-	foods, err := getAllFoods()
-	if err != nil {
-		return err
-	}
-
-	foods = append(foods, *food)
-	return saveFoods(foods)
-}
-
-func updateFood(updatedFood *Food) error {
-	foods, err := getAllFoods()
-	if err != nil {
-		return err
-	}
-
-	for i, food := range foods {
-		if food.ID == updatedFood.ID {
-			foods[i] = *updatedFood
-			return saveFoods(foods)
-		}
-	}
-	return fmt.Errorf("food not found")
-}
-
-func deleteFood(foodID string) error {
-	foods, err := getAllFoods()
-	if err != nil {
-		return err
-	}
-
-	for i, food := range foods {
-		if food.ID == foodID {
-			foods = append(foods[:i], foods[i+1:]...)
-			return saveFoods(foods)
-		}
-	}
-	return fmt.Errorf("food not found")
-}
-
-// ========== ORDER OPERATIONS ==========
-
-func getAllOrders() ([]Order, error) {
-	ordersLock.RLock()
-	defer ordersLock.RUnlock()
-
-	var orders []Order
-	err := readJSONFile(ORDERS_FILE, &orders)
-	return orders, err
-}
-
-func saveOrders(orders []Order) error {
-	ordersLock.Lock()
-	defer ordersLock.Unlock()
-
-	return writeJSONFile(ORDERS_FILE, orders)
-}
-
-func getOrderByID(orderID string) (*Order, error) {
-	orders, err := getAllOrders()
-	if err != nil {
-		return nil, err
-	}
-
-	for _, order := range orders {
-		if order.OrderID == orderID {
-			return &order, nil
-		}
-	}
-	return nil, fmt.Errorf("order not found")
-}
-
-func createOrder(order *Order) error {
-	orders, err := getAllOrders()
-	if err != nil {
-		return err
-	}
-
-	orders = append(orders, *order)
-	return saveOrders(orders)
-}
-
-func updateOrder(updatedOrder *Order) error {
-	orders, err := getAllOrders()
-	if err != nil {
-		return err
-	}
-
-	for i, order := range orders {
-		if order.OrderID == updatedOrder.OrderID {
-			orders[i] = *updatedOrder
-			return saveOrders(orders)
-		}
-	}
-	return fmt.Errorf("order not found")
-}
-
-// ========== REVIEW OPERATIONS ==========
-
-func getAllReviews() ([]Review, error) {
-	reviewsLock.RLock()
-	defer reviewsLock.RUnlock()
-
-	var reviews []Review
-	err := readJSONFile(REVIEWS_FILE, &reviews)
-	return reviews, err
-}
-
-func saveReviews(reviews []Review) error {
-	reviewsLock.Lock()
-	defer reviewsLock.Unlock()
-
-	return writeJSONFile(REVIEWS_FILE, reviews)
-}
-
-func getReviewsByFoodID(foodID string) ([]Review, error) {
-	reviews, err := getAllReviews()
-	if err != nil {
-		return nil, err
-	}
-
-	var foodReviews []Review
-	for _, review := range reviews {
-		if review.FoodID == foodID {
-			// Get user name
-			if user, err := getUserByID(review.UserID); err == nil {
-				review.UserName = user.FullName
-			}
-			foodReviews = append(foodReviews, review)
-		}
-	}
-	return foodReviews, nil
-}
-
-func createReview(review *Review) error {
-	reviews, err := getAllReviews()
-	if err != nil {
-		return err
-	}
-
-	// Check if user already reviewed this food
-	for i, existingReview := range reviews {
-		if existingReview.UserID == review.UserID && existingReview.FoodID == review.FoodID {
-			// Update existing review
-			reviews[i] = *review
-			return saveReviews(reviews)
-		}
-	}
-
-	// Add new review
-	reviews = append(reviews, *review)
-	return saveReviews(reviews)
-}
-
-func updateFoodRating(foodID string) error {
-	reviews, err := getAllReviews()
-	if err != nil {
-		return err
-	}
-
-	// Calculate average rating
-	var totalRating float64
-	var count int
-	for _, review := range reviews {
-		if review.FoodID == foodID {
-			totalRating += float64(review.Rating)
-			count++
-		}
-	}
-
-	if count > 0 {
-		averageRating := totalRating / float64(count)
-
-		// Update food rating
-		foods, err := getAllFoods()
-		if err != nil {
-			return err
-		}
-
-		for i, food := range foods {
-			if food.ID == foodID {
-				foods[i].Rating = averageRating
-				foods[i].ReviewCount = count
-				return saveFoods(foods)
-			}
+	for _, query := range queries {
+		if _, err := db.Exec(query); err != nil {
+			return fmt.Errorf("Jadval yaratishda xatolik: %v", err)
 		}
 	}
 
 	return nil
-}
-
-// ========== FILE UPLOAD OPERATIONS ==========
-
-func getAllFileUploads() ([]FileUpload, error) {
-	uploadsLock.RLock()
-	defer uploadsLock.RUnlock()
-
-	var uploads []FileUpload
-	err := readJSONFile(FILE_UPLOADS_FILE, &uploads)
-	return uploads, err
-}
-
-func saveFileUploads(uploads []FileUpload) error {
-	uploadsLock.Lock()
-	defer uploadsLock.Unlock()
-
-	return writeJSONFile(FILE_UPLOADS_FILE, uploads)
-}
-
-func createFileUpload(upload *FileUpload) error {
-	uploads, err := getAllFileUploads()
-	if err != nil {
-		return err
-	}
-
-	uploads = append(uploads, *upload)
-	return saveFileUploads(uploads)
-}
-
-func deleteFileUpload(fileID string) error {
-	uploads, err := getAllFileUploads()
-	if err != nil {
-		return err
-	}
-
-	for i, upload := range uploads {
-		if upload.ID == fileID {
-			uploads = append(uploads[:i], uploads[i+1:]...)
-			return saveFileUploads(uploads)
-		}
-	}
-	return fmt.Errorf("file not found")
-}
-
-func getFileUploadByID(fileID string) (*FileUpload, error) {
-	uploads, err := getAllFileUploads()
-	if err != nil {
-		return nil, err
-	}
-
-	for _, upload := range uploads {
-		if upload.ID == fileID {
-			return &upload, nil
-		}
-	}
-	return nil, fmt.Errorf("file not found")
-}
-
-// ========== DAILY COUNTER OPERATIONS ==========
-
-func getDailyCounter() (*DailyCounter, error) {
-	counterLock.RLock()
-	defer counterLock.RUnlock()
-
-	var counter DailyCounter
-	err := readJSONFile(DAILY_COUNTER_FILE, &counter)
-	return &counter, err
-}
-
-func saveDailyCounter(counter *DailyCounter) error {
-	counterLock.Lock()
-	defer counterLock.Unlock()
-
-	return writeJSONFile(DAILY_COUNTER_FILE, counter)
 }
 
 // ========== UTILITY FUNCTIONS ==========
@@ -983,50 +729,52 @@ func generateID(prefix string) string {
 }
 
 func generateFoodID() string {
-	foods, err := getAllFoods()
+	// Eng oxirgi ID ni topish
+	var lastID string
+	query := `SELECT id FROM foods WHERE id LIKE 'amur_%' ORDER BY 
+			  CAST(SUBSTRING(id FROM 'amur_(.*)') AS INTEGER) DESC LIMIT 1`
+
+	err := db.QueryRow(query).Scan(&lastID)
+	if err != nil {
+		// Birinchi ovqat bo'lsa
+		return "amur_1"
+	}
+
+	// ID dan raqamni ajratib olish
+	re := regexp.MustCompile(`amur_(\d+)`)
+	matches := re.FindStringSubmatch(lastID)
+	if len(matches) != 2 {
+		return "amur_1"
+	}
+
+	// Raqamni 1 ga oshirish
+	num, err := strconv.Atoi(matches[1])
 	if err != nil {
 		return "amur_1"
 	}
 
-	maxID := 0
-	re := regexp.MustCompile(`amur_(\d+)`)
-
-	for _, food := range foods {
-		matches := re.FindStringSubmatch(food.ID)
-		if len(matches) == 2 {
-			if num, err := strconv.Atoi(matches[1]); err == nil {
-				if num > maxID {
-					maxID = num
-				}
-			}
-		}
-	}
-
-	return fmt.Sprintf("amur_%d", maxID+1)
+	return fmt.Sprintf("amur_%d", num+1)
 }
 
 func generateOrderID() string {
 	today := time.Now().Format("2006-01-02")
 
-	counter, err := getDailyCounter()
+	// Daily counter-ni database dan olish yoki yaratish
+	var count int
+	query := `SELECT COUNT(*) FROM orders WHERE DATE(order_time) = $1`
+	err := db.QueryRow(query, today).Scan(&count)
 	if err != nil {
-		counter = &DailyCounter{Date: today, Count: 0}
+		log.Printf("Order count olishda xatolik: %v", err)
+		count = 0
 	}
 
-	if counter.Date != today {
-		counter.Date = today
-		counter.Count = 0
-	}
-
-	counter.Count++
-	saveDailyCounter(counter)
-
-	return fmt.Sprintf("%s-%d", today, counter.Count)
+	count++
+	return fmt.Sprintf("%s-%d", today, count)
 }
 
 func hashPassword(password string) string {
-	// Simple hash - in production use bcrypt
-	return fmt.Sprintf("%x", password)
+	hash := md5.Sum([]byte(password))
+	return fmt.Sprintf("%x", hash)
 }
 
 func createToken(user *User) (string, error) {
@@ -1062,9 +810,11 @@ func getHostURL(c *gin.Context) string {
 }
 
 func cleanFileName(name string) string {
+	// Fayl nomini tozalash (faqat harflar, raqamlar va - _ .)
 	re := regexp.MustCompile(`[^a-zA-Z0-9\-_.]`)
 	cleaned := re.ReplaceAllString(name, "_")
 
+	// Uzunligini cheklash
 	if len(cleaned) > 50 {
 		ext := filepath.Ext(cleaned)
 		nameWithoutExt := strings.TrimSuffix(cleaned, ext)
@@ -1077,58 +827,331 @@ func cleanFileName(name string) string {
 	return cleaned
 }
 
-func getLocalizedFood(food *Food, lang string) *Food {
-	localizedFood := *food
+// ========== FILE UPLOAD FUNCTIONS ==========
 
-	// Ko'p tilli nomni olish
-	if food.Names != nil {
-		if name, exists := food.Names[lang]; exists {
-			localizedFood.Name = name
-		} else if name, exists := food.Names["uz"]; exists {
-			localizedFood.Name = name
-		}
+func uploadFile(c *gin.Context) {
+	lang := getUserLanguage(c.Request.Header)
+
+	// Foydalanuvchi tekshiruvi (ixtiyoriy)
+	var uploaderID string
+	if userInterface, exists := c.Get("user"); exists {
+		user := userInterface.(*Claims)
+		uploaderID = user.UserID
 	}
 
-	// Ko'p tilli tavsifni olish
-	if food.Descriptions != nil {
-		if desc, exists := food.Descriptions[lang]; exists {
-			localizedFood.Description = desc
-		} else if desc, exists := food.Descriptions["uz"]; exists {
-			localizedFood.Description = desc
-		}
+	// Faylni olish
+	file, fileHeader, err := c.Request.FormFile("file")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Fayl tanlanmadi"})
+		return
+	}
+	defer file.Close()
+
+	// Fayl hajmini tekshirish
+	if fileHeader.Size > MAX_FILE_SIZE {
+		c.JSON(http.StatusBadRequest, createResponse("file_too_large", lang))
+		return
 	}
 
-	// Kategoriya nomini tarjima qilish
-	categoryKey := strings.ToLower(strings.ReplaceAll(food.Category, " ", "_"))
-	localizedFood.CategoryName = getTranslation(categoryKey, lang)
-
-	// Chegirma hisoblash
-	if food.Discount > 0 {
-		localizedFood.OriginalPrice = food.Price
-		localizedFood.Price = food.Price - (food.Price * food.Discount / 100)
+	// Fayl turini tekshirish
+	allowedTypes := map[string]bool{
+		"image/jpeg": true,
+		"image/jpg":  true,
+		"image/png":  true,
+		"image/gif":  true,
+		"image/webp": true,
 	}
 
-	return &localizedFood
+	contentType := fileHeader.Header.Get("Content-Type")
+	if !allowedTypes[contentType] {
+		c.JSON(http.StatusBadRequest, createResponse("invalid_file", lang))
+		return
+	}
+
+	// Upload papkasini yaratish
+	if _, err := os.Stat(UPLOAD_DIR); os.IsNotExist(err) {
+		os.MkdirAll(UPLOAD_DIR, 0755)
+	}
+
+	// Ovqat nomi bilan fayl nomi yaratish
+	originalName := strings.TrimSuffix(fileHeader.Filename, filepath.Ext(fileHeader.Filename))
+	cleanedName := cleanFileName(originalName)
+	ext := filepath.Ext(fileHeader.Filename)
+
+	// Noyob fayl nomi yaratish (ovqat nomi + vaqt)
+	fileName := fmt.Sprintf("%s_%d%s", cleanedName, time.Now().Unix(), ext)
+	filePath := filepath.Join(UPLOAD_DIR, fileName)
+
+	// Faylni saqlash
+	dst, err := os.Create(filePath)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Faylni saqlashda xatolik"})
+		return
+	}
+	defer dst.Close()
+
+	if _, err := io.Copy(dst, file); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Faylni nusxalashda xatolik"})
+		return
+	}
+
+	// URL yaratish
+	fileURL := fmt.Sprintf("%s/uploads/%s", getHostURL(c), fileName)
+
+	// Ma'lumotlar bazasiga saqlash
+	fileUpload := &FileUpload{
+		ID:           generateID("file"),
+		OriginalName: fileHeader.Filename,
+		FileName:     fileName,
+		FilePath:     filePath,
+		FileSize:     fileHeader.Size,
+		MimeType:     contentType,
+		URL:          fileURL,
+		UploadedBy:   uploaderID,
+		CreatedAt:    time.Now(),
+	}
+
+	query := `INSERT INTO file_uploads (id, original_name, file_name, file_path, file_size, mime_type, url, uploaded_by, created_at) 
+			  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`
+
+	_, err = db.Exec(query, fileUpload.ID, fileUpload.OriginalName, fileUpload.FileName,
+		fileUpload.FilePath, fileUpload.FileSize, fileUpload.MimeType, fileUpload.URL,
+		fileUpload.UploadedBy, fileUpload.CreatedAt)
+
+	if err != nil {
+		log.Printf("Fayl ma'lumotlarini saqlashda xatolik: %v", err)
+		// Faylni o'chirish
+		os.Remove(filePath)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotni saqlashda xatolik"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message":    getTranslation("file_uploaded", lang),
+		"file":       fileUpload,
+		"url":        fileURL,
+		"public_url": fileURL,
+	})
 }
 
-func getAllLocalizedFoods(lang string, isAdmin bool) ([]*Food, error) {
-	foods, err := getAllFoods()
-	if err != nil {
-		return nil, err
+func getUploadedFiles(c *gin.Context) {
+	page, _ := strconv.Atoi(c.Query("page"))
+	limit, _ := strconv.Atoi(c.Query("limit"))
+	fileType := c.Query("type") // image, document
+
+	if page <= 0 {
+		page = 1
+	}
+	if limit <= 0 {
+		limit = 20
 	}
 
-	var localizedFoods []*Food
-	for _, food := range foods {
-		// Non-admin users only see available foods
-		if !isAdmin && (!food.IsThere || food.Stock <= 0) {
+	offset := (page - 1) * limit
+
+	// Query yaratish
+	query := `SELECT id, original_name, file_name, file_path, file_size, mime_type, url, uploaded_by, created_at 
+			  FROM file_uploads WHERE 1=1`
+	args := []interface{}{}
+	argIndex := 1
+
+	if fileType == "image" {
+		query += fmt.Sprintf(" AND mime_type LIKE 'image/%%' ORDER BY created_at DESC LIMIT $%d OFFSET $%d", argIndex, argIndex+1)
+		args = append(args, limit, offset)
+	} else {
+		query += fmt.Sprintf(" ORDER BY created_at DESC LIMIT $%d OFFSET $%d", argIndex, argIndex+1)
+		args = append(args, limit, offset)
+	}
+
+	rows, err := db.Query(query, args...)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
+		return
+	}
+	defer rows.Close()
+
+	var files []FileUpload
+	for rows.Next() {
+		var file FileUpload
+		err := rows.Scan(&file.ID, &file.OriginalName, &file.FileName, &file.FilePath,
+			&file.FileSize, &file.MimeType, &file.URL, &file.UploadedBy, &file.CreatedAt)
+		if err != nil {
 			continue
 		}
-
-		localizedFood := getLocalizedFood(&food, lang)
-		localizedFoods = append(localizedFoods, localizedFood)
+		files = append(files, file)
 	}
 
-	return localizedFoods, nil
+	// Total count
+	countQuery := `SELECT COUNT(*) FROM file_uploads`
+	if fileType == "image" {
+		countQuery += " WHERE mime_type LIKE 'image/%'"
+	}
+
+	var total int
+	db.QueryRow(countQuery).Scan(&total)
+
+	c.JSON(http.StatusOK, gin.H{
+		"files": files,
+		"pagination": gin.H{
+			"page":        page,
+			"limit":       limit,
+			"total":       total,
+			"total_pages": (total + limit - 1) / limit,
+		},
+	})
+}
+
+func deleteFile(c *gin.Context) {
+	fileID := c.Param("file_id")
+	lang := getUserLanguage(c.Request.Header)
+
+	// Faylni ma'lumotlar bazasidan olish
+	var file FileUpload
+	query := `SELECT id, file_path FROM file_uploads WHERE id = $1`
+	err := db.QueryRow(query, fileID).Scan(&file.ID, &file.FilePath)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			c.JSON(http.StatusNotFound, createResponse("not_found", lang))
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
+		return
+	}
+
+	// Faylni disk dan o'chirish
+	if err := os.Remove(file.FilePath); err != nil {
+		log.Printf("Faylni o'chirishda xatolik: %v", err)
+	}
+
+	// Ma'lumotlar bazasidan o'chirish
+	deleteQuery := `DELETE FROM file_uploads WHERE id = $1`
+	_, err = db.Exec(deleteQuery, fileID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotni o'chirishda xatolik"})
+		return
+	}
+
+	c.JSON(http.StatusOK, createResponse("success", lang))
+}
+
+// ========== TELEGRAM BOT FUNCTIONS ==========
+
+func sendTelegramMessage(message string) error {
+	url := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", TELEGRAM_BOT_TOKEN)
+
+	payload := TelegramMessage{
+		ChatID: TELEGRAM_GROUP_ID,
+		Text:   message,
+	}
+
+	jsonData, err := json.Marshal(payload)
+	if err != nil {
+		return err
+	}
+
+	resp, err := http.Post(url, "application/json", bytes.NewBuffer(jsonData))
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return fmt.Errorf("Telegram API xatolik: %s", string(body))
+	}
+
+	return nil
+}
+
+func sendTelegramMessageToUser(userTgID int64, message string) error {
+	url := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", TELEGRAM_BOT_TOKEN)
+
+	payload := TelegramMessage{
+		ChatID: fmt.Sprintf("%d", userTgID),
+		Text:   message,
+	}
+
+	jsonData, err := json.Marshal(payload)
+	if err != nil {
+		return err
+	}
+
+	resp, err := http.Post(url, "application/json", bytes.NewBuffer(jsonData))
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return fmt.Errorf("Telegram API xatolik: %s", string(body))
+	}
+
+	return nil
+}
+
+func formatOrderForTelegram(order *Order, lang string) string {
+	message := fmt.Sprintf("🍽️ %s\n\n", getTranslation("new_order", lang))
+	message += fmt.Sprintf("📋 %s %s\n", getTranslation("order_id", lang), order.OrderID)
+	message += fmt.Sprintf("👤 %s %s\n", getTranslation("customer", lang), order.UserName)
+	message += fmt.Sprintf("📞 %s %s\n", getTranslation("phone", lang), order.UserNumber)
+	message += fmt.Sprintf("🕐 %s %s\n\n", getTranslation("time", lang), order.OrderTime.Format("15:04"))
+
+	message += fmt.Sprintf("🍕 %s\n", getTranslation("order_items", lang))
+	for _, food := range order.Foods {
+		message += fmt.Sprintf("• %s x%d = %d so'm\n", food.Name, food.Count, food.TotalPrice)
+	}
+
+	message += fmt.Sprintf("\n💰 %s %d so'm\n", getTranslation("total_amount", lang), order.TotalPrice)
+
+	// Yetkazib berish ma'lumotlari
+	switch order.DeliveryType {
+	case "delivery":
+		if address, ok := order.DeliveryInfo["address"].(string); ok {
+			message += fmt.Sprintf("🚚 %s %s\n", getTranslation("delivery_address", lang), address)
+		}
+		if lat, ok := order.DeliveryInfo["latitude"].(float64); ok {
+			if lng, ok := order.DeliveryInfo["longitude"].(float64); ok {
+				message += fmt.Sprintf("📍 Koordinatalar: %.6f, %.6f\n", lat, lng)
+			}
+		}
+	case "own_withdrawal":
+		message += fmt.Sprintf("🏪 %s\n", getTranslation("pickup", lang))
+	case "atTheRestaurant":
+		if tableName, ok := order.DeliveryInfo["table_name"].(string); ok {
+			message += fmt.Sprintf("🍽️ %s %s\n", getTranslation("restaurant_table", lang), tableName)
+		}
+	}
+
+	message += fmt.Sprintf("💳 %s %s\n", getTranslation("payment_method", lang),
+		getTranslation(string(order.PaymentInfo.Method), lang))
+
+	if order.EstimatedTime != nil {
+		message += fmt.Sprintf("⏱️ %s %d daqiqa\n", getTranslation("preparation_time", lang), *order.EstimatedTime)
+	}
+
+	if order.SpecialInstructions != nil && *order.SpecialInstructions != "" {
+		message += fmt.Sprintf("📝 %s %s\n", getTranslation("additional_notes", lang), *order.SpecialInstructions)
+	}
+
+	return message
+}
+
+func formatOrderStatusUpdateForUser(order *Order, lang string) string {
+	statusKey := fmt.Sprintf("order_status_%s", string(order.Status))
+	statusMessage := getTranslation(statusKey, lang)
+
+	message := fmt.Sprintf("📋 Buyurtma: %s\n", order.OrderID)
+	message += fmt.Sprintf("📍 Status: %s\n\n", statusMessage)
+
+	if order.Status == OrderReady {
+		message += "🎉 Buyurtmangiz tayyor! Iltimos, olib ketishga keling.\n"
+	} else if order.Status == OrderDelivered {
+		message += "✅ Buyurtmangiz muvaffaqiyatli yetkazildi. Rahmat!\n"
+	} else if order.Status == OrderCancelled {
+		message += "❌ Buyurtmangiz bekor qilindi.\n"
+	}
+
+	return message
 }
 
 // ========== WEBSOCKET FUNCTIONS ==========
@@ -1189,6 +1212,16 @@ func sendNewOrderNotification(order *Order) {
 		Data:    order,
 	}
 	broadcastToClients(wsMessage)
+
+	// Telegram xabar yuborish (admin gruppasiga)
+	go func() {
+		telegramMessage := formatOrderForTelegram(order, "uz")
+		if err := sendTelegramMessage(telegramMessage); err != nil {
+			log.Printf("Telegram xabar yuborishda xatolik: %v", err)
+		} else {
+			log.Printf("Telegram xabar yuborildi: %s", order.OrderID)
+		}
+	}()
 }
 
 // ========== MIDDLEWARE ==========
@@ -1282,49 +1315,462 @@ func adminMiddleware() gin.HandlerFunc {
 	})
 }
 
-// ========== API HANDLERS ==========
+// ========== DATABASE HELPER FUNCTIONS ==========
 
-// Root handler
-func rootHandler(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"message":             "Restaurant API - JSON Version",
-		"version":             "6.0.0",
-		"supported_languages": []string{"uz", "ru", "en"},
-		"features": []string{
-			"JSON File Storage",
-			"File Upload with Food Names",
-			"Auto-incremental Food IDs (amur_1, amur_2, etc.)",
-			"GPS Coordinates for Delivery",
-			"Stock Management",
-			"Public Foods API",
-			"Real-time Order Tracking",
-			"WebSocket Support",
-			"Advanced Search",
-			"Review System",
-			"Multi-language Support",
-		},
-		"endpoints": gin.H{
-			"foods":      "/api/foods (PUBLIC)",
-			"categories": "/api/categories (PUBLIC)",
-			"search":     "/api/search (PUBLIC)",
-			"upload":     "/api/upload (PUBLIC/AUTH)",
-			"orders":     "/api/orders (AUTH)",
-			"reviews":    "/api/reviews (AUTH)",
-			"websocket":  "/ws",
-			"statistics": "/api/admin/statistics (ADMIN)",
-		},
-		"storage": gin.H{
-			"type":   "JSON Files",
-			"status": "ready",
-		},
-		"integrations": gin.H{
-			"file_upload":  "enabled",
-			"gps_tracking": "enabled",
-		},
-	})
+func getUserByNumber(number string) (*User, error) {
+	query := `SELECT id, number, password, role, full_name, email, created_at, is_active, tg_id, language 
+			  FROM users WHERE number = $1`
+
+	var user User
+	err := db.QueryRow(query, number).Scan(
+		&user.ID, &user.Number, &user.Password, &user.Role,
+		&user.FullName, &user.Email, &user.CreatedAt,
+		&user.IsActive, &user.TgID, &user.Language,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
 }
 
-// Authentication handlers
+func createUser(user *User) error {
+	query := `INSERT INTO users (id, number, password, role, full_name, email, created_at, is_active, tg_id, language) 
+			  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`
+
+	_, err := db.Exec(query, user.ID, user.Number, user.Password, user.Role,
+		user.FullName, user.Email, user.CreatedAt, user.IsActive, user.TgID, user.Language)
+
+	return err
+}
+
+func getFoodByID(foodID string) (*Food, error) {
+	query := `SELECT id, names, name, descriptions, description, category, price, is_there, 
+			  image_url, ingredients, allergens, rating, review_count, preparation_time, 
+			  stock, is_popular, discount, comment, created_at, updated_at
+			  FROM foods WHERE id = $1`
+
+	var food Food
+	var namesJSON, descriptionsJSON, ingredientsJSON, allergensJSON []byte
+
+	err := db.QueryRow(query, foodID).Scan(
+		&food.ID, &namesJSON, &food.Name, &descriptionsJSON, &food.Description,
+		&food.Category, &food.Price, &food.IsThere, &food.ImageURL,
+		&ingredientsJSON, &allergensJSON, &food.Rating, &food.ReviewCount,
+		&food.PreparationTime, &food.Stock, &food.IsPopular, &food.Discount,
+		&food.Comment, &food.CreatedAt, &food.UpdatedAt,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// JSON unmarshal
+	if namesJSON != nil {
+		json.Unmarshal(namesJSON, &food.Names)
+	}
+	if descriptionsJSON != nil {
+		json.Unmarshal(descriptionsJSON, &food.Descriptions)
+	}
+	if ingredientsJSON != nil {
+		json.Unmarshal(ingredientsJSON, &food.Ingredients)
+	}
+	if allergensJSON != nil {
+		json.Unmarshal(allergensJSON, &food.Allergens)
+	}
+
+	return &food, nil
+}
+
+func getAllFoods() ([]*Food, error) {
+	// Faqat mavjud ovqatlarni qaytarish (isThere = true va stock > 0)
+	query := `SELECT id, names, name, descriptions, description, category, price, is_there, 
+			  image_url, ingredients, allergens, rating, review_count, preparation_time, 
+			  stock, is_popular, discount, comment, created_at, updated_at
+			  FROM foods WHERE is_there = true AND stock > 0 ORDER BY id ASC`
+
+	rows, err := db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var foods []*Food
+	for rows.Next() {
+		var food Food
+		var namesJSON, descriptionsJSON, ingredientsJSON, allergensJSON []byte
+
+		err := rows.Scan(
+			&food.ID, &namesJSON, &food.Name, &descriptionsJSON, &food.Description,
+			&food.Category, &food.Price, &food.IsThere, &food.ImageURL,
+			&ingredientsJSON, &allergensJSON, &food.Rating, &food.ReviewCount,
+			&food.PreparationTime, &food.Stock, &food.IsPopular, &food.Discount,
+			&food.Comment, &food.CreatedAt, &food.UpdatedAt,
+		)
+
+		if err != nil {
+			continue
+		}
+
+		// JSON unmarshal
+		if namesJSON != nil {
+			json.Unmarshal(namesJSON, &food.Names)
+		}
+		if descriptionsJSON != nil {
+			json.Unmarshal(descriptionsJSON, &food.Descriptions)
+		}
+		if ingredientsJSON != nil {
+			json.Unmarshal(ingredientsJSON, &food.Ingredients)
+		}
+		if allergensJSON != nil {
+			json.Unmarshal(allergensJSON, &food.Allergens)
+		}
+
+		foods = append(foods, &food)
+	}
+
+	return foods, nil
+}
+
+func getAllFoodsForAdmin() ([]*Food, error) {
+	// Admin uchun barcha ovqatlarni ko'rsatish
+	query := `SELECT id, names, name, descriptions, description, category, price, is_there, 
+			  image_url, ingredients, allergens, rating, review_count, preparation_time, 
+			  stock, is_popular, discount, comment, created_at, updated_at
+			  FROM foods ORDER BY id ASC`
+
+	rows, err := db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var foods []*Food
+	for rows.Next() {
+		var food Food
+		var namesJSON, descriptionsJSON, ingredientsJSON, allergensJSON []byte
+
+		err := rows.Scan(
+			&food.ID, &namesJSON, &food.Name, &descriptionsJSON, &food.Description,
+			&food.Category, &food.Price, &food.IsThere, &food.ImageURL,
+			&ingredientsJSON, &allergensJSON, &food.Rating, &food.ReviewCount,
+			&food.PreparationTime, &food.Stock, &food.IsPopular, &food.Discount,
+			&food.Comment, &food.CreatedAt, &food.UpdatedAt,
+		)
+
+		if err != nil {
+			continue
+		}
+
+		// JSON unmarshal
+		if namesJSON != nil {
+			json.Unmarshal(namesJSON, &food.Names)
+		}
+		if descriptionsJSON != nil {
+			json.Unmarshal(descriptionsJSON, &food.Descriptions)
+		}
+		if ingredientsJSON != nil {
+			json.Unmarshal(ingredientsJSON, &food.Ingredients)
+		}
+		if allergensJSON != nil {
+			json.Unmarshal(allergensJSON, &food.Allergens)
+		}
+
+		foods = append(foods, &food)
+	}
+
+	return foods, nil
+}
+
+func createFood(food *Food) error {
+	namesJSON, _ := json.Marshal(food.Names)
+	descriptionsJSON, _ := json.Marshal(food.Descriptions)
+	ingredientsJSON, _ := json.Marshal(food.Ingredients)
+	allergensJSON, _ := json.Marshal(food.Allergens)
+
+	query := `INSERT INTO foods (id, names, name, descriptions, description, category, price, 
+			  is_there, image_url, ingredients, allergens, rating, review_count, 
+			  preparation_time, stock, is_popular, discount, comment, created_at, updated_at) 
+			  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)`
+
+	_, err := db.Exec(query, food.ID, namesJSON, food.Name, descriptionsJSON, food.Description,
+		food.Category, food.Price, food.IsThere, food.ImageURL, ingredientsJSON,
+		allergensJSON, food.Rating, food.ReviewCount, food.PreparationTime,
+		food.Stock, food.IsPopular, food.Discount, food.Comment, food.CreatedAt, food.UpdatedAt)
+
+	return err
+}
+
+func updateFood(food *Food) error {
+	namesJSON, _ := json.Marshal(food.Names)
+	descriptionsJSON, _ := json.Marshal(food.Descriptions)
+	ingredientsJSON, _ := json.Marshal(food.Ingredients)
+	allergensJSON, _ := json.Marshal(food.Allergens)
+
+	query := `UPDATE foods SET names = $2, name = $3, descriptions = $4, description = $5, 
+			  category = $6, price = $7, is_there = $8, image_url = $9, ingredients = $10, 
+			  allergens = $11, rating = $12, review_count = $13, preparation_time = $14, 
+			  stock = $15, is_popular = $16, discount = $17, comment = $18, updated_at = $19 
+			  WHERE id = $1`
+
+	_, err := db.Exec(query, food.ID, namesJSON, food.Name, descriptionsJSON, food.Description,
+		food.Category, food.Price, food.IsThere, food.ImageURL, ingredientsJSON,
+		allergensJSON, food.Rating, food.ReviewCount, food.PreparationTime,
+		food.Stock, food.IsPopular, food.Discount, food.Comment, time.Now())
+
+	return err
+}
+
+func createOrder(order *Order) error {
+	foodsJSON, _ := json.Marshal(order.Foods)
+	deliveryInfoJSON, _ := json.Marshal(order.DeliveryInfo)
+	paymentInfoJSON, _ := json.Marshal(order.PaymentInfo)
+	statusHistoryJSON, _ := json.Marshal(order.StatusHistory)
+
+	query := `INSERT INTO orders (order_id, user_number, user_name, foods, total_price, 
+			  order_time, delivery_type, delivery_info, status, payment_info, 
+			  special_instructions, estimated_time, delivered_at, status_history, 
+			  created_at, updated_at) 
+			  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)`
+
+	_, err := db.Exec(query, order.OrderID, order.UserNumber, order.UserName, foodsJSON,
+		order.TotalPrice, order.OrderTime, order.DeliveryType, deliveryInfoJSON,
+		order.Status, paymentInfoJSON, order.SpecialInstructions, order.EstimatedTime,
+		order.DeliveredAt, statusHistoryJSON, order.CreatedAt, order.UpdatedAt)
+
+	return err
+}
+
+func getOrderByID(orderID string) (*Order, error) {
+	query := `SELECT order_id, user_number, user_name, foods, total_price, order_time, 
+			  delivery_type, delivery_info, status, payment_info, special_instructions, 
+			  estimated_time, delivered_at, status_history, created_at, updated_at
+			  FROM orders WHERE order_id = $1`
+
+	var order Order
+	var foodsJSON, deliveryInfoJSON, paymentInfoJSON, statusHistoryJSON []byte
+
+	err := db.QueryRow(query, orderID).Scan(
+		&order.OrderID, &order.UserNumber, &order.UserName, &foodsJSON,
+		&order.TotalPrice, &order.OrderTime, &order.DeliveryType, &deliveryInfoJSON,
+		&order.Status, &paymentInfoJSON, &order.SpecialInstructions,
+		&order.EstimatedTime, &order.DeliveredAt, &statusHistoryJSON,
+		&order.CreatedAt, &order.UpdatedAt,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// JSON unmarshal
+	json.Unmarshal(foodsJSON, &order.Foods)
+	json.Unmarshal(deliveryInfoJSON, &order.DeliveryInfo)
+	json.Unmarshal(paymentInfoJSON, &order.PaymentInfo)
+	json.Unmarshal(statusHistoryJSON, &order.StatusHistory)
+
+	return &order, nil
+}
+
+func updateOrder(order *Order) error {
+	foodsJSON, _ := json.Marshal(order.Foods)
+	deliveryInfoJSON, _ := json.Marshal(order.DeliveryInfo)
+	paymentInfoJSON, _ := json.Marshal(order.PaymentInfo)
+	statusHistoryJSON, _ := json.Marshal(order.StatusHistory)
+
+	query := `UPDATE orders SET user_number = $2, user_name = $3, foods = $4, total_price = $5, 
+			  order_time = $6, delivery_type = $7, delivery_info = $8, status = $9, 
+			  payment_info = $10, special_instructions = $11, estimated_time = $12, 
+			  delivered_at = $13, status_history = $14, updated_at = $15 
+			  WHERE order_id = $1`
+
+	_, err := db.Exec(query, order.OrderID, order.UserNumber, order.UserName, foodsJSON,
+		order.TotalPrice, order.OrderTime, order.DeliveryType, deliveryInfoJSON,
+		order.Status, paymentInfoJSON, order.SpecialInstructions, order.EstimatedTime,
+		order.DeliveredAt, statusHistoryJSON, time.Now())
+
+	return err
+}
+
+func createReview(review *Review) error {
+	query := `INSERT INTO reviews (id, user_id, food_id, rating, comment, created_at, updated_at)
+			  VALUES ($1, $2, $3, $4, $5, $6, $7)
+			  ON CONFLICT (user_id, food_id) 
+			  DO UPDATE SET rating = $4, comment = $5, updated_at = $7`
+
+	_, err := db.Exec(query, review.ID, review.UserID, review.FoodID, review.Rating,
+		review.Comment, review.CreatedAt, review.UpdatedAt)
+
+	return err
+}
+
+func getReviewsByFoodID(foodID string) ([]*Review, error) {
+	query := `SELECT r.id, r.user_id, r.food_id, r.rating, r.comment, r.created_at, r.updated_at, u.full_name
+			  FROM reviews r 
+			  LEFT JOIN users u ON r.user_id = u.id 
+			  WHERE r.food_id = $1 ORDER BY r.created_at DESC`
+
+	rows, err := db.Query(query, foodID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var reviews []*Review
+	for rows.Next() {
+		var review Review
+		err := rows.Scan(&review.ID, &review.UserID, &review.FoodID, &review.Rating,
+			&review.Comment, &review.CreatedAt, &review.UpdatedAt, &review.UserName)
+		if err != nil {
+			continue
+		}
+		reviews = append(reviews, &review)
+	}
+
+	return reviews, nil
+}
+
+func updateFoodRating(foodID string) error {
+	query := `UPDATE foods SET 
+			  rating = (SELECT AVG(rating)::DECIMAL(3,2) FROM reviews WHERE food_id = $1),
+			  review_count = (SELECT COUNT(*) FROM reviews WHERE food_id = $1),
+			  updated_at = CURRENT_TIMESTAMP
+			  WHERE id = $1`
+
+	_, err := db.Exec(query, foodID)
+	return err
+}
+
+// ========== API HANDLERS ==========
+
+// Test ma'lumotlarini yaratish
+func initializeTestData() error {
+	// Test foydalanuvchilar
+	adminUser := &User{
+		ID:        generateID("user"),
+		Number:    "770451117",
+		Password:  hashPassword("samandar"),
+		Role:      "admin",
+		FullName:  "Samandar Admin",
+		Email:     stringPtr("admin@restaurant.uz"),
+		CreatedAt: time.Now(),
+		IsActive:  true,
+		TgID:      int64Ptr(1713329317),
+		Language:  "uz",
+	}
+
+	// Foydalanuvchi mavjudligini tekshirish
+	existingUser, err := getUserByNumber(adminUser.Number)
+	if err == sql.ErrNoRows {
+		// Foydalanuvchi mavjud emas, yaratish
+		if err := createUser(adminUser); err != nil {
+			log.Printf("Admin foydalanuvchi yaratishda xatolik: %v", err)
+		} else {
+			log.Println("✅ Admin foydalanuvchi yaratildi")
+		}
+	} else if err != nil {
+		log.Printf("Foydalanuvchi tekshirishda xatolik: %v", err)
+	} else {
+		log.Printf("✅ Admin foydalanuvchi mavjud: %s", existingUser.FullName)
+	}
+
+	testUser := &User{
+		ID:        generateID("user"),
+		Number:    "998901234567",
+		Password:  hashPassword("user123"),
+		Role:      "user",
+		FullName:  "Test User",
+		Email:     stringPtr("user@test.uz"),
+		CreatedAt: time.Now(),
+		IsActive:  true,
+		TgID:      int64Ptr(1066137436),
+		Language:  "uz",
+	}
+
+	existingTestUser, err := getUserByNumber(testUser.Number)
+	if err == sql.ErrNoRows {
+		if err := createUser(testUser); err != nil {
+			log.Printf("Test foydalanuvchi yaratishda xatolik: %v", err)
+		} else {
+			log.Println("✅ Test foydalanuvchi yaratildi")
+		}
+	} else if err != nil {
+		log.Printf("Test foydalanuvchi tekshirishda xatolik: %v", err)
+	} else {
+		log.Printf("✅ Test foydalanuvchi mavjud: %s", existingTestUser.FullName)
+	}
+
+	return nil
+}
+
+// Yordamchi funksiyalar
+func stringPtr(s string) *string {
+	return &s
+}
+
+func int64Ptr(i int64) *int64 {
+	return &i
+}
+
+func getLocalizedFood(food *Food, lang string) *Food {
+	localizedFood := *food
+
+	// Ko'p tilli nomni olish
+	if food.Names != nil {
+		if name, exists := food.Names[lang]; exists {
+			localizedFood.Name = name
+		} else if name, exists := food.Names["uz"]; exists {
+			localizedFood.Name = name
+		}
+	}
+
+	// Ko'p tilli tavsifni olish
+	if food.Descriptions != nil {
+		if desc, exists := food.Descriptions[lang]; exists {
+			localizedFood.Description = desc
+		} else if desc, exists := food.Descriptions["uz"]; exists {
+			localizedFood.Description = desc
+		}
+	}
+
+	// Kategoriya nomini tarjima qilish
+	categoryKey := strings.ToLower(strings.ReplaceAll(food.Category, " ", "_"))
+	localizedFood.CategoryName = getTranslation(categoryKey, lang)
+
+	// Chegirma hisoblash
+	if food.Discount > 0 {
+		localizedFood.OriginalPrice = food.Price
+		localizedFood.Price = food.Price - (food.Price * food.Discount / 100)
+	}
+
+	return &localizedFood
+}
+
+func getAllLocalizedFoods(lang string, isAdmin bool) ([]*Food, error) {
+	var foods []*Food
+	var err error
+
+	if isAdmin {
+		foods, err = getAllFoodsForAdmin()
+	} else {
+		foods, err = getAllFoods()
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	var localizedFoods []*Food
+	for _, food := range foods {
+		localizedFood := getLocalizedFood(food, lang)
+		localizedFoods = append(localizedFoods, localizedFood)
+	}
+
+	return localizedFoods, nil
+}
+
+// ========== AUTHENTICATION HANDLERS ==========
+
 func register(c *gin.Context) {
 	var req RegisterRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -1337,8 +1783,9 @@ func register(c *gin.Context) {
 		lang = "uz"
 	}
 
-	// Check if user already exists
-	if _, err := getUserByNumber(req.Number); err == nil {
+	// Foydalanuvchi mavjudligini tekshirish
+	_, err := getUserByNumber(req.Number)
+	if err == nil {
 		c.JSON(http.StatusBadRequest, createResponse("phone_already_registered", lang))
 		return
 	}
@@ -1421,14 +1868,15 @@ func getProfile(c *gin.Context) {
 		return
 	}
 
-	// Remove password
+	// Parolni o'chirish
 	userResponse := *userDB
 	userResponse.Password = ""
 
 	c.JSON(http.StatusOK, userResponse)
 }
 
-// Category handlers
+// ========== CATEGORY HANDLERS ==========
+
 func getCategories(c *gin.Context) {
 	lang := getUserLanguage(c.Request.Header)
 
@@ -1443,7 +1891,8 @@ func getCategories(c *gin.Context) {
 	c.JSON(http.StatusOK, categories)
 }
 
-// Food handlers
+// ========== FOOD HANDLERS ==========
+
 func getAllFoodsHandler(c *gin.Context) {
 	lang := getUserLanguage(c.Request.Header)
 	category := c.Query("category")
@@ -1460,7 +1909,7 @@ func getAllFoodsHandler(c *gin.Context) {
 		limit = 20
 	}
 
-	// Check if admin
+	// Admin yoki oddiy foydalanuvchi ekanligini tekshirish
 	isAdmin := false
 	if userInterface, exists := c.Get("user"); exists {
 		user := userInterface.(*Claims)
@@ -1473,7 +1922,7 @@ func getAllFoodsHandler(c *gin.Context) {
 		return
 	}
 
-	// Apply filters
+	// Filtrlash
 	if category != "" {
 		filtered := []*Food{}
 		for _, food := range foods {
@@ -1506,7 +1955,7 @@ func getAllFoodsHandler(c *gin.Context) {
 		foods = filtered
 	}
 
-	// Sort
+	// Saralash
 	switch sortBy {
 	case "price_asc":
 		sort.Slice(foods, func(i, j int) bool {
@@ -1540,13 +1989,13 @@ func getAllFoodsHandler(c *gin.Context) {
 			return foods[i].Name < foods[j].Name
 		})
 	default:
-		// Default: ID bo'yicha saralash
+		// Default: ID bo'yicha saralash (amur_1, amur_2, amur_3...)
 		sort.Slice(foods, func(i, j int) bool {
 			return foods[i].ID < foods[j].ID
 		})
 	}
 
-	// Pagination
+	// Sahifalash
 	total := len(foods)
 	start := (page - 1) * limit
 	end := start + limit
@@ -1559,7 +2008,7 @@ func getAllFoodsHandler(c *gin.Context) {
 		foods = foods[start:end]
 	}
 
-	// Fix image URLs
+	// ImageURL-ni to'liq URL qilish
 	hostURL := getHostURL(c)
 	for _, food := range foods {
 		if food.ImageURL != "" && !strings.HasPrefix(food.ImageURL, "http") {
@@ -1584,13 +2033,17 @@ func getFoodHandler(c *gin.Context) {
 
 	food, err := getFoodByID(foodID)
 	if err != nil {
-		c.JSON(http.StatusNotFound, createResponse("food_not_found", lang))
+		if err == sql.ErrNoRows {
+			c.JSON(http.StatusNotFound, createResponse("food_not_found", lang))
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
 		return
 	}
 
 	localizedFood := getLocalizedFood(food, lang)
 
-	// Fix image URL
+	// ImageURL-ni to'liq URL qilish
 	if localizedFood.ImageURL != "" && !strings.HasPrefix(localizedFood.ImageURL, "http") {
 		localizedFood.ImageURL = getHostURL(c) + localizedFood.ImageURL
 	}
@@ -1605,7 +2058,7 @@ func createFoodHandler(c *gin.Context) {
 		return
 	}
 
-	// Generate ID
+	// ID avtomatik generatsiya qilish
 	foodID := generateFoodID()
 
 	if req.PreparationTime == 0 {
@@ -1615,28 +2068,28 @@ func createFoodHandler(c *gin.Context) {
 		req.Stock = 100
 	}
 
-	// Multi-language names
+	// Ko'p tilli nomlarni yaratish
 	names := map[string]string{
 		"uz": req.NameUz,
 		"ru": req.NameRu,
 		"en": req.NameEn,
 	}
 
-	// Multi-language descriptions
+	// Ko'p tilli tavsiflarni yaratish
 	descriptions := map[string]string{
 		"uz": req.DescriptionUz,
 		"ru": req.DescriptionRu,
 		"en": req.DescriptionEn,
 	}
 
-	// Multi-language ingredients
+	// Ko'p tilli ingredientlarni yaratish
 	ingredients := map[string][]string{
 		"uz": req.IngredientsUz,
 		"ru": req.IngredientsRu,
 		"en": req.IngredientsEn,
 	}
 
-	// Multi-language allergens
+	// Ko'p tilli allergenlarni yaratish
 	allergens := map[string][]string{
 		"uz": req.AllergensUz,
 		"ru": req.AllergensRu,
@@ -1646,9 +2099,9 @@ func createFoodHandler(c *gin.Context) {
 	food := &Food{
 		ID:              foodID,
 		Names:           names,
-		Name:            req.NameUz,
+		Name:            req.NameUz, // Default o'zbek tilida
 		Descriptions:    descriptions,
-		Description:     req.DescriptionUz,
+		Description:     req.DescriptionUz, // Default o'zbek tilida
 		Category:        req.Category,
 		Price:           req.Price,
 		IsThere:         req.IsThere,
@@ -1680,7 +2133,11 @@ func updateFoodHandler(c *gin.Context) {
 
 	food, err := getFoodByID(foodID)
 	if err != nil {
-		c.JSON(http.StatusNotFound, createResponse("food_not_found", lang))
+		if err == sql.ErrNoRows {
+			c.JSON(http.StatusNotFound, createResponse("food_not_found", lang))
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
 		return
 	}
 
@@ -1690,7 +2147,7 @@ func updateFoodHandler(c *gin.Context) {
 		return
 	}
 
-	// Update fields
+	// Ma'lumotlarni yangilash
 	if name, ok := updates["name"].(string); ok {
 		food.Name = name
 	}
@@ -1736,15 +2193,21 @@ func deleteFoodHandler(c *gin.Context) {
 	foodID := c.Param("food_id")
 	lang := getUserLanguage(c.Request.Header)
 
-	// Check if food exists
+	// Ovqat mavjudligini tekshirish
 	_, err := getFoodByID(foodID)
 	if err != nil {
-		c.JSON(http.StatusNotFound, createResponse("food_not_found", lang))
+		if err == sql.ErrNoRows {
+			c.JSON(http.StatusNotFound, createResponse("food_not_found", lang))
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
 		return
 	}
 
-	// Delete food
-	if err := deleteFood(foodID); err != nil {
+	// Ovqatni o'chirish
+	query := `DELETE FROM foods WHERE id = $1`
+	_, err = db.Exec(query, foodID)
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ovqat o'chirishda xatolik"})
 		return
 	}
@@ -1752,7 +2215,8 @@ func deleteFoodHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, createResponse("food_deleted", lang))
 }
 
-// Order handlers
+// ========== ORDER HANDLERS ==========
+
 func createOrderHandler(c *gin.Context) {
 	var req OrderRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -1762,7 +2226,7 @@ func createOrderHandler(c *gin.Context) {
 
 	lang := getUserLanguage(c.Request.Header)
 
-	// User verification
+	// Foydalanuvchi tekshiruvi
 	var user *Claims
 	if userInterface, exists := c.Get("user"); exists {
 		user = userInterface.(*Claims)
@@ -1771,15 +2235,16 @@ func createOrderHandler(c *gin.Context) {
 		return
 	}
 
-	// Check cart
+	// Savatni tekshirish
 	if len(req.Items) == 0 {
 		c.JSON(http.StatusBadRequest, createResponse("cart_empty", lang))
 		return
 	}
 
+	// Debug log
 	log.Printf("Creating order for user: %s, items count: %d", user.Number, len(req.Items))
 
-	// Check foods and stock
+	// Ovqatlarni tekshirish va stock-ni tekshirish
 	var orderedFoods []OrderFood
 	totalPrice := 0
 	totalPrepTime := 0
@@ -1807,7 +2272,7 @@ func createOrderHandler(c *gin.Context) {
 			return
 		}
 
-		// Stock check
+		// Stock tekshiruvi
 		if food.Stock < item.Quantity {
 			log.Printf("Insufficient stock: required=%d, available=%d", item.Quantity, food.Stock)
 			c.JSON(http.StatusBadRequest, gin.H{
@@ -1839,7 +2304,7 @@ func createOrderHandler(c *gin.Context) {
 		orderedFoods = append(orderedFoods, orderedFood)
 		totalPrice += foodTotalPrice
 
-		// Reduce stock
+		// Stock-ni kamaytirish
 		food.Stock -= item.Quantity
 		if err := updateFood(food); err != nil {
 			log.Printf("Stock yangilashda xatolik: %v", err)
@@ -1848,7 +2313,7 @@ func createOrderHandler(c *gin.Context) {
 
 	log.Printf("Order foods processed successfully, total_price: %d", totalPrice)
 
-	// Delivery info
+	// Yetkazib berish ma'lumotlari
 	deliveryInfo := make(map[string]interface{})
 	switch req.DeliveryType {
 	case DeliveryHome:
@@ -1863,12 +2328,12 @@ func createOrderHandler(c *gin.Context) {
 			"address": address,
 		}
 
-		// Add phone
+		// Phone qo'shish
 		if phone, ok := req.DeliveryInfo["phone"].(string); ok {
 			deliveryInfo["phone"] = phone
 		}
 
-		// Add coordinates if available
+		// Koordinatalarni qo'shish (agar mavjud bo'lsa)
 		if lat, ok := req.DeliveryInfo["latitude"].(float64); ok {
 			deliveryInfo["latitude"] = lat
 		}
@@ -1876,7 +2341,7 @@ func createOrderHandler(c *gin.Context) {
 			deliveryInfo["longitude"] = lng
 		}
 
-		totalPrepTime += 20 // delivery time
+		totalPrepTime += 20 // yetkazib berish vaqti
 	case DeliveryPickup:
 		deliveryInfo = map[string]interface{}{
 			"type":        "own_withdrawal",
@@ -1898,7 +2363,7 @@ func createOrderHandler(c *gin.Context) {
 
 	log.Printf("Delivery info prepared: %+v", deliveryInfo)
 
-	// Payment info
+	// To'lov ma'lumotlari
 	paymentInfo := PaymentInfo{
 		Method: req.PaymentMethod,
 		Status: PaymentPending,
@@ -1912,7 +2377,7 @@ func createOrderHandler(c *gin.Context) {
 
 	log.Printf("Payment info prepared: %+v", paymentInfo)
 
-	// Create order
+	// Buyurtma yaratish
 	orderID := generateOrderID()
 	orderTime := time.Now()
 
@@ -1922,7 +2387,7 @@ func createOrderHandler(c *gin.Context) {
 		userName = userDB.FullName
 	}
 
-	// Use customer info
+	// Customer info ni ishlatish
 	if req.CustomerInfo != nil {
 		if req.CustomerInfo.Name != "" {
 			userName = req.CustomerInfo.Name
@@ -1955,12 +2420,12 @@ func createOrderHandler(c *gin.Context) {
 		UpdatedAt: orderTime,
 	}
 
-	log.Printf("Order object created, attempting to save...")
+	log.Printf("Order object created, attempting to save to database...")
 
 	if err := createOrder(order); err != nil {
-		log.Printf("Error creating order: %v", err)
+		log.Printf("Database error creating order: %v", err)
 
-		// Rollback stock
+		// Stock-ni qaytarish (rollback)
 		for _, item := range req.Items {
 			if food, err := getFoodByID(item.FoodID); err == nil {
 				food.Stock += item.Quantity
@@ -1975,9 +2440,9 @@ func createOrderHandler(c *gin.Context) {
 		return
 	}
 
-	log.Printf("Order created successfully: %s", orderID)
+	log.Printf("Order created successfully in database: %s", orderID)
 
-	// Real-time updates
+	// Real-time yangilanish
 	go func() {
 		sendNewOrderNotification(order)
 		sendOrderUpdate(orderID, OrderPending, getTranslation("order_created", lang))
@@ -2005,48 +2470,96 @@ func getOrdersHandler(c *gin.Context) {
 		limit = 10
 	}
 
-	orders, err := getAllOrders()
+	offset := (page - 1) * limit
+
+	// Query yaratish
+	var query string
+	var args []interface{}
+	argIndex := 1
+
+	if user.Role == "admin" {
+		query = `SELECT order_id, user_number, user_name, foods, total_price, order_time, 
+				 delivery_type, delivery_info, status, payment_info, special_instructions, 
+				 estimated_time, delivered_at, status_history, created_at, updated_at
+				 FROM orders WHERE 1=1`
+		if status != "" {
+			query += fmt.Sprintf(" AND status = $%d", argIndex)
+			args = append(args, status)
+			argIndex++
+		}
+	} else {
+		query = `SELECT order_id, user_number, user_name, foods, total_price, order_time, 
+				 delivery_type, delivery_info, status, payment_info, special_instructions, 
+				 estimated_time, delivered_at, status_history, created_at, updated_at
+				 FROM orders WHERE user_number = $1`
+		args = append(args, user.Number)
+		argIndex++
+		if status != "" {
+			query += fmt.Sprintf(" AND status = $%d", argIndex)
+			args = append(args, status)
+			argIndex++
+		}
+	}
+
+	query += fmt.Sprintf(" ORDER BY order_time DESC LIMIT $%d OFFSET $%d", argIndex, argIndex+1)
+	args = append(args, limit, offset)
+
+	rows, err := db.Query(query, args...)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
 		return
 	}
+	defer rows.Close()
 
-	// Filter orders
-	var filteredOrders []Order
-	for _, order := range orders {
-		// Admin can see all orders, users only their own
-		if user.Role != "admin" && order.UserNumber != user.Number {
+	var orders []*Order
+	for rows.Next() {
+		var order Order
+		var foodsJSON, deliveryInfoJSON, paymentInfoJSON, statusHistoryJSON []byte
+
+		err := rows.Scan(
+			&order.OrderID, &order.UserNumber, &order.UserName, &foodsJSON,
+			&order.TotalPrice, &order.OrderTime, &order.DeliveryType, &deliveryInfoJSON,
+			&order.Status, &paymentInfoJSON, &order.SpecialInstructions,
+			&order.EstimatedTime, &order.DeliveredAt, &statusHistoryJSON,
+			&order.CreatedAt, &order.UpdatedAt,
+		)
+
+		if err != nil {
 			continue
 		}
 
-		// Status filter
-		if status != "" && string(order.Status) != status {
-			continue
-		}
+		// JSON unmarshal
+		json.Unmarshal(foodsJSON, &order.Foods)
+		json.Unmarshal(deliveryInfoJSON, &order.DeliveryInfo)
+		json.Unmarshal(paymentInfoJSON, &order.PaymentInfo)
+		json.Unmarshal(statusHistoryJSON, &order.StatusHistory)
 
-		filteredOrders = append(filteredOrders, order)
+		orders = append(orders, &order)
 	}
 
-	// Sort by order time (newest first)
-	sort.Slice(filteredOrders, func(i, j int) bool {
-		return filteredOrders[i].OrderTime.After(filteredOrders[j].OrderTime)
-	})
-
-	// Pagination
-	total := len(filteredOrders)
-	start := (page - 1) * limit
-	end := start + limit
-	if start >= total {
-		filteredOrders = []Order{}
+	// Total count
+	var countQuery string
+	var countArgs []interface{}
+	if user.Role == "admin" {
+		countQuery = `SELECT COUNT(*) FROM orders`
+		if status != "" {
+			countQuery += " WHERE status = $1"
+			countArgs = append(countArgs, status)
+		}
 	} else {
-		if end > total {
-			end = total
+		countQuery = `SELECT COUNT(*) FROM orders WHERE user_number = $1`
+		countArgs = append(countArgs, user.Number)
+		if status != "" {
+			countQuery += " AND status = $2"
+			countArgs = append(countArgs, status)
 		}
-		filteredOrders = filteredOrders[start:end]
 	}
+
+	var total int
+	db.QueryRow(countQuery, countArgs...).Scan(&total)
 
 	c.JSON(http.StatusOK, gin.H{
-		"orders": filteredOrders,
+		"orders": orders,
 		"pagination": gin.H{
 			"page":        page,
 			"limit":       limit,
@@ -2063,11 +2576,15 @@ func getOrderHandler(c *gin.Context) {
 
 	order, err := getOrderByID(orderID)
 	if err != nil {
-		c.JSON(http.StatusNotFound, createResponse("order_not_found", lang))
+		if err == sql.ErrNoRows {
+			c.JSON(http.StatusNotFound, createResponse("order_not_found", lang))
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
 		return
 	}
 
-	// Users can only see their own orders
+	// Foydalanuvchi faqat o'z buyurtmasini ko'ra oladi
 	if user.Role != "admin" && order.UserNumber != user.Number {
 		c.JSON(http.StatusForbidden, createResponse("forbidden", lang))
 		return
@@ -2082,11 +2599,15 @@ func trackOrderHandler(c *gin.Context) {
 
 	order, err := getOrderByID(orderID)
 	if err != nil {
-		c.JSON(http.StatusNotFound, createResponse("order_not_found", lang))
+		if err == sql.ErrNoRows {
+			c.JSON(http.StatusNotFound, createResponse("order_not_found", lang))
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
 		return
 	}
 
-	// Tracking info
+	// Kuzatuv ma'lumotlari
 	trackingInfo := gin.H{
 		"order_id":       order.OrderID,
 		"status":         order.Status,
@@ -2095,7 +2616,7 @@ func trackOrderHandler(c *gin.Context) {
 		"status_history": order.StatusHistory,
 	}
 
-	// Calculate time
+	// Vaqt hisoblash
 	if order.EstimatedTime != nil {
 		elapsed := int(time.Since(order.OrderTime).Minutes())
 		remaining := *order.EstimatedTime - elapsed
@@ -2124,11 +2645,15 @@ func updateOrderStatusHandler(c *gin.Context) {
 
 	order, err := getOrderByID(orderID)
 	if err != nil {
-		c.JSON(http.StatusNotFound, createResponse("order_not_found", lang))
+		if err == sql.ErrNoRows {
+			c.JSON(http.StatusNotFound, createResponse("order_not_found", lang))
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
 		return
 	}
 
-	// Add to status history
+	// Status history-ga qo'shish
 	statusUpdate := StatusUpdate{
 		Status:    req.Status,
 		Timestamp: time.Now(),
@@ -2140,7 +2665,7 @@ func updateOrderStatusHandler(c *gin.Context) {
 	if req.Status == OrderDelivered {
 		now := time.Now()
 		order.DeliveredAt = &now
-		// Confirm payment
+		// To'lovni tasdiqlash
 		if order.PaymentInfo.Method == PaymentCash {
 			order.PaymentInfo.Status = PaymentPaid
 			order.PaymentInfo.PaymentTime = &now
@@ -2152,9 +2677,21 @@ func updateOrderStatusHandler(c *gin.Context) {
 		return
 	}
 
-	// Real-time update
+	// Real-time yangilanish
 	message := getTranslation("order_status_updated", lang)
 	sendOrderUpdate(orderID, req.Status, message)
+
+	// Foydalanuvchiga Telegram orqali xabar yuborish
+	go func() {
+		if userDB, err := getUserByNumber(order.UserNumber); err == nil && userDB.TgID != nil {
+			userMessage := formatOrderStatusUpdateForUser(order, userDB.Language)
+			if err := sendTelegramMessageToUser(*userDB.TgID, userMessage); err != nil {
+				log.Printf("Telegram foydalanuvchi xabarini yuborishda xatolik: %v", err)
+			} else {
+				log.Printf("Telegram foydalanuvchi xabari yuborildi: %s", order.OrderID)
+			}
+		}
+	}()
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": message,
@@ -2169,17 +2706,21 @@ func cancelOrderHandler(c *gin.Context) {
 
 	order, err := getOrderByID(orderID)
 	if err != nil {
-		c.JSON(http.StatusNotFound, createResponse("order_not_found", lang))
+		if err == sql.ErrNoRows {
+			c.JSON(http.StatusNotFound, createResponse("order_not_found", lang))
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
 		return
 	}
 
-	// Only order owner or admin can cancel
+	// Faqat buyurtma egasi yoki admin bekor qila oladi
 	if order.UserNumber != user.Number && user.Role != "admin" {
 		c.JSON(http.StatusForbidden, createResponse("forbidden", lang))
 		return
 	}
 
-	// Can only cancel pending or confirmed orders
+	// Faqat pending yoki confirmed holatdagi buyurtmalarni bekor qilish mumkin
 	if order.Status != OrderPending && order.Status != OrderConfirmed {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Buyurtmani bekor qilib bo'lmaydi",
@@ -2187,7 +2728,7 @@ func cancelOrderHandler(c *gin.Context) {
 		return
 	}
 
-	// Return stock
+	// Stock-ni qaytarish
 	for _, orderFood := range order.Foods {
 		if food, err := getFoodByID(orderFood.ID); err == nil {
 			food.Stock += orderFood.Count
@@ -2195,7 +2736,7 @@ func cancelOrderHandler(c *gin.Context) {
 		}
 	}
 
-	// Add to status history
+	// Status history-ga qo'shish
 	statusUpdate := StatusUpdate{
 		Status:    OrderCancelled,
 		Timestamp: time.Now(),
@@ -2209,13 +2750,24 @@ func cancelOrderHandler(c *gin.Context) {
 		return
 	}
 
-	// Real-time update
+	// Real-time yangilanish
 	sendOrderUpdate(orderID, OrderCancelled, getTranslation("order_cancelled", lang))
+
+	// Foydalanuvchiga Telegram orqali xabar yuborish
+	go func() {
+		if userDB, err := getUserByNumber(order.UserNumber); err == nil && userDB.TgID != nil {
+			userMessage := formatOrderStatusUpdateForUser(order, userDB.Language)
+			if err := sendTelegramMessageToUser(*userDB.TgID, userMessage); err != nil {
+				log.Printf("Telegram foydalanuvchi xabarini yuborishda xatolik: %v", err)
+			}
+		}
+	}()
 
 	c.JSON(http.StatusOK, createResponse("order_cancelled", lang))
 }
 
-// Review handlers
+// ========== REVIEW HANDLERS ==========
+
 func createReviewHandler(c *gin.Context) {
 	var req ReviewCreate
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -2226,7 +2778,7 @@ func createReviewHandler(c *gin.Context) {
 	user := c.MustGet("user").(*Claims)
 	lang := getUserLanguage(c.Request.Header)
 
-	// Check if food exists
+	// Ovqat mavjudligini tekshirish
 	if _, err := getFoodByID(req.FoodID); err != nil {
 		c.JSON(http.StatusNotFound, createResponse("food_not_found", lang))
 		return
@@ -2247,7 +2799,7 @@ func createReviewHandler(c *gin.Context) {
 		return
 	}
 
-	// Update food rating
+	// Ovqat reytingini yangilash
 	if err := updateFoodRating(req.FoodID); err != nil {
 		log.Printf("Ovqat reytingini yangilashda xatolik: %v", err)
 	}
@@ -2276,17 +2828,12 @@ func getFoodReviewsHandler(c *gin.Context) {
 		return
 	}
 
-	// Sort by creation time (newest first)
-	sort.Slice(reviews, func(i, j int) bool {
-		return reviews[i].CreatedAt.After(reviews[j].CreatedAt)
-	})
-
-	// Pagination
+	// Sahifalash
 	total := len(reviews)
 	start := (page - 1) * limit
 	end := start + limit
 	if start >= total {
-		reviews = []Review{}
+		reviews = []*Review{}
 	} else {
 		if end > total {
 			end = total
@@ -2305,7 +2852,8 @@ func getFoodReviewsHandler(c *gin.Context) {
 	})
 }
 
-// Search handler
+// ========== SEARCH HANDLER ==========
+
 func searchHandler(c *gin.Context) {
 	query := c.Query("q")
 	category := c.Query("category")
@@ -2319,7 +2867,7 @@ func searchHandler(c *gin.Context) {
 		return
 	}
 
-	// Check if admin
+	// Admin yoki oddiy foydalanuvchi ekanligini tekshirish
 	isAdmin := false
 	if userInterface, exists := c.Get("user"); exists {
 		user := userInterface.(*Claims)
@@ -2332,19 +2880,19 @@ func searchHandler(c *gin.Context) {
 		return
 	}
 
-	// Search
+	// Qidiruv
 	searchLower := strings.ToLower(query)
 	var results []*Food
 
 	for _, food := range foods {
-		// Search in name, description and ingredients
+		// Nom, tavsif va ingredientlarda qidirish
 		if strings.Contains(strings.ToLower(food.Name), searchLower) ||
 			strings.Contains(strings.ToLower(food.Description), searchLower) {
 			results = append(results, food)
 			continue
 		}
 
-		// Search in ingredients
+		// Ingredientlarda qidirish
 		if food.Ingredients != nil {
 			if ingredientsList, ok := food.Ingredients[lang]; ok {
 				for _, ingredient := range ingredientsList {
@@ -2364,7 +2912,7 @@ func searchHandler(c *gin.Context) {
 		}
 	}
 
-	// Apply filters
+	// Filtrlar
 	if category != "" {
 		filtered := []*Food{}
 		for _, food := range results {
@@ -2396,7 +2944,7 @@ func searchHandler(c *gin.Context) {
 		results = filtered
 	}
 
-	// Fix image URLs
+	// ImageURL-ni to'liq URL qilish
 	hostURL := getHostURL(c)
 	for _, food := range results {
 		if food.ImageURL != "" && !strings.HasPrefix(food.ImageURL, "http") {
@@ -2418,241 +2966,33 @@ func searchHandler(c *gin.Context) {
 	})
 }
 
-// File upload handlers
-func uploadFile(c *gin.Context) {
-	lang := getUserLanguage(c.Request.Header)
+// ========== STATISTICS HANDLER ==========
 
-	// User verification (optional)
-	var uploaderID string
-	if userInterface, exists := c.Get("user"); exists {
-		user := userInterface.(*Claims)
-		uploaderID = user.UserID
-	}
-
-	// Get file
-	file, fileHeader, err := c.Request.FormFile("file")
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Fayl tanlanmadi"})
-		return
-	}
-	defer file.Close()
-
-	// Check file size
-	if fileHeader.Size > MAX_FILE_SIZE {
-		c.JSON(http.StatusBadRequest, createResponse("file_too_large", lang))
-		return
-	}
-
-	// Check file type
-	allowedTypes := map[string]bool{
-		"image/jpeg": true,
-		"image/jpg":  true,
-		"image/png":  true,
-		"image/gif":  true,
-		"image/webp": true,
-	}
-
-	contentType := fileHeader.Header.Get("Content-Type")
-	if !allowedTypes[contentType] {
-		c.JSON(http.StatusBadRequest, createResponse("invalid_file", lang))
-		return
-	}
-
-	// Create upload directory
-	if _, err := os.Stat(UPLOAD_DIR); os.IsNotExist(err) {
-		os.MkdirAll(UPLOAD_DIR, 0755)
-	}
-
-	// Create file name
-	originalName := strings.TrimSuffix(fileHeader.Filename, filepath.Ext(fileHeader.Filename))
-	cleanedName := cleanFileName(originalName)
-	ext := filepath.Ext(fileHeader.Filename)
-
-	// Create unique file name
-	fileName := fmt.Sprintf("%s_%d%s", cleanedName, time.Now().Unix(), ext)
-	filePath := filepath.Join(UPLOAD_DIR, fileName)
-
-	// Save file
-	dst, err := os.Create(filePath)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Faylni saqlashda xatolik"})
-		return
-	}
-	defer dst.Close()
-
-	if _, err := io.Copy(dst, file); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Faylni nusxalashda xatolik"})
-		return
-	}
-
-	// Create URL
-	fileURL := fmt.Sprintf("%s/uploads/%s", getHostURL(c), fileName)
-
-	// Save to database
-	fileUpload := &FileUpload{
-		ID:           generateID("file"),
-		OriginalName: fileHeader.Filename,
-		FileName:     fileName,
-		FilePath:     filePath,
-		FileSize:     fileHeader.Size,
-		MimeType:     contentType,
-		URL:          fileURL,
-		UploadedBy:   uploaderID,
-		CreatedAt:    time.Now(),
-	}
-
-	if err := createFileUpload(fileUpload); err != nil {
-		log.Printf("Fayl ma'lumotlarini saqlashda xatolik: %v", err)
-		// Delete file
-		os.Remove(filePath)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotni saqlashda xatolik"})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{
-		"message":    getTranslation("file_uploaded", lang),
-		"file":       fileUpload,
-		"url":        fileURL,
-		"public_url": fileURL,
-	})
-}
-
-func getUploadedFiles(c *gin.Context) {
-	page, _ := strconv.Atoi(c.Query("page"))
-	limit, _ := strconv.Atoi(c.Query("limit"))
-	fileType := c.Query("type") // image, document
-
-	if page <= 0 {
-		page = 1
-	}
-	if limit <= 0 {
-		limit = 20
-	}
-
-	uploads, err := getAllFileUploads()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
-		return
-	}
-
-	// Filter by type
-	var filteredUploads []FileUpload
-	for _, upload := range uploads {
-		if fileType == "image" && !strings.HasPrefix(upload.MimeType, "image/") {
-			continue
-		}
-		filteredUploads = append(filteredUploads, upload)
-	}
-
-	// Sort by creation time (newest first)
-	sort.Slice(filteredUploads, func(i, j int) bool {
-		return filteredUploads[i].CreatedAt.After(filteredUploads[j].CreatedAt)
-	})
-
-	// Pagination
-	total := len(filteredUploads)
-	start := (page - 1) * limit
-	end := start + limit
-	if start >= total {
-		filteredUploads = []FileUpload{}
-	} else {
-		if end > total {
-			end = total
-		}
-		filteredUploads = filteredUploads[start:end]
-	}
-
-	c.JSON(http.StatusOK, gin.H{
-		"files": filteredUploads,
-		"pagination": gin.H{
-			"page":        page,
-			"limit":       limit,
-			"total":       total,
-			"total_pages": (total + limit - 1) / limit,
-		},
-	})
-}
-
-func deleteFile(c *gin.Context) {
-	fileID := c.Param("file_id")
-	lang := getUserLanguage(c.Request.Header)
-
-	// Get file from database
-	file, err := getFileUploadByID(fileID)
-	if err != nil {
-		c.JSON(http.StatusNotFound, createResponse("not_found", lang))
-		return
-	}
-
-	// Delete file from disk
-	if err := os.Remove(file.FilePath); err != nil {
-		log.Printf("Faylni o'chirishda xatolik: %v", err)
-	}
-
-	// Delete from database
-	if err := deleteFileUpload(fileID); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotni o'chirishda xatolik"})
-		return
-	}
-
-	c.JSON(http.StatusOK, createResponse("success", lang))
-}
-
-// Statistics handler
 func getStatisticsHandler(c *gin.Context) {
-	orders, err := getAllOrders()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
-		return
-	}
-
-	foods, err := getAllFoods()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
-		return
-	}
-
-	users, err := getAllUsers()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
-		return
-	}
-
-	// Calculate statistics
-	totalOrders := len(orders)
-	var pendingOrders, completedOrders, cancelledOrders, totalRevenue int
+	// Buyurtmalar statistikasi
+	var totalOrders, pendingOrders, completedOrders, cancelledOrders, totalRevenue int
 	var todayOrders, todayRevenue int
 
+	// Umumiy statistika
+	db.QueryRow("SELECT COUNT(*) FROM orders").Scan(&totalOrders)
+	db.QueryRow("SELECT COUNT(*) FROM orders WHERE status IN ('pending', 'confirmed', 'preparing')").Scan(&pendingOrders)
+	db.QueryRow("SELECT COUNT(*) FROM orders WHERE status = 'delivered'").Scan(&completedOrders)
+	db.QueryRow("SELECT COUNT(*) FROM orders WHERE status = 'cancelled'").Scan(&cancelledOrders)
+	db.QueryRow("SELECT COALESCE(SUM(total_price), 0) FROM orders WHERE status = 'delivered'").Scan(&totalRevenue)
+
+	// Bugungi statistika
 	today := time.Now().Format("2006-01-02")
+	db.QueryRow("SELECT COUNT(*) FROM orders WHERE DATE(order_time) = $1", today).Scan(&todayOrders)
+	db.QueryRow("SELECT COALESCE(SUM(total_price), 0) FROM orders WHERE status = 'delivered' AND DATE(order_time) = $1", today).Scan(&todayRevenue)
 
-	for _, order := range orders {
-		switch order.Status {
-		case OrderPending, OrderConfirmed, OrderPreparing:
-			pendingOrders++
-		case OrderDelivered:
-			completedOrders++
-			totalRevenue += order.TotalPrice
-		case OrderCancelled:
-			cancelledOrders++
-		}
+	// Ovqatlar statistikasi
+	var totalFoods, popularFoods int
+	db.QueryRow("SELECT COUNT(*) FROM foods").Scan(&totalFoods)
+	db.QueryRow("SELECT COUNT(*) FROM foods WHERE is_popular = true OR rating >= 4.0").Scan(&popularFoods)
 
-		// Today's statistics
-		if order.OrderTime.Format("2006-01-02") == today {
-			todayOrders++
-			if order.Status == OrderDelivered {
-				todayRevenue += order.TotalPrice
-			}
-		}
-	}
-
-	// Food statistics
-	totalFoods := len(foods)
-	var popularFoods int
-	for _, food := range foods {
-		if food.IsPopular || food.Rating >= 4.0 {
-			popularFoods++
-		}
-	}
+	// Foydalanuvchilar statistikasi
+	var totalUsers int
+	db.QueryRow("SELECT COUNT(*) FROM users").Scan(&totalUsers)
 
 	c.JSON(http.StatusOK, gin.H{
 		"total_orders":     totalOrders,
@@ -2663,75 +3003,57 @@ func getStatisticsHandler(c *gin.Context) {
 		"today_orders":     todayOrders,
 		"today_revenue":    todayRevenue,
 		"total_foods":      totalFoods,
-		"total_users":      len(users),
+		"total_users":      totalUsers,
 		"popular_foods":    popularFoods,
 	})
 }
 
-// Initialize test data
-func initializeTestData() error {
-	// Test admin user
-	adminUser := &User{
-		ID:        generateID("user"),
-		Number:    "770451117",
-		Password:  hashPassword("samandar"),
-		Role:      "admin",
-		FullName:  "Samandar Admin",
-		Email:     stringPtr("admin@restaurant.uz"),
-		CreatedAt: time.Now(),
-		IsActive:  true,
-		TgID:      int64Ptr(1713329317),
-		Language:  "uz",
-	}
+// ========== ROOT HANDLER ==========
 
-	// Check if admin exists
-	if _, err := getUserByNumber(adminUser.Number); err != nil {
-		if err := createUser(adminUser); err != nil {
-			log.Printf("Admin foydalanuvchi yaratishda xatolik: %v", err)
-		} else {
-			log.Println("✅ Admin foydalanuvchi yaratildi")
-		}
-	} else {
-		log.Println("✅ Admin foydalanuvchi mavjud")
-	}
-
-	// Test user
-	testUser := &User{
-		ID:        generateID("user"),
-		Number:    "998901234567",
-		Password:  hashPassword("user123"),
-		Role:      "user",
-		FullName:  "Test User",
-		Email:     stringPtr("user@test.uz"),
-		CreatedAt: time.Now(),
-		IsActive:  true,
-		TgID:      int64Ptr(1066137436),
-		Language:  "uz",
-	}
-
-	if _, err := getUserByNumber(testUser.Number); err != nil {
-		if err := createUser(testUser); err != nil {
-			log.Printf("Test foydalanuvchi yaratishda xatolik: %v", err)
-		} else {
-			log.Println("✅ Test foydalanuvchi yaratildi")
-		}
-	} else {
-		log.Println("✅ Test foydalanuvchi mavjud")
-	}
-
-	return nil
+func rootHandler(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"message":             "Restaurant API - To'liq Funksional Versiya",
+		"version":             "5.0.0",
+		"supported_languages": []string{"uz", "ru", "en"},
+		"features": []string{
+			"PostgreSQL Database",
+			"File Upload with Food Names",
+			"Telegram Bot Integration with User Notifications",
+			"Auto-incremental Food IDs (amur_1, amur_2, etc.)",
+			"GPS Coordinates for Delivery",
+			"Stock Management (hide unavailable foods)",
+			"Public Foods API",
+			"Real-time Order Tracking",
+			"WebSocket Support",
+			"Advanced Search",
+			"Review System",
+			"Multi-language Support",
+		},
+		"endpoints": gin.H{
+			"foods":      "/api/foods (PUBLIC)",
+			"categories": "/api/categories (PUBLIC)",
+			"search":     "/api/search (PUBLIC)",
+			"upload":     "/api/upload (PUBLIC/AUTH)",
+			"orders":     "/api/orders (AUTH)",
+			"reviews":    "/api/reviews (AUTH)",
+			"websocket":  "/ws",
+			"statistics": "/api/admin/statistics (ADMIN)",
+		},
+		"database": gin.H{
+			"type":   "PostgreSQL",
+			"status": "connected",
+		},
+		"integrations": gin.H{
+			"telegram_bot":       "enabled",
+			"user_notifications": "enabled",
+			"file_upload":        "enabled",
+			"gps_tracking":       "enabled",
+		},
+	})
 }
 
-// Helper functions
-func stringPtr(s string) *string {
-	return &s
-}
+// ========== SETUP ROUTES ==========
 
-func int64Ptr(i int64) *int64 {
-	return &i
-}
-
-// Setup routes
 func setupRoutes() *gin.Engine {
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
@@ -2739,11 +3061,12 @@ func setupRoutes() *gin.Engine {
 	// Middleware
 	r.Use(corsMiddleware())
 
-	// Static files
+	// Static fayllar (CORS bilan)
 	if _, err := os.Stat(UPLOAD_DIR); os.IsNotExist(err) {
 		os.MkdirAll(UPLOAD_DIR, 0755)
 	}
 
+	// Static files with proper headers for web access
 	r.Static("/uploads", "./"+UPLOAD_DIR)
 	r.StaticFile("/favicon.ico", "./favicon.ico")
 
@@ -2756,13 +3079,13 @@ func setupRoutes() *gin.Engine {
 	// API group
 	api := r.Group("/api")
 
-	// PUBLIC ENDPOINTS
+	// PUBLIC ENDPOINTS (login not required)
 	public := api.Group("/")
 	{
 		// Categories
 		public.GET("/categories", getCategories)
 
-		// Foods (public - only available foods)
+		// Foods (public - faqat mavjud ovqatlar)
 		public.GET("/foods", optionalAuthMiddleware(), getAllFoodsHandler)
 		public.GET("/foods/:food_id", getFoodHandler)
 
@@ -2826,27 +3149,27 @@ func setupRoutes() *gin.Engine {
 	return r
 }
 
-// Main function
+// ========== MAIN FUNCTION ==========
+
 func main() {
-	// Initialize data directory
-	if err := initDataDirectory(); err != nil {
-		log.Fatalf("Data papkasini tayyorlashda xatolik: %v", err)
+	// Database initialization
+	if err := initDatabase(); err != nil {
+		log.Fatalf("❌ Ma'lumotlar bazasi xatoligi: %v", err)
 	}
 
-	// Initialize test data
+	// Test data initialization
 	if err := initializeTestData(); err != nil {
-		log.Printf("Test ma'lumotlarini yaratishda xatolik: %v", err)
+		log.Printf("⚠️ Test ma'lumotlari yaratishda xatolik: %v", err)
 	}
 
 	// WebSocket handler
 	go func() {
 		for {
 			select {
-			case message := <-broadcast:
+			case msg := <-broadcast:
 				for client := range clients {
-					err := client.WriteMessage(websocket.TextMessage, message)
-					if err != nil {
-						log.Printf("WebSocket xabar yuborishda xatolik: %v", err)
+					if err := client.WriteMessage(websocket.TextMessage, msg); err != nil {
+						log.Printf("WebSocket xatolik: %v", err)
 						client.Close()
 						delete(clients, client)
 					}
@@ -2855,20 +3178,30 @@ func main() {
 		}
 	}()
 
-	// Setup routes
+	// Server setup
 	r := setupRoutes()
 
-	// Get port from environment
+	// Server port
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8080"
+		port = "8000"
 	}
 
-	log.Printf("🚀 Server JSON versiyasida %s portida ishlamoqda", port)
-	log.Printf("📂 Ma'lumotlar JSON fayllarida saqlanadi: %s/", DATA_DIR)
-	log.Printf("🌐 API dokumentatsiyasi: http://localhost:%s", port)
+	log.Printf("🚀 Restaurant API - To'liq Funksional Versiya ishlamoqda:")
+	log.Printf("📍 Server: http://localhost:%s", port)
+	log.Printf("🔗 WebSocket: ws://localhost:%s/ws", port)
+	log.Printf("📚 API Docs: http://localhost:%s/", port)
+	log.Printf("🍽️ Public Foods: http://localhost:%s/api/foods", port)
+	log.Printf("🔍 Search: http://localhost:%s/api/search", port)
+	log.Printf("📤 File Upload: http://localhost:%s/api/upload", port)
+	log.Printf("📊 Admin Stats: http://localhost:%s/api/admin/statistics", port)
+	log.Printf("🖼️ Static Files: http://localhost:%s/uploads/", port)
+	log.Printf("⭐ Reviews: http://localhost:%s/api/foods/:id/reviews", port)
+	log.Printf("🗄️ Database: PostgreSQL")
+	log.Printf("🤖 Telegram Bot: Admin + User Notifications")
+	log.Printf("📍 GPS: Delivery Coordinates Support")
+	log.Printf("🔢 Auto ID: amur_1, amur_2, amur_3...")
+	log.Printf("👁️ Visibility: Only available foods (isThere=true, stock>0)")
 
-	if err := r.Run(":" + port); err != nil {
-		log.Fatalf("Serverni ishga tushirishda xatolik: %v", err)
-	}
+	log.Fatal(r.Run(":" + port))
 }
