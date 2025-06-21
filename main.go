@@ -325,10 +325,69 @@ type Claims struct {
 
 // Restaurant tables
 var RestaurantTables = map[string]string{
-	"Zal-1 Stol-1": "93e05d01c3304b3b9dc963db187dbb51",
-	"Zal-1 Stol-2": "73d6827a734a43b6ad779b5979bb9c6a",
-	"Zal-1 Stol-3": "dc6e76e87f9e42a08a4e1198fc5f89a0",
-	"Zal-1 Stol-4": "70a53b0ac3264fce88d9a4b7d3a7fa5e",
+	// Zal-1
+	"Zal-1 Stol-1":  "93e05d01c3304b3b9dc963db187dbb51",
+	"Zal-1 Stol-2":  "73d6827a734a43b6ad779b5979bb9c6a",
+	"Zal-1 Stol-3":  "dc6e76e87f9e42a08a4e1198fc5f89a0",
+	"Zal-1 Stol-4":  "70a53b0ac3264fce88d9a4b7d3a7fa5e",
+	"Zal-1 Stol-5":  "3b8bfb57a10b4e4cb3b7a6d1434dd1bc",
+	"Zal-1 Stol-6":  "4f0e0220e40b43b5a28747984474d6f7",
+	"Zal-1 Stol-7":  "15fc7ed2ff3041aeaa52c5087e51f6b2",
+	"Zal-1 Stol-8":  "41d0d60382b246469b7e01d70031c648",
+	"Zal-1 Stol-9":  "539f421ed1974f55b86d09cfdace9ae3",
+	"Zal-1 Stol-10": "1ad401f487024d1ab78e1db90eb3ac18",
+	"Zal-1 Stol-11": "367f6587c09d4c1ebfe2b3e31c45b0ec",
+	"Zal-1 Stol-12": "da2a9f108bff460aa1b3149b8fa9ed2a",
+	"Zal-1 Stol-13": "91e91fa5a9e849aab850152b55613f98",
+	"Zal-1 Stol-14": "d6d2ee01a57f4f4e93e6788eb1ccf4b2",
+	"Zal-1 Stol-15": "b0f79bb99fef4492a26573f279845b9c",
+	"Zal-1 Stol-16": "c2b7aeef8e814a9c8dfc4935cf8392f6",
+	"Zal-1 Stol-17": "f4389cde50ac4c2ab4487a4a106d6d48",
+
+	// Zal-2
+	"Zal-2 Stol-1":  "c366a08ac9aa48d4a29f31de3561f69a",
+	"Zal-2 Stol-2":  "d10a58dcb3cc4e3eb67a84f785a1a62d",
+	"Zal-2 Stol-3":  "ecfc541124a54051b78e72930e1eac54",
+	"Zal-2 Stol-4":  "e5baf1c7ed4d4a449fca1c7df1bb7006",
+	"Zal-2 Stol-5":  "22bc7dbd17e145c6be40b1d01b29b16d",
+	"Zal-2 Stol-6":  "ff6c4b82207f42a89b676ec5d0f1f7cc",
+	"Zal-2 Stol-7":  "f00db03ddfa24d8b9f603a59cfb6f6cf",
+	"Zal-2 Stol-8":  "f5c5bfa4a9974643b7a3aeb6d1114c7b",
+	"Zal-2 Stol-9":  "62eb05a6882c401c953933132d43b7ff",
+	"Zal-2 Stol-10": "bb842ff325a8498a99414958c400bc62",
+	"Zal-2 Stol-11": "5ab7550a5ecf49b2b28faec156acbd44",
+	"Zal-2 Stol-12": "9d640accb3d94fcbad09c191f03a7f8e",
+	"Zal-2 Stol-13": "7a4044a32e2b4a35a9c91be98c3975a2",
+	"Zal-2 Stol-14": "9c45db6ccda54e989f8b0ebf12c0a34b",
+	"Zal-2 Stol-15": "f3fbbf2f179b4ec89745bfc3fdd10667",
+	"Zal-2 Stol-16": "42134cd30da04d5b9e37fc68f7913fc7",
+
+	// Terassa
+	"Terassa Stol-1":  "3066c1f1c2e640e5a7272e28b4d08f8e",
+	"Terassa Stol-2":  "5932a6769b154a94b7dbbf646e3725a3",
+	"Terassa Stol-3":  "bc1dce5a12d049a489f5aa6f7aa64b3c",
+	"Terassa Stol-4":  "a30c8e82ab6843d898c487ae9a6f31f2",
+	"Terassa Stol-5":  "fa8e703e17924a99b4496c96459ae1e7",
+	"Terassa Stol-6":  "32575a40ab784b878888b1de5421c24f",
+	"Terassa Stol-7":  "f4530dcf98854f92a49d64b71b7d1372",
+	"Terassa Stol-8":  "93c931e153694f69a9fd404be85727de",
+	"Terassa Stol-9":  "4be17f7c57964e689d536cc946925e02",
+	"Terassa Stol-10": "1ad9d8bbcc4e4b58b90ffed835f42e6b",
+	"Terassa Stol-11": "49045b8e013d4722a72a41e3a5b8a761",
+	"Terassa Stol-12": "f9a753a6bfc5483f9be02b36b3a021ae",
+	"Terassa Stol-13": "c4a91adbf5c545f0b5c2cd0732e429ef",
+	"Terassa Stol-14": "be6e16140c744418b47e021134a31b3f",
+	"Terassa Stol-15": "c3c2317de56f4f8da8fa4c758dfb0427",
+	"Terassa Stol-16": "76a5f6e3c08d4761b859ea0bb496fc63",
+
+	// VIP stollar
+	"VIP-1": "vip1_id_placeholder",
+	"VIP-2": "vip2_id_placeholder",
+	"VIP-3": "vip3_id_placeholder",
+	"VIP-4": "vip4_id_placeholder",
+	"VIP-5": "vip5_id_placeholder",
+	"VIP-6": "vip6_id_placeholder",
+	"VIP-7": "vip7_id_placeholder",
 }
 
 // WebSocket message types
