@@ -24,7 +24,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-// Doimiylar
+// Constants
 const (
 	SECRET_KEY                = "restaurant_secret_key_2024"
 	ACCESS_TOKEN_EXPIRE_HOURS = 24
@@ -42,11 +42,11 @@ var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
 	CheckOrigin: func(r *http.Request) bool {
-		return true // CORS uchun
+		return true
 	},
 }
 
-// WebSocket mijozlari
+// WebSocket clients
 var clients = make(map[*websocket.Conn]bool)
 var broadcast = make(chan []byte)
 
@@ -88,212 +88,32 @@ const (
 	PaymentRefunded PaymentStatus = "refunded"
 )
 
-// Ko'p tilli qo'llab-quvvatlash
-var TRANSLATIONS = map[string]map[string]string{
+// Multi-language support for foods only
+var FOOD_TRANSLATIONS = map[string]map[string]string{
 	"uz": {
-		"success":                    "Muvaffaqiyatli",
-		"error":                      "Xatolik",
-		"not_found":                  "Topilmadi",
-		"unauthorized":               "Ruxsat etilmagan",
-		"forbidden":                  "Taqiqlangan",
-		"invalid_request":            "Noto'g'ri so'rov",
-		"phone_already_registered":   "Bu telefon raqami allaqachon ro'yxatdan o'tgan",
-		"invalid_credentials":        "Telefon raqami yoki parol noto'g'ri",
-		"user_not_found":             "Foydalanuvchi topilmadi",
-		"token_invalid":              "Token yaroqsiz",
-		"registration_successful":    "Ro'yxatdan o'tish muvaffaqiyatli",
-		"login_successful":           "Tizimga kirish muvaffaqiyatli",
-		"food_not_found":             "Ovqat topilmadi",
-		"food_created":               "Ovqat yaratildi",
-		"food_updated":               "Ovqat ma'lumotlari yangilandi",
-		"food_deleted":               "Ovqat o'chirildi",
-		"only_admin_can_manage_food": "Faqat admin ovqat boshqara oladi",
-		"order_created":              "Buyurtma yaratildi",
-		"order_not_found":            "Buyurtma topilmadi",
-		"order_cancelled":            "Buyurtma bekor qilindi",
-		"order_status_updated":       "Buyurtma holati yangilandi",
-		"food_not_available":         "Ovqat mavjud emas",
-		"invalid_quantity":           "Ovqat miqdori 0 dan katta bo'lishi kerak",
-		"order_confirmed":            "Buyurtmangiz tasdiqlandi!",
-		"new_order":                  "Yangi buyurtma!",
-		"order_id":                   "Buyurtma ID:",
-		"customer":                   "Mijoz:",
-		"phone":                      "Telefon:",
-		"time":                       "Vaqt:",
-		"order_items":                "Buyurtma tarkibi:",
-		"total_amount":               "Umumiy summa:",
-		"delivery_address":           "Yetkazib berish:",
-		"pickup":                     "O'zi olib ketish:",
-		"restaurant_table":           "Restoranda:",
-		"payment_method":             "To'lov usuli:",
-		"preparation_time":           "Tayyorlash vaqti:",
-		"additional_notes":           "Qo'shimcha:",
-		"shashlik":                   "Shashlik",
-		"milliy_taomlar":             "Milliy taomlar",
-		"ichimliklar":                "Ichimliklar",
-		"salatlar":                   "Salatlar",
-		"shirinliklar":               "Shirinliklar",
-		"delivery":                   "Yetkazib berish",
-		"own_withdrawal":             "O'zi olib ketish",
-		"at_restaurant":              "Restoranda",
-		"cash":                       "Naqd",
-		"card":                       "Karta",
-		"click":                      "Click",
-		"payme":                      "Payme",
-		"login_required":             "Buyurtma berish uchun tizimga kiring",
-		"cart_empty":                 "Savatda mahsulot yo'q",
-		"insufficient_stock":         "Yetarli miqdor yo'q",
-		"order_processing":           "Buyurtma qayta ishlanmoqda",
-		"file_uploaded":              "Fayl yuklandi",
-		"invalid_file":               "Noto'g'ri fayl",
-		"file_too_large":             "Fayl hajmi katta",
-		"order_status_pending":       "Buyurtmangiz qabul qilindi",
-		"order_status_confirmed":     "Buyurtmangiz tasdiqlandi!",
-		"order_status_preparing":     "Buyurtmangiz tayyorlanmoqda",
-		"order_status_ready":         "Buyurtmangiz tayyor!",
-		"order_status_delivered":     "Buyurtmangiz yetkazildi",
-		"order_status_cancelled":     "Buyurtmangiz bekor qilindi",
-		"review_created":             "Sharh qo'shildi",
-		"review_updated":             "Sharh yangilandi",
-		"review_deleted":             "Sharh o'chirildi",
+		"shashlik":       "Shashlik",
+		"milliy_taomlar": "Milliy taomlar",
+		"ichimliklar":    "Ichimliklar",
+		"salatlar":       "Salatlar",
+		"shirinliklar":   "Shirinliklar",
 	},
 	"ru": {
-		"success":                    "Успешно",
-		"error":                      "Ошибка",
-		"not_found":                  "Не найдено",
-		"unauthorized":               "Неавторизован",
-		"forbidden":                  "Запрещено",
-		"invalid_request":            "Неверный запрос",
-		"phone_already_registered":   "Этот номер телефона уже зарегистрирован",
-		"invalid_credentials":        "Неверный номер телефона или пароль",
-		"user_not_found":             "Пользователь не найден",
-		"token_invalid":              "Токен недействителен",
-		"registration_successful":    "Регистрация успешна",
-		"login_successful":           "Вход выполнен успешно",
-		"food_not_found":             "Блюдо не найдено",
-		"food_created":               "Блюдо создано",
-		"food_updated":               "Информация о блюде обновлена",
-		"food_deleted":               "Блюдо удалено",
-		"only_admin_can_manage_food": "Только админ может управлять блюдами",
-		"order_created":              "Заказ создан",
-		"order_not_found":            "Заказ не найден",
-		"order_cancelled":            "Заказ отменен",
-		"order_status_updated":       "Статус заказа обновлен",
-		"food_not_available":         "Блюдо недоступно",
-		"invalid_quantity":           "Количество блюда должно быть больше 0",
-		"order_confirmed":            "Ваш заказ подтвержден!",
-		"new_order":                  "Новый заказ!",
-		"order_id":                   "ID заказа:",
-		"customer":                   "Клиент:",
-		"phone":                      "Телефон:",
-		"time":                       "Время:",
-		"order_items":                "Состав заказа:",
-		"total_amount":               "Общая сумма:",
-		"delivery_address":           "Доставка:",
-		"pickup":                     "Самовывоз:",
-		"restaurant_table":           "В ресторане:",
-		"payment_method":             "Способ оплаты:",
-		"preparation_time":           "Время приготовления:",
-		"additional_notes":           "Дополнительно:",
-		"shashlik":                   "Шашлык",
-		"milliy_taomlar":             "Национальные блюда",
-		"ichimliklar":                "Напитки",
-		"salatlar":                   "Салаты",
-		"shirinliklar":               "Десерты",
-		"delivery":                   "Доставка",
-		"own_withdrawal":             "Самовывоз",
-		"at_restaurant":              "В ресторане",
-		"cash":                       "Наличные",
-		"card":                       "Карта",
-		"click":                      "Click",
-		"payme":                      "Payme",
-		"login_required":             "Войдите в систему для оформления заказа",
-		"cart_empty":                 "Корзина пуста",
-		"insufficient_stock":         "Недостаточное количество",
-		"order_processing":           "Заказ обрабатывается",
-		"file_uploaded":              "Файл загружен",
-		"invalid_file":               "Неверный файл",
-		"file_too_large":             "Файл слишком большой",
-		"order_status_pending":       "Ваш заказ принят",
-		"order_status_confirmed":     "Ваш заказ подтвержден!",
-		"order_status_preparing":     "Ваш заказ готовится",
-		"order_status_ready":         "Ваш заказ готов!",
-		"order_status_delivered":     "Ваш заказ доставлен",
-		"order_status_cancelled":     "Ваш заказ отменен",
-		"review_created":             "Отзыв добавлен",
-		"review_updated":             "Отзыв обновлен",
-		"review_deleted":             "Отзыв удален",
+		"shashlik":       "Шашлык",
+		"milliy_taomlar": "Национальные блюда",
+		"ichimliklar":    "Напитки",
+		"salatlar":       "Салаты",
+		"shirinliklar":   "Десерты",
 	},
 	"en": {
-		"success":                    "Success",
-		"error":                      "Error",
-		"not_found":                  "Not found",
-		"unauthorized":               "Unauthorized",
-		"forbidden":                  "Forbidden",
-		"invalid_request":            "Invalid request",
-		"phone_already_registered":   "This phone number is already registered",
-		"invalid_credentials":        "Invalid phone number or password",
-		"user_not_found":             "User not found",
-		"token_invalid":              "Token is invalid",
-		"registration_successful":    "Registration successful",
-		"login_successful":           "Login successful",
-		"food_not_found":             "Food not found",
-		"food_created":               "Food created",
-		"food_updated":               "Food information updated",
-		"food_deleted":               "Food deleted",
-		"only_admin_can_manage_food": "Only admin can manage food",
-		"order_created":              "Order created",
-		"order_not_found":            "Order not found",
-		"order_cancelled":            "Order cancelled",
-		"order_status_updated":       "Order status updated",
-		"food_not_available":         "Food not available",
-		"invalid_quantity":           "Food quantity must be greater than 0",
-		"order_confirmed":            "Your order has been confirmed!",
-		"new_order":                  "New order!",
-		"order_id":                   "Order ID:",
-		"customer":                   "Customer:",
-		"phone":                      "Phone:",
-		"time":                       "Time:",
-		"order_items":                "Order items:",
-		"total_amount":               "Total amount:",
-		"delivery_address":           "Delivery:",
-		"pickup":                     "Pickup:",
-		"restaurant_table":           "At restaurant:",
-		"payment_method":             "Payment method:",
-		"preparation_time":           "Preparation time:",
-		"additional_notes":           "Additional:",
-		"shashlik":                   "Barbecue",
-		"milliy_taomlar":             "National dishes",
-		"ichimliklar":                "Drinks",
-		"salatlar":                   "Salads",
-		"shirinliklar":               "Desserts",
-		"delivery":                   "Delivery",
-		"own_withdrawal":             "Pickup",
-		"at_restaurant":              "At restaurant",
-		"cash":                       "Cash",
-		"card":                       "Card",
-		"click":                      "Click",
-		"payme":                      "Payme",
-		"login_required":             "Please login to place an order",
-		"cart_empty":                 "Cart is empty",
-		"insufficient_stock":         "Insufficient stock",
-		"order_processing":           "Order is being processed",
-		"file_uploaded":              "File uploaded",
-		"invalid_file":               "Invalid file",
-		"file_too_large":             "File too large",
-		"order_status_pending":       "Your order has been received",
-		"order_status_confirmed":     "Your order has been confirmed!",
-		"order_status_preparing":     "Your order is being prepared",
-		"order_status_ready":         "Your order is ready!",
-		"order_status_delivered":     "Your order has been delivered",
-		"order_status_cancelled":     "Your order has been cancelled",
-		"review_created":             "Review added",
-		"review_updated":             "Review updated",
-		"review_deleted":             "Review deleted",
+		"shashlik":       "Barbecue",
+		"milliy_taomlar": "National dishes",
+		"ichimliklar":    "Drinks",
+		"salatlar":       "Salads",
+		"shirinliklar":   "Desserts",
 	},
 }
 
-// Strukturalar
+// Models
 type User struct {
 	ID        string    `json:"id" db:"id"`
 	Number    string    `json:"number" db:"number"`
@@ -308,7 +128,7 @@ type User struct {
 }
 
 type Food struct {
-	ID              string              `json:"id" db:"id"`
+	ID              int64               `json:"id" db:"id"`
 	Names           map[string]string   `json:"names,omitempty" db:"names"`
 	Name            string              `json:"name" db:"name"`
 	Descriptions    map[string]string   `json:"descriptions,omitempty" db:"descriptions"`
@@ -333,7 +153,7 @@ type Food struct {
 }
 
 type OrderFood struct {
-	ID          string `json:"id"`
+	ID          int64  `json:"id"`
 	Name        string `json:"name"`
 	Category    string `json:"category"`
 	Price       int    `json:"price"`
@@ -391,7 +211,7 @@ type Review struct {
 	ID        string    `json:"id" db:"id"`
 	UserID    string    `json:"user_id" db:"user_id"`
 	UserName  string    `json:"user_name,omitempty"`
-	FoodID    string    `json:"food_id" db:"food_id"`
+	FoodID    int64     `json:"food_id" db:"food_id"`
 	Rating    int       `json:"rating" db:"rating"`
 	Comment   string    `json:"comment" db:"comment"`
 	CreatedAt time.Time `json:"created_at" db:"created_at"`
@@ -410,7 +230,7 @@ type FileUpload struct {
 	CreatedAt    time.Time `json:"created_at" db:"created_at"`
 }
 
-// Request/Response strukturalar
+// Request/Response structures
 type LoginRequest struct {
 	Number   string `json:"number" binding:"required"`
 	Password string `json:"password" binding:"required"`
@@ -433,6 +253,7 @@ type LoginResponse struct {
 }
 
 type FoodCreate struct {
+	CustomID        *int64   `json:"custom_id,omitempty"`
 	NameUz          string   `json:"nameUz" binding:"required"`
 	NameRu          string   `json:"nameRu" binding:"required"`
 	NameEn          string   `json:"nameEn" binding:"required"`
@@ -454,11 +275,12 @@ type FoodCreate struct {
 	IsPopular       bool     `json:"is_popular,omitempty"`
 	Discount        int      `json:"discount,omitempty"`
 	Comment         string   `json:"comment,omitempty"`
+	StarRating      float64  `json:"star_rating,omitempty"`
 }
 
 type CartItem struct {
-	FoodID   string `json:"food_id" binding:"required"`
-	Quantity int    `json:"quantity" binding:"required,min=1"`
+	FoodID   int64 `json:"food_id" binding:"required"`
+	Quantity int   `json:"quantity" binding:"required,min=1"`
 }
 
 type OrderRequest struct {
@@ -477,7 +299,7 @@ type CustomerInfo struct {
 }
 
 type ReviewCreate struct {
-	FoodID  string `json:"food_id" binding:"required"`
+	FoodID  int64  `json:"food_id" binding:"required"`
 	Rating  int    `json:"rating" binding:"required,min=1,max=5"`
 	Comment string `json:"comment" binding:"required"`
 }
@@ -487,17 +309,13 @@ type ReviewUpdate struct {
 	Comment *string `json:"comment,omitempty"`
 }
 
-type LanguageRequest struct {
-	Language string `json:"language" binding:"required"`
-}
-
-// Telegram strukturalar
+// Telegram structures
 type TelegramMessage struct {
 	ChatID string `json:"chat_id"`
 	Text   string `json:"text"`
 }
 
-// Claims JWT uchun
+// JWT Claims
 type Claims struct {
 	Number string `json:"sub"`
 	Role   string `json:"role"`
@@ -513,10 +331,7 @@ var RestaurantTables = map[string]string{
 	"Zal-1 Stol-4": "70a53b0ac3264fce88d9a4b7d3a7fa5e",
 }
 
-// Daily order counter
-var DailyOrderCounter = make(map[string]int)
-
-// WebSocket uchun xabar turlari
+// WebSocket message types
 type WSMessage struct {
 	Type    string      `json:"type"`
 	Data    interface{} `json:"data"`
@@ -555,20 +370,18 @@ func initDatabase() error {
 
 	db, err = sql.Open("postgres", connStr)
 	if err != nil {
-		return fmt.Errorf("Ma'lumotlar bazasiga ulanishda xatolik: %v", err)
+		return fmt.Errorf("database connection error: %v", err)
 	}
 
-	// Test ulanish
 	if err = db.Ping(); err != nil {
-		return fmt.Errorf("Ma'lumotlar bazasini tekshirishda xatolik: %v", err)
+		return fmt.Errorf("database ping error: %v", err)
 	}
 
-	// Jadvallarni yaratish
 	if err = createTables(); err != nil {
-		return fmt.Errorf("Jadvallarni yaratishda xatolik: %v", err)
+		return fmt.Errorf("create tables error: %v", err)
 	}
 
-	log.Println("✅ PostgreSQL ma'lumotlar bazasi muvaffaqiyatli ulandi")
+	log.Println("✅ PostgreSQL database connected successfully")
 	return nil
 }
 
@@ -588,9 +401,9 @@ func createTables() error {
 			language VARCHAR(5) DEFAULT 'uz'
 		)`,
 
-		// Foods table
+		// Foods table with BIGSERIAL ID
 		`CREATE TABLE IF NOT EXISTS foods (
-			id VARCHAR(255) PRIMARY KEY,
+			id BIGSERIAL PRIMARY KEY,
 			names JSONB,
 			name VARCHAR(255) NOT NULL,
 			descriptions JSONB,
@@ -636,7 +449,7 @@ func createTables() error {
 		`CREATE TABLE IF NOT EXISTS reviews (
 			id VARCHAR(255) PRIMARY KEY,
 			user_id VARCHAR(255) NOT NULL,
-			food_id VARCHAR(255) NOT NULL,
+			food_id BIGINT NOT NULL,
 			rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
 			comment TEXT NOT NULL,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -658,6 +471,22 @@ func createTables() error {
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 		)`,
 
+		// Auto-update trigger for foods
+		`CREATE OR REPLACE FUNCTION update_updated_at_column()
+		RETURNS TRIGGER AS $$
+		BEGIN
+			NEW.updated_at = CURRENT_TIMESTAMP;
+			RETURN NEW;
+		END;
+		$$ language 'plpgsql'`,
+
+		`DROP TRIGGER IF EXISTS update_foods_updated_at ON foods`,
+
+		`CREATE TRIGGER update_foods_updated_at 
+			BEFORE UPDATE ON foods 
+			FOR EACH ROW 
+			EXECUTE FUNCTION update_updated_at_column()`,
+
 		// Indexes
 		`CREATE INDEX IF NOT EXISTS idx_foods_category ON foods(category)`,
 		`CREATE INDEX IF NOT EXISTS idx_foods_is_there ON foods(is_there)`,
@@ -671,7 +500,7 @@ func createTables() error {
 
 	for _, query := range queries {
 		if _, err := db.Exec(query); err != nil {
-			return fmt.Errorf("Jadval yaratishda xatolik: %v", err)
+			return fmt.Errorf("table creation error: %v", err)
 		}
 	}
 
@@ -680,17 +509,17 @@ func createTables() error {
 
 // ========== UTILITY FUNCTIONS ==========
 
-func getTranslation(key, lang string) string {
+func getFoodTranslation(key, lang string) string {
 	if lang == "" {
 		lang = "uz"
 	}
-	if translations, exists := TRANSLATIONS[lang]; exists {
+	if translations, exists := FOOD_TRANSLATIONS[lang]; exists {
 		if translation, exists := translations[key]; exists {
 			return translation
 		}
 	}
-	// Default o'zbek tilida qaytarish
-	if translations, exists := TRANSLATIONS["uz"]; exists {
+	// Default uzbek language
+	if translations, exists := FOOD_TRANSLATIONS["uz"]; exists {
 		if translation, exists := translations[key]; exists {
 			return translation
 		}
@@ -716,58 +545,19 @@ func getUserLanguage(headers map[string][]string) string {
 	return "uz"
 }
 
-func createResponse(messageKey, lang string) gin.H {
-	message := getTranslation(messageKey, lang)
-	return gin.H{
-		"message":  message,
-		"language": lang,
-	}
-}
-
 func generateID(prefix string) string {
 	return fmt.Sprintf("%s_%s", prefix, uuid.New().String()[:8])
 }
 
-func generateFoodID() string {
-	// Eng oxirgi ID ni topish
-	var lastID string
-	query := `SELECT id FROM foods WHERE id LIKE 'amur_%' ORDER BY 
-			  CAST(SUBSTRING(id FROM 'amur_(.*)') AS INTEGER) DESC LIMIT 1`
-
-	err := db.QueryRow(query).Scan(&lastID)
-	if err != nil {
-		// Birinchi ovqat bo'lsa
-		return "amur_1"
-	}
-
-	// ID dan raqamni ajratib olish
-	re := regexp.MustCompile(`amur_(\d+)`)
-	matches := re.FindStringSubmatch(lastID)
-	if len(matches) != 2 {
-		return "amur_1"
-	}
-
-	// Raqamni 1 ga oshirish
-	num, err := strconv.Atoi(matches[1])
-	if err != nil {
-		return "amur_1"
-	}
-
-	return fmt.Sprintf("amur_%d", num+1)
-}
-
 func generateOrderID() string {
 	today := time.Now().Format("2006-01-02")
-
-	// Daily counter-ni database dan olish yoki yaratish
 	var count int
 	query := `SELECT COUNT(*) FROM orders WHERE DATE(order_time) = $1`
 	err := db.QueryRow(query, today).Scan(&count)
 	if err != nil {
-		log.Printf("Order count olishda xatolik: %v", err)
+		log.Printf("Order count error: %v", err)
 		count = 0
 	}
-
 	count++
 	return fmt.Sprintf("%s-%d", today, count)
 }
@@ -798,7 +588,7 @@ func getTableNameByID(tableID string) string {
 			return tableName
 		}
 	}
-	return "Noma'lum stol"
+	return "Unknown table"
 }
 
 func getHostURL(c *gin.Context) string {
@@ -810,11 +600,9 @@ func getHostURL(c *gin.Context) string {
 }
 
 func cleanFileName(name string) string {
-	// Fayl nomini tozalash (faqat harflar, raqamlar va - _ .)
 	re := regexp.MustCompile(`[^a-zA-Z0-9\-_.]`)
 	cleaned := re.ReplaceAllString(name, "_")
 
-	// Uzunligini cheklash
 	if len(cleaned) > 50 {
 		ext := filepath.Ext(cleaned)
 		nameWithoutExt := strings.TrimSuffix(cleaned, ext)
@@ -830,30 +618,24 @@ func cleanFileName(name string) string {
 // ========== FILE UPLOAD FUNCTIONS ==========
 
 func uploadFile(c *gin.Context) {
-	lang := getUserLanguage(c.Request.Header)
-
-	// Foydalanuvchi tekshiruvi (ixtiyoriy)
 	var uploaderID string
 	if userInterface, exists := c.Get("user"); exists {
 		user := userInterface.(*Claims)
 		uploaderID = user.UserID
 	}
 
-	// Faylni olish
 	file, fileHeader, err := c.Request.FormFile("file")
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Fayl tanlanmadi"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "No file selected"})
 		return
 	}
 	defer file.Close()
 
-	// Fayl hajmini tekshirish
 	if fileHeader.Size > MAX_FILE_SIZE {
-		c.JSON(http.StatusBadRequest, createResponse("file_too_large", lang))
+		c.JSON(http.StatusBadRequest, gin.H{"error": "File too large"})
 		return
 	}
 
-	// Fayl turini tekshirish
 	allowedTypes := map[string]bool{
 		"image/jpeg": true,
 		"image/jpg":  true,
@@ -864,41 +646,35 @@ func uploadFile(c *gin.Context) {
 
 	contentType := fileHeader.Header.Get("Content-Type")
 	if !allowedTypes[contentType] {
-		c.JSON(http.StatusBadRequest, createResponse("invalid_file", lang))
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid file type"})
 		return
 	}
 
-	// Upload papkasini yaratish
 	if _, err := os.Stat(UPLOAD_DIR); os.IsNotExist(err) {
 		os.MkdirAll(UPLOAD_DIR, 0755)
 	}
 
-	// Ovqat nomi bilan fayl nomi yaratish
 	originalName := strings.TrimSuffix(fileHeader.Filename, filepath.Ext(fileHeader.Filename))
 	cleanedName := cleanFileName(originalName)
 	ext := filepath.Ext(fileHeader.Filename)
 
-	// Noyob fayl nomi yaratish (ovqat nomi + vaqt)
 	fileName := fmt.Sprintf("%s_%d%s", cleanedName, time.Now().Unix(), ext)
 	filePath := filepath.Join(UPLOAD_DIR, fileName)
 
-	// Faylni saqlash
 	dst, err := os.Create(filePath)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Faylni saqlashda xatolik"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "File save error"})
 		return
 	}
 	defer dst.Close()
 
 	if _, err := io.Copy(dst, file); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Faylni nusxalashda xatolik"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "File copy error"})
 		return
 	}
 
-	// URL yaratish
-	fileURL := fmt.Sprintf("%s/uploads/%s", getHostURL(c), fileName)
+	fileURL := fmt.Sprintf("/uploads/%s", fileName)
 
-	// Ma'lumotlar bazasiga saqlash
 	fileUpload := &FileUpload{
 		ID:           generateID("file"),
 		OriginalName: fileHeader.Filename,
@@ -919,118 +695,18 @@ func uploadFile(c *gin.Context) {
 		fileUpload.UploadedBy, fileUpload.CreatedAt)
 
 	if err != nil {
-		log.Printf("Fayl ma'lumotlarini saqlashda xatolik: %v", err)
-		// Faylni o'chirish
+		log.Printf("File data save error: %v", err)
 		os.Remove(filePath)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotni saqlashda xatolik"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Data save error"})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"message":    getTranslation("file_uploaded", lang),
+		"message":    "File uploaded successfully",
 		"file":       fileUpload,
 		"url":        fileURL,
 		"public_url": fileURL,
 	})
-}
-
-func getUploadedFiles(c *gin.Context) {
-	page, _ := strconv.Atoi(c.Query("page"))
-	limit, _ := strconv.Atoi(c.Query("limit"))
-	fileType := c.Query("type") // image, document
-
-	if page <= 0 {
-		page = 1
-	}
-	if limit <= 0 {
-		limit = 20
-	}
-
-	offset := (page - 1) * limit
-
-	// Query yaratish
-	query := `SELECT id, original_name, file_name, file_path, file_size, mime_type, url, uploaded_by, created_at 
-			  FROM file_uploads WHERE 1=1`
-	args := []interface{}{}
-	argIndex := 1
-
-	if fileType == "image" {
-		query += fmt.Sprintf(" AND mime_type LIKE 'image/%%' ORDER BY created_at DESC LIMIT $%d OFFSET $%d", argIndex, argIndex+1)
-		args = append(args, limit, offset)
-	} else {
-		query += fmt.Sprintf(" ORDER BY created_at DESC LIMIT $%d OFFSET $%d", argIndex, argIndex+1)
-		args = append(args, limit, offset)
-	}
-
-	rows, err := db.Query(query, args...)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
-		return
-	}
-	defer rows.Close()
-
-	var files []FileUpload
-	for rows.Next() {
-		var file FileUpload
-		err := rows.Scan(&file.ID, &file.OriginalName, &file.FileName, &file.FilePath,
-			&file.FileSize, &file.MimeType, &file.URL, &file.UploadedBy, &file.CreatedAt)
-		if err != nil {
-			continue
-		}
-		files = append(files, file)
-	}
-
-	// Total count
-	countQuery := `SELECT COUNT(*) FROM file_uploads`
-	if fileType == "image" {
-		countQuery += " WHERE mime_type LIKE 'image/%'"
-	}
-
-	var total int
-	db.QueryRow(countQuery).Scan(&total)
-
-	c.JSON(http.StatusOK, gin.H{
-		"files": files,
-		"pagination": gin.H{
-			"page":        page,
-			"limit":       limit,
-			"total":       total,
-			"total_pages": (total + limit - 1) / limit,
-		},
-	})
-}
-
-func deleteFile(c *gin.Context) {
-	fileID := c.Param("file_id")
-	lang := getUserLanguage(c.Request.Header)
-
-	// Faylni ma'lumotlar bazasidan olish
-	var file FileUpload
-	query := `SELECT id, file_path FROM file_uploads WHERE id = $1`
-	err := db.QueryRow(query, fileID).Scan(&file.ID, &file.FilePath)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			c.JSON(http.StatusNotFound, createResponse("not_found", lang))
-			return
-		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
-		return
-	}
-
-	// Faylni disk dan o'chirish
-	if err := os.Remove(file.FilePath); err != nil {
-		log.Printf("Faylni o'chirishda xatolik: %v", err)
-	}
-
-	// Ma'lumotlar bazasidan o'chirish
-	deleteQuery := `DELETE FROM file_uploads WHERE id = $1`
-	_, err = db.Exec(deleteQuery, fileID)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotni o'chirishda xatolik"})
-		return
-	}
-
-	c.JSON(http.StatusOK, createResponse("success", lang))
 }
 
 // ========== TELEGRAM BOT FUNCTIONS ==========
@@ -1056,7 +732,7 @@ func sendTelegramMessage(message string) error {
 
 	if resp.StatusCode != http.StatusOK {
 		body, _ := io.ReadAll(resp.Body)
-		return fmt.Errorf("Telegram API xatolik: %s", string(body))
+		return fmt.Errorf("telegram API error: %s", string(body))
 	}
 
 	return nil
@@ -1083,72 +759,53 @@ func sendTelegramMessageToUser(userTgID int64, message string) error {
 
 	if resp.StatusCode != http.StatusOK {
 		body, _ := io.ReadAll(resp.Body)
-		return fmt.Errorf("Telegram API xatolik: %s", string(body))
+		return fmt.Errorf("telegram API error: %s", string(body))
 	}
 
 	return nil
 }
 
-func formatOrderForTelegram(order *Order, lang string) string {
-	message := fmt.Sprintf("🍽️ %s\n\n", getTranslation("new_order", lang))
-	message += fmt.Sprintf("📋 %s %s\n", getTranslation("order_id", lang), order.OrderID)
-	message += fmt.Sprintf("👤 %s %s\n", getTranslation("customer", lang), order.UserName)
-	message += fmt.Sprintf("📞 %s %s\n", getTranslation("phone", lang), order.UserNumber)
-	message += fmt.Sprintf("🕐 %s %s\n\n", getTranslation("time", lang), order.OrderTime.Format("15:04"))
+func formatOrderForTelegram(order *Order) string {
+	message := fmt.Sprintf("🍽️ New Order!\n\n")
+	message += fmt.Sprintf("📋 Order ID: %s\n", order.OrderID)
+	message += fmt.Sprintf("👤 Customer: %s\n", order.UserName)
+	message += fmt.Sprintf("📞 Phone: %s\n", order.UserNumber)
+	message += fmt.Sprintf("🕐 Time: %s\n\n", order.OrderTime.Format("15:04"))
 
-	message += fmt.Sprintf("🍕 %s\n", getTranslation("order_items", lang))
+	message += fmt.Sprintf("🍕 Order Items:\n")
 	for _, food := range order.Foods {
-		message += fmt.Sprintf("• %s x%d = %d so'm\n", food.Name, food.Count, food.TotalPrice)
+		message += fmt.Sprintf("• %s x%d = %d UZS\n", food.Name, food.Count, food.TotalPrice)
 	}
 
-	message += fmt.Sprintf("\n💰 %s %d so'm\n", getTranslation("total_amount", lang), order.TotalPrice)
+	message += fmt.Sprintf("\n💰 Total Amount: %d UZS\n", order.TotalPrice)
 
-	// Yetkazib berish ma'lumotlari
+	// Delivery information
 	switch order.DeliveryType {
 	case "delivery":
 		if address, ok := order.DeliveryInfo["address"].(string); ok {
-			message += fmt.Sprintf("🚚 %s %s\n", getTranslation("delivery_address", lang), address)
+			message += fmt.Sprintf("🚚 Delivery Address: %s\n", address)
 		}
 		if lat, ok := order.DeliveryInfo["latitude"].(float64); ok {
 			if lng, ok := order.DeliveryInfo["longitude"].(float64); ok {
-				message += fmt.Sprintf("📍 Koordinatalar: %.6f, %.6f\n", lat, lng)
+				message += fmt.Sprintf("📍 Coordinates: %.6f, %.6f\n", lat, lng)
 			}
 		}
 	case "own_withdrawal":
-		message += fmt.Sprintf("🏪 %s\n", getTranslation("pickup", lang))
+		message += fmt.Sprintf("🏪 Pickup\n")
 	case "atTheRestaurant":
 		if tableName, ok := order.DeliveryInfo["table_name"].(string); ok {
-			message += fmt.Sprintf("🍽️ %s %s\n", getTranslation("restaurant_table", lang), tableName)
+			message += fmt.Sprintf("🍽️ Table: %s\n", tableName)
 		}
 	}
 
-	message += fmt.Sprintf("💳 %s %s\n", getTranslation("payment_method", lang),
-		getTranslation(string(order.PaymentInfo.Method), lang))
+	message += fmt.Sprintf("💳 Payment Method: %s\n", string(order.PaymentInfo.Method))
 
 	if order.EstimatedTime != nil {
-		message += fmt.Sprintf("⏱️ %s %d daqiqa\n", getTranslation("preparation_time", lang), *order.EstimatedTime)
+		message += fmt.Sprintf("⏱️ Preparation Time: %d minutes\n", *order.EstimatedTime)
 	}
 
 	if order.SpecialInstructions != nil && *order.SpecialInstructions != "" {
-		message += fmt.Sprintf("📝 %s %s\n", getTranslation("additional_notes", lang), *order.SpecialInstructions)
-	}
-
-	return message
-}
-
-func formatOrderStatusUpdateForUser(order *Order, lang string) string {
-	statusKey := fmt.Sprintf("order_status_%s", string(order.Status))
-	statusMessage := getTranslation(statusKey, lang)
-
-	message := fmt.Sprintf("📋 Buyurtma: %s\n", order.OrderID)
-	message += fmt.Sprintf("📍 Status: %s\n\n", statusMessage)
-
-	if order.Status == OrderReady {
-		message += "🎉 Buyurtmangiz tayyor! Iltimos, olib ketishga keling.\n"
-	} else if order.Status == OrderDelivered {
-		message += "✅ Buyurtmangiz muvaffaqiyatli yetkazildi. Rahmat!\n"
-	} else if order.Status == OrderCancelled {
-		message += "❌ Buyurtmangiz bekor qilindi.\n"
+		message += fmt.Sprintf("📝 Special Instructions: %s\n", *order.SpecialInstructions)
 	}
 
 	return message
@@ -1159,20 +816,20 @@ func formatOrderStatusUpdateForUser(order *Order, lang string) string {
 func handleWebSocket(c *gin.Context) {
 	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
-		log.Printf("WebSocket upgrade xatoligi: %v", err)
+		log.Printf("WebSocket upgrade error: %v", err)
 		return
 	}
 	defer conn.Close()
 
 	clients[conn] = true
-	log.Printf("WebSocket mijoz ulandi. Jami mijozlar: %d", len(clients))
+	log.Printf("WebSocket client connected. Total clients: %d", len(clients))
 
 	for {
 		_, _, err := conn.ReadMessage()
 		if err != nil {
-			log.Printf("WebSocket o'qish xatoligi: %v", err)
+			log.Printf("WebSocket read error: %v", err)
 			delete(clients, conn)
-			log.Printf("WebSocket mijoz uzildi. Qolgan mijozlar: %d", len(clients))
+			log.Printf("WebSocket client disconnected. Remaining clients: %d", len(clients))
 			break
 		}
 	}
@@ -1183,12 +840,12 @@ func broadcastToClients(message WSMessage) {
 	for client := range clients {
 		err := client.WriteJSON(message)
 		if err != nil {
-			log.Printf("WebSocket yozish xatoligi: %v", err)
+			log.Printf("WebSocket write error: %v", err)
 			client.Close()
 			delete(clients, client)
 		}
 	}
-	log.Printf("WebSocket xabar yuborildi: %s", string(jsonData))
+	log.Printf("WebSocket message sent: %s", string(jsonData))
 }
 
 func sendOrderUpdate(orderID string, status OrderStatus, message string) {
@@ -1213,13 +870,13 @@ func sendNewOrderNotification(order *Order) {
 	}
 	broadcastToClients(wsMessage)
 
-	// Telegram xabar yuborish (admin gruppasiga)
+	// Send Telegram message to admin group
 	go func() {
-		telegramMessage := formatOrderForTelegram(order, "uz")
+		telegramMessage := formatOrderForTelegram(order)
 		if err := sendTelegramMessage(telegramMessage); err != nil {
-			log.Printf("Telegram xabar yuborishda xatolik: %v", err)
+			log.Printf("Telegram message error: %v", err)
 		} else {
-			log.Printf("Telegram xabar yuborildi: %s", order.OrderID)
+			log.Printf("Telegram message sent: %s", order.OrderID)
 		}
 	}()
 }
@@ -1305,8 +962,7 @@ func adminMiddleware() gin.HandlerFunc {
 
 		claims := user.(*Claims)
 		if claims.Role != "admin" {
-			lang := getUserLanguage(c.Request.Header)
-			c.JSON(http.StatusForbidden, createResponse("forbidden", lang))
+			c.JSON(http.StatusForbidden, gin.H{"error": "Admin access required"})
 			c.Abort()
 			return
 		}
@@ -1345,7 +1001,7 @@ func createUser(user *User) error {
 	return err
 }
 
-func getFoodByID(foodID string) (*Food, error) {
+func getFoodByID(foodID int64) (*Food, error) {
 	query := `SELECT id, names, name, descriptions, description, category, price, is_there, 
 			  image_url, ingredients, allergens, rating, review_count, preparation_time, 
 			  stock, is_popular, discount, comment, created_at, updated_at
@@ -1384,7 +1040,7 @@ func getFoodByID(foodID string) (*Food, error) {
 }
 
 func getAllFoods() ([]*Food, error) {
-	// Faqat mavjud ovqatlarni qaytarish (isThere = true va stock > 0)
+	// Only available foods (isThere = true and stock > 0) ordered by ID
 	query := `SELECT id, names, name, descriptions, description, category, price, is_there, 
 			  image_url, ingredients, allergens, rating, review_count, preparation_time, 
 			  stock, is_popular, discount, comment, created_at, updated_at
@@ -1434,7 +1090,7 @@ func getAllFoods() ([]*Food, error) {
 }
 
 func getAllFoodsForAdmin() ([]*Food, error) {
-	// Admin uchun barcha ovqatlarni ko'rsatish
+	// All foods for admin ordered by ID
 	query := `SELECT id, names, name, descriptions, description, category, price, is_there, 
 			  image_url, ingredients, allergens, rating, review_count, preparation_time, 
 			  stock, is_popular, discount, comment, created_at, updated_at
@@ -1483,23 +1139,69 @@ func getAllFoodsForAdmin() ([]*Food, error) {
 	return foods, nil
 }
 
-func createFood(food *Food) error {
-	namesJSON, _ := json.Marshal(food.Names)
-	descriptionsJSON, _ := json.Marshal(food.Descriptions)
-	ingredientsJSON, _ := json.Marshal(food.Ingredients)
-	allergensJSON, _ := json.Marshal(food.Allergens)
+func createFoodWithCustomID(food *Food, customID *int64) error {
+	var query string
+	var err error
 
-	query := `INSERT INTO foods (id, names, name, descriptions, description, category, price, 
-			  is_there, image_url, ingredients, allergens, rating, review_count, 
-			  preparation_time, stock, is_popular, discount, comment, created_at, updated_at) 
-			  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)`
+	namesJSON, err := json.Marshal(food.Names)
+	if err != nil {
+		return fmt.Errorf("names JSON marshal error: %w", err)
+	}
 
-	_, err := db.Exec(query, food.ID, namesJSON, food.Name, descriptionsJSON, food.Description,
-		food.Category, food.Price, food.IsThere, food.ImageURL, ingredientsJSON,
-		allergensJSON, food.Rating, food.ReviewCount, food.PreparationTime,
-		food.Stock, food.IsPopular, food.Discount, food.Comment, food.CreatedAt, food.UpdatedAt)
+	descriptionsJSON, err := json.Marshal(food.Descriptions)
+	if err != nil {
+		return fmt.Errorf("descriptions JSON marshal error: %w", err)
+	}
 
-	return err
+	ingredientsJSON, err := json.Marshal(food.Ingredients)
+	if err != nil {
+		return fmt.Errorf("ingredients JSON marshal error: %w", err)
+	}
+
+	allergensJSON, err := json.Marshal(food.Allergens)
+	if err != nil {
+		return fmt.Errorf("allergens JSON marshal error: %w", err)
+	}
+
+	if customID != nil {
+		// Manual ID insertion
+		query = `INSERT INTO foods (id, names, name, descriptions, description, category, price, 
+				 is_there, image_url, ingredients, allergens, rating, review_count, 
+				 preparation_time, stock, is_popular, discount, comment, created_at, updated_at) 
+				 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)`
+
+		_, err = db.Exec(query, *customID, namesJSON, food.Name, descriptionsJSON, food.Description,
+			food.Category, food.Price, food.IsThere, food.ImageURL, ingredientsJSON,
+			allergensJSON, food.Rating, food.ReviewCount, food.PreparationTime,
+			food.Stock, food.IsPopular, food.Discount, food.Comment,
+			food.CreatedAt, food.UpdatedAt)
+
+		if err != nil {
+			return fmt.Errorf("manual ID insertion error: %w", err)
+		}
+
+		food.ID = *customID
+	} else {
+		// Automatic ID (BIGSERIAL)
+		query = `INSERT INTO foods (names, name, descriptions, description, category, price, 
+				 is_there, image_url, ingredients, allergens, rating, review_count, 
+				 preparation_time, stock, is_popular, discount, comment, created_at, updated_at) 
+				 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19)
+				 RETURNING id`
+
+		err = db.QueryRow(query, namesJSON, food.Name, descriptionsJSON, food.Description,
+			food.Category, food.Price, food.IsThere, food.ImageURL, ingredientsJSON,
+			allergensJSON, food.Rating, food.ReviewCount, food.PreparationTime,
+			food.Stock, food.IsPopular, food.Discount, food.Comment,
+			food.CreatedAt, food.UpdatedAt).Scan(&food.ID)
+
+		if err != nil {
+			return fmt.Errorf("automatic ID insertion error: %w", err)
+		}
+	}
+
+	log.Printf("✅ Food created successfully with ID: %d", food.ID)
+	return nil
 }
 
 func updateFood(food *Food) error {
@@ -1511,13 +1213,13 @@ func updateFood(food *Food) error {
 	query := `UPDATE foods SET names = $2, name = $3, descriptions = $4, description = $5, 
 			  category = $6, price = $7, is_there = $8, image_url = $9, ingredients = $10, 
 			  allergens = $11, rating = $12, review_count = $13, preparation_time = $14, 
-			  stock = $15, is_popular = $16, discount = $17, comment = $18, updated_at = $19 
+			  stock = $15, is_popular = $16, discount = $17, comment = $18, updated_at = CURRENT_TIMESTAMP
 			  WHERE id = $1`
 
 	_, err := db.Exec(query, food.ID, namesJSON, food.Name, descriptionsJSON, food.Description,
 		food.Category, food.Price, food.IsThere, food.ImageURL, ingredientsJSON,
 		allergensJSON, food.Rating, food.ReviewCount, food.PreparationTime,
-		food.Stock, food.IsPopular, food.Discount, food.Comment, time.Now())
+		food.Stock, food.IsPopular, food.Discount, food.Comment)
 
 	return err
 }
@@ -1581,129 +1283,28 @@ func updateOrder(order *Order) error {
 	query := `UPDATE orders SET user_number = $2, user_name = $3, foods = $4, total_price = $5, 
 			  order_time = $6, delivery_type = $7, delivery_info = $8, status = $9, 
 			  payment_info = $10, special_instructions = $11, estimated_time = $12, 
-			  delivered_at = $13, status_history = $14, updated_at = $15 
+			  delivered_at = $13, status_history = $14, updated_at = CURRENT_TIMESTAMP
 			  WHERE order_id = $1`
 
 	_, err := db.Exec(query, order.OrderID, order.UserNumber, order.UserName, foodsJSON,
 		order.TotalPrice, order.OrderTime, order.DeliveryType, deliveryInfoJSON,
 		order.Status, paymentInfoJSON, order.SpecialInstructions, order.EstimatedTime,
-		order.DeliveredAt, statusHistoryJSON, time.Now())
+		order.DeliveredAt, statusHistoryJSON)
 
 	return err
 }
 
-func createReview(review *Review) error {
-	query := `INSERT INTO reviews (id, user_id, food_id, rating, comment, created_at, updated_at)
-			  VALUES ($1, $2, $3, $4, $5, $6, $7)
-			  ON CONFLICT (user_id, food_id) 
-			  DO UPDATE SET rating = $4, comment = $5, updated_at = $7`
-
-	_, err := db.Exec(query, review.ID, review.UserID, review.FoodID, review.Rating,
-		review.Comment, review.CreatedAt, review.UpdatedAt)
-
-	return err
-}
-
-func getReviewsByFoodID(foodID string) ([]*Review, error) {
-	query := `SELECT r.id, r.user_id, r.food_id, r.rating, r.comment, r.created_at, r.updated_at, u.full_name
-			  FROM reviews r 
-			  LEFT JOIN users u ON r.user_id = u.id 
-			  WHERE r.food_id = $1 ORDER BY r.created_at DESC`
-
-	rows, err := db.Query(query, foodID)
+func updateSequenceAfterManualInsert() error {
+	query := `SELECT setval('foods_id_seq', (SELECT MAX(id) FROM foods))`
+	_, err := db.Exec(query)
 	if err != nil {
-		return nil, err
+		return fmt.Errorf("sequence update error: %w", err)
 	}
-	defer rows.Close()
-
-	var reviews []*Review
-	for rows.Next() {
-		var review Review
-		err := rows.Scan(&review.ID, &review.UserID, &review.FoodID, &review.Rating,
-			&review.Comment, &review.CreatedAt, &review.UpdatedAt, &review.UserName)
-		if err != nil {
-			continue
-		}
-		reviews = append(reviews, &review)
-	}
-
-	return reviews, nil
-}
-
-func updateFoodRating(foodID string) error {
-	query := `UPDATE foods SET 
-			  rating = (SELECT AVG(rating)::DECIMAL(3,2) FROM reviews WHERE food_id = $1),
-			  review_count = (SELECT COUNT(*) FROM reviews WHERE food_id = $1),
-			  updated_at = CURRENT_TIMESTAMP
-			  WHERE id = $1`
-
-	_, err := db.Exec(query, foodID)
-	return err
-}
-
-// ========== API HANDLERS ==========
-
-// Test ma'lumotlarini yaratish
-func initializeTestData() error {
-	// Test foydalanuvchilar
-	adminUser := &User{
-		ID:        generateID("user"),
-		Number:    "770451117",
-		Password:  hashPassword("samandar"),
-		Role:      "admin",
-		FullName:  "Samandar Admin",
-		Email:     stringPtr("admin@restaurant.uz"),
-		CreatedAt: time.Now(),
-		IsActive:  true,
-		TgID:      int64Ptr(1713329317),
-		Language:  "uz",
-	}
-
-	// Foydalanuvchi mavjudligini tekshirish
-	existingUser, err := getUserByNumber(adminUser.Number)
-	if err == sql.ErrNoRows {
-		// Foydalanuvchi mavjud emas, yaratish
-		if err := createUser(adminUser); err != nil {
-			log.Printf("Admin foydalanuvchi yaratishda xatolik: %v", err)
-		} else {
-			log.Println("✅ Admin foydalanuvchi yaratildi")
-		}
-	} else if err != nil {
-		log.Printf("Foydalanuvchi tekshirishda xatolik: %v", err)
-	} else {
-		log.Printf("✅ Admin foydalanuvchi mavjud: %s", existingUser.FullName)
-	}
-
-	testUser := &User{
-		ID:        generateID("user"),
-		Number:    "998901234567",
-		Password:  hashPassword("user123"),
-		Role:      "user",
-		FullName:  "Test User",
-		Email:     stringPtr("user@test.uz"),
-		CreatedAt: time.Now(),
-		IsActive:  true,
-		TgID:      int64Ptr(1066137436),
-		Language:  "uz",
-	}
-
-	existingTestUser, err := getUserByNumber(testUser.Number)
-	if err == sql.ErrNoRows {
-		if err := createUser(testUser); err != nil {
-			log.Printf("Test foydalanuvchi yaratishda xatolik: %v", err)
-		} else {
-			log.Println("✅ Test foydalanuvchi yaratildi")
-		}
-	} else if err != nil {
-		log.Printf("Test foydalanuvchi tekshirishda xatolik: %v", err)
-	} else {
-		log.Printf("✅ Test foydalanuvchi mavjud: %s", existingTestUser.FullName)
-	}
-
+	log.Println("✅ Sequence updated")
 	return nil
 }
 
-// Yordamchi funksiyalar
+// Helper functions
 func stringPtr(s string) *string {
 	return &s
 }
@@ -1715,7 +1316,7 @@ func int64Ptr(i int64) *int64 {
 func getLocalizedFood(food *Food, lang string) *Food {
 	localizedFood := *food
 
-	// Ko'p tilli nomni olish
+	// Get multilingual name
 	if food.Names != nil {
 		if name, exists := food.Names[lang]; exists {
 			localizedFood.Name = name
@@ -1724,7 +1325,7 @@ func getLocalizedFood(food *Food, lang string) *Food {
 		}
 	}
 
-	// Ko'p tilli tavsifni olish
+	// Get multilingual description
 	if food.Descriptions != nil {
 		if desc, exists := food.Descriptions[lang]; exists {
 			localizedFood.Description = desc
@@ -1733,11 +1334,11 @@ func getLocalizedFood(food *Food, lang string) *Food {
 		}
 	}
 
-	// Kategoriya nomini tarjima qilish
+	// Translate category name
 	categoryKey := strings.ToLower(strings.ReplaceAll(food.Category, " ", "_"))
-	localizedFood.CategoryName = getTranslation(categoryKey, lang)
+	localizedFood.CategoryName = getFoodTranslation(categoryKey, lang)
 
-	// Chegirma hisoblash
+	// Calculate discount
 	if food.Discount > 0 {
 		localizedFood.OriginalPrice = food.Price
 		localizedFood.Price = food.Price - (food.Price * food.Discount / 100)
@@ -1783,10 +1384,10 @@ func register(c *gin.Context) {
 		lang = "uz"
 	}
 
-	// Foydalanuvchi mavjudligini tekshirish
+	// Check if user exists
 	_, err := getUserByNumber(req.Number)
 	if err == nil {
-		c.JSON(http.StatusBadRequest, createResponse("phone_already_registered", lang))
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Phone number already registered"})
 		return
 	}
 
@@ -1804,13 +1405,13 @@ func register(c *gin.Context) {
 	}
 
 	if err := createUser(user); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Foydalanuvchi yaratishda xatolik"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "User creation error"})
 		return
 	}
 
 	token, err := createToken(user)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Token yaratishda xatolik"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Token creation error"})
 		return
 	}
 
@@ -1833,18 +1434,18 @@ func login(c *gin.Context) {
 
 	user, err := getUserByNumber(req.Number)
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, createResponse("invalid_credentials", "uz"))
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
 		return
 	}
 
 	if user.Password != hashPassword(req.Password) {
-		c.JSON(http.StatusUnauthorized, createResponse("invalid_credentials", user.Language))
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
 		return
 	}
 
 	token, err := createToken(user)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Token yaratishda xatolik"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Token creation error"})
 		return
 	}
 
@@ -1863,12 +1464,11 @@ func getProfile(c *gin.Context) {
 
 	userDB, err := getUserByNumber(user.Number)
 	if err != nil {
-		lang := getUserLanguage(c.Request.Header)
-		c.JSON(http.StatusNotFound, createResponse("user_not_found", lang))
+		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
 		return
 	}
 
-	// Parolni o'chirish
+	// Remove password
 	userResponse := *userDB
 	userResponse.Password = ""
 
@@ -1881,11 +1481,11 @@ func getCategories(c *gin.Context) {
 	lang := getUserLanguage(c.Request.Header)
 
 	categories := []gin.H{
-		{"key": "shashlik", "name": getTranslation("shashlik", lang)},
-		{"key": "milliy_taomlar", "name": getTranslation("milliy_taomlar", lang)},
-		{"key": "ichimliklar", "name": getTranslation("ichimliklar", lang)},
-		{"key": "salatlar", "name": getTranslation("salatlar", lang)},
-		{"key": "shirinliklar", "name": getTranslation("shirinliklar", lang)},
+		{"key": "shashlik", "name": getFoodTranslation("shashlik", lang)},
+		{"key": "milliy_taomlar", "name": getFoodTranslation("milliy_taomlar", lang)},
+		{"key": "ichimliklar", "name": getFoodTranslation("ichimliklar", lang)},
+		{"key": "salatlar", "name": getFoodTranslation("salatlar", lang)},
+		{"key": "shirinliklar", "name": getFoodTranslation("shirinliklar", lang)},
 	}
 
 	c.JSON(http.StatusOK, categories)
@@ -1909,7 +1509,7 @@ func getAllFoodsHandler(c *gin.Context) {
 		limit = 20
 	}
 
-	// Admin yoki oddiy foydalanuvchi ekanligini tekshirish
+	// Check if admin or regular user
 	isAdmin := false
 	if userInterface, exists := c.Get("user"); exists {
 		user := userInterface.(*Claims)
@@ -1918,11 +1518,11 @@ func getAllFoodsHandler(c *gin.Context) {
 
 	foods, err := getAllLocalizedFoods(lang, isAdmin)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Data fetch error"})
 		return
 	}
 
-	// Filtrlash
+	// Filtering
 	if category != "" {
 		filtered := []*Food{}
 		for _, food := range foods {
@@ -1955,7 +1555,7 @@ func getAllFoodsHandler(c *gin.Context) {
 		foods = filtered
 	}
 
-	// Saralash
+	// Sorting
 	switch sortBy {
 	case "price_asc":
 		sort.Slice(foods, func(i, j int) bool {
@@ -1976,26 +1576,18 @@ func getAllFoodsHandler(c *gin.Context) {
 			}
 			return foods[i].Rating > foods[j].Rating
 		})
-	case "id_asc":
-		sort.Slice(foods, func(i, j int) bool {
-			return foods[i].ID < foods[j].ID
-		})
-	case "id_desc":
-		sort.Slice(foods, func(i, j int) bool {
-			return foods[i].ID > foods[j].ID
-		})
 	case "name":
 		sort.Slice(foods, func(i, j int) bool {
 			return foods[i].Name < foods[j].Name
 		})
 	default:
-		// Default: ID bo'yicha saralash (amur_1, amur_2, amur_3...)
+		// Default: ID ascending (1, 2, 3, 4...)
 		sort.Slice(foods, func(i, j int) bool {
 			return foods[i].ID < foods[j].ID
 		})
 	}
 
-	// Sahifalash
+	// Pagination
 	total := len(foods)
 	start := (page - 1) * limit
 	end := start + limit
@@ -2008,7 +1600,7 @@ func getAllFoodsHandler(c *gin.Context) {
 		foods = foods[start:end]
 	}
 
-	// ImageURL-ni to'liq URL qilish
+	// Make ImageURL full URL
 	hostURL := getHostURL(c)
 	for _, food := range foods {
 		if food.ImageURL != "" && !strings.HasPrefix(food.ImageURL, "http") {
@@ -2028,22 +1620,29 @@ func getAllFoodsHandler(c *gin.Context) {
 }
 
 func getFoodHandler(c *gin.Context) {
-	foodID := c.Param("food_id")
+	foodIDStr := c.Param("food_id")
 	lang := getUserLanguage(c.Request.Header)
+
+	// Convert string ID to integer
+	foodID, err := strconv.ParseInt(foodIDStr, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid food ID format"})
+		return
+	}
 
 	food, err := getFoodByID(foodID)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			c.JSON(http.StatusNotFound, createResponse("food_not_found", lang))
+			c.JSON(http.StatusNotFound, gin.H{"error": "Food not found"})
 			return
 		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Data fetch error"})
 		return
 	}
 
 	localizedFood := getLocalizedFood(food, lang)
 
-	// ImageURL-ni to'liq URL qilish
+	// Make ImageURL full URL
 	if localizedFood.ImageURL != "" && !strings.HasPrefix(localizedFood.ImageURL, "http") {
 		localizedFood.ImageURL = getHostURL(c) + localizedFood.ImageURL
 	}
@@ -2054,13 +1653,36 @@ func getFoodHandler(c *gin.Context) {
 func createFoodHandler(c *gin.Context) {
 	var req FoodCreate
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		log.Printf("JSON binding error: %v", err)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Invalid JSON format",
+			"details": err.Error(),
+		})
 		return
 	}
 
-	// ID avtomatik generatsiya qilish
-	foodID := generateFoodID()
+	log.Printf("Received food creation request: %+v", req)
 
+	// Check if custom ID already exists
+	if req.CustomID != nil {
+		var exists bool
+		checkQuery := `SELECT EXISTS(SELECT 1 FROM foods WHERE id = $1)`
+		err := db.QueryRow(checkQuery, *req.CustomID).Scan(&exists)
+		if err != nil {
+			log.Printf("ID check error: %v", err)
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error":   "ID check error",
+				"details": err.Error(),
+			})
+			return
+		}
+		if exists {
+			c.JSON(http.StatusConflict, gin.H{"error": fmt.Sprintf("ID %d already exists", *req.CustomID)})
+			return
+		}
+	}
+
+	// Set defaults
 	if req.PreparationTime == 0 {
 		req.PreparationTime = 15
 	}
@@ -2068,28 +1690,28 @@ func createFoodHandler(c *gin.Context) {
 		req.Stock = 100
 	}
 
-	// Ko'p tilli nomlarni yaratish
+	// Create multilingual names
 	names := map[string]string{
 		"uz": req.NameUz,
 		"ru": req.NameRu,
 		"en": req.NameEn,
 	}
 
-	// Ko'p tilli tavsiflarni yaratish
+	// Create multilingual descriptions
 	descriptions := map[string]string{
 		"uz": req.DescriptionUz,
 		"ru": req.DescriptionRu,
 		"en": req.DescriptionEn,
 	}
 
-	// Ko'p tilli ingredientlarni yaratish
+	// Create multilingual ingredients
 	ingredients := map[string][]string{
 		"uz": req.IngredientsUz,
 		"ru": req.IngredientsRu,
 		"en": req.IngredientsEn,
 	}
 
-	// Ko'p tilli allergenlarni yaratish
+	// Create multilingual allergens
 	allergens := map[string][]string{
 		"uz": req.AllergensUz,
 		"ru": req.AllergensRu,
@@ -2097,18 +1719,17 @@ func createFoodHandler(c *gin.Context) {
 	}
 
 	food := &Food{
-		ID:              foodID,
 		Names:           names,
-		Name:            req.NameUz, // Default o'zbek tilida
+		Name:            req.NameUz, // Default Uzbek
 		Descriptions:    descriptions,
-		Description:     req.DescriptionUz, // Default o'zbek tilida
+		Description:     req.DescriptionUz, // Default Uzbek
 		Category:        req.Category,
 		Price:           req.Price,
 		IsThere:         req.IsThere,
 		ImageURL:        req.ImageURL,
 		Ingredients:     ingredients,
 		Allergens:       allergens,
-		Rating:          0.0,
+		Rating:          req.StarRating, // Use star_rating from request
 		ReviewCount:     0,
 		PreparationTime: req.PreparationTime,
 		Stock:           req.Stock,
@@ -2119,25 +1740,50 @@ func createFoodHandler(c *gin.Context) {
 		UpdatedAt:       time.Now(),
 	}
 
-	if err := createFood(food); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ovqat yaratishda xatolik"})
+	log.Printf("Food object created: %+v", food)
+
+	if err := createFoodWithCustomID(food, req.CustomID); err != nil {
+		log.Printf("Food creation error: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   "Food creation error",
+			"details": err.Error(),
+		})
 		return
 	}
 
-	c.JSON(http.StatusCreated, food)
+	// Update sequence if custom ID was used
+	if req.CustomID != nil {
+		if err := updateSequenceAfterManualInsert(); err != nil {
+			log.Printf("Sequence update warning: %v", err)
+		}
+	}
+
+	log.Printf("Food created successfully: ID=%d, Name=%s", food.ID, food.Name)
+
+	c.JSON(http.StatusCreated, gin.H{
+		"message": "Food created successfully",
+		"food":    food,
+		"id_type": map[bool]string{true: "custom", false: "auto"}[req.CustomID != nil],
+	})
 }
 
 func updateFoodHandler(c *gin.Context) {
-	foodID := c.Param("food_id")
-	lang := getUserLanguage(c.Request.Header)
+	foodIDStr := c.Param("food_id")
+
+	// Convert string ID to integer
+	foodID, err := strconv.ParseInt(foodIDStr, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid food ID format"})
+		return
+	}
 
 	food, err := getFoodByID(foodID)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			c.JSON(http.StatusNotFound, createResponse("food_not_found", lang))
+			c.JSON(http.StatusNotFound, gin.H{"error": "Food not found"})
 			return
 		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Data fetch error"})
 		return
 	}
 
@@ -2147,7 +1793,7 @@ func updateFoodHandler(c *gin.Context) {
 		return
 	}
 
-	// Ma'lumotlarni yangilash
+	// Update fields
 	if name, ok := updates["name"].(string); ok {
 		food.Name = name
 	}
@@ -2182,37 +1828,46 @@ func updateFoodHandler(c *gin.Context) {
 	food.UpdatedAt = time.Now()
 
 	if err := updateFood(food); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ovqat yangilashda xatolik"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Food update error"})
 		return
 	}
 
-	c.JSON(http.StatusOK, food)
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Food updated successfully",
+		"food":    food,
+	})
 }
 
 func deleteFoodHandler(c *gin.Context) {
-	foodID := c.Param("food_id")
-	lang := getUserLanguage(c.Request.Header)
+	foodIDStr := c.Param("food_id")
 
-	// Ovqat mavjudligini tekshirish
-	_, err := getFoodByID(foodID)
+	// Convert string ID to integer
+	foodID, err := strconv.ParseInt(foodIDStr, 10, 64)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			c.JSON(http.StatusNotFound, createResponse("food_not_found", lang))
-			return
-		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid food ID format"})
 		return
 	}
 
-	// Ovqatni o'chirish
+	// Check if food exists
+	_, err = getFoodByID(foodID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Food not found"})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Data fetch error"})
+		return
+	}
+
+	// Delete food
 	query := `DELETE FROM foods WHERE id = $1`
 	_, err = db.Exec(query, foodID)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ovqat o'chirishda xatolik"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Food deletion error"})
 		return
 	}
 
-	c.JSON(http.StatusOK, createResponse("food_deleted", lang))
+	c.JSON(http.StatusOK, gin.H{"message": "Food deleted successfully"})
 }
 
 // ========== ORDER HANDLERS ==========
@@ -2224,39 +1879,36 @@ func createOrderHandler(c *gin.Context) {
 		return
 	}
 
-	lang := getUserLanguage(c.Request.Header)
-
-	// Foydalanuvchi tekshiruvi
+	// User authentication
 	var user *Claims
 	if userInterface, exists := c.Get("user"); exists {
 		user = userInterface.(*Claims)
 	} else {
-		c.JSON(http.StatusUnauthorized, createResponse("login_required", lang))
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Login required"})
 		return
 	}
 
-	// Savatni tekshirish
+	// Check cart
 	if len(req.Items) == 0 {
-		c.JSON(http.StatusBadRequest, createResponse("cart_empty", lang))
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Cart is empty"})
 		return
 	}
 
-	// Debug log
 	log.Printf("Creating order for user: %s, items count: %d", user.Number, len(req.Items))
 
-	// Ovqatlarni tekshirish va stock-ni tekshirish
+	// Check foods and stock
 	var orderedFoods []OrderFood
 	totalPrice := 0
 	totalPrepTime := 0
 
 	for _, item := range req.Items {
-		log.Printf("Processing food_id: %s, quantity: %d", item.FoodID, item.Quantity)
+		log.Printf("Processing food_id: %d, quantity: %d", item.FoodID, item.Quantity)
 
 		food, err := getFoodByID(item.FoodID)
 		if err != nil {
 			log.Printf("Food not found error: %v", err)
 			c.JSON(http.StatusBadRequest, gin.H{
-				"error":   getTranslation("food_not_available", lang),
+				"error":   "Food not available",
 				"food_id": item.FoodID,
 				"details": err.Error(),
 			})
@@ -2266,17 +1918,17 @@ func createOrderHandler(c *gin.Context) {
 		if !food.IsThere || food.Stock <= 0 {
 			log.Printf("Food not available: isThere=%v, stock=%d", food.IsThere, food.Stock)
 			c.JSON(http.StatusBadRequest, gin.H{
-				"error":   getTranslation("food_not_available", lang),
+				"error":   "Food not available",
 				"food_id": item.FoodID,
 			})
 			return
 		}
 
-		// Stock tekshiruvi
+		// Check stock
 		if food.Stock < item.Quantity {
 			log.Printf("Insufficient stock: required=%d, available=%d", item.Quantity, food.Stock)
 			c.JSON(http.StatusBadRequest, gin.H{
-				"error":     getTranslation("insufficient_stock", lang),
+				"error":     "Insufficient stock",
 				"food_id":   item.FoodID,
 				"required":  item.Quantity,
 				"available": food.Stock,
@@ -2284,7 +1936,7 @@ func createOrderHandler(c *gin.Context) {
 			return
 		}
 
-		localizedFood := getLocalizedFood(food, lang)
+		localizedFood := getLocalizedFood(food, "uz")
 		foodTotalPrice := localizedFood.Price * item.Quantity
 		prepTime := food.PreparationTime
 		if prepTime > totalPrepTime {
@@ -2304,16 +1956,16 @@ func createOrderHandler(c *gin.Context) {
 		orderedFoods = append(orderedFoods, orderedFood)
 		totalPrice += foodTotalPrice
 
-		// Stock-ni kamaytirish
+		// Reduce stock
 		food.Stock -= item.Quantity
 		if err := updateFood(food); err != nil {
-			log.Printf("Stock yangilashda xatolik: %v", err)
+			log.Printf("Stock update error: %v", err)
 		}
 	}
 
 	log.Printf("Order foods processed successfully, total_price: %d", totalPrice)
 
-	// Yetkazib berish ma'lumotlari
+	// Delivery information
 	deliveryInfo := make(map[string]interface{})
 	switch req.DeliveryType {
 	case DeliveryHome:
@@ -2328,12 +1980,10 @@ func createOrderHandler(c *gin.Context) {
 			"address": address,
 		}
 
-		// Phone qo'shish
 		if phone, ok := req.DeliveryInfo["phone"].(string); ok {
 			deliveryInfo["phone"] = phone
 		}
 
-		// Koordinatalarni qo'shish (agar mavjud bo'lsa)
 		if lat, ok := req.DeliveryInfo["latitude"].(float64); ok {
 			deliveryInfo["latitude"] = lat
 		}
@@ -2341,7 +1991,7 @@ func createOrderHandler(c *gin.Context) {
 			deliveryInfo["longitude"] = lng
 		}
 
-		totalPrepTime += 20 // yetkazib berish vaqti
+		totalPrepTime += 20 // delivery time
 	case DeliveryPickup:
 		deliveryInfo = map[string]interface{}{
 			"type":        "own_withdrawal",
@@ -2363,7 +2013,7 @@ func createOrderHandler(c *gin.Context) {
 
 	log.Printf("Delivery info prepared: %+v", deliveryInfo)
 
-	// To'lov ma'lumotlari
+	// Payment information
 	paymentInfo := PaymentInfo{
 		Method: req.PaymentMethod,
 		Status: PaymentPending,
@@ -2377,17 +2027,17 @@ func createOrderHandler(c *gin.Context) {
 
 	log.Printf("Payment info prepared: %+v", paymentInfo)
 
-	// Buyurtma yaratish
+	// Create order
 	orderID := generateOrderID()
 	orderTime := time.Now()
 
 	userDB, _ := getUserByNumber(user.Number)
-	userName := "Foydalanuvchi"
+	userName := "User"
 	if userDB != nil {
 		userName = userDB.FullName
 	}
 
-	// Customer info ni ishlatish
+	// Use customer info
 	if req.CustomerInfo != nil {
 		if req.CustomerInfo.Name != "" {
 			userName = req.CustomerInfo.Name
@@ -2413,7 +2063,7 @@ func createOrderHandler(c *gin.Context) {
 			{
 				Status:    OrderPending,
 				Timestamp: orderTime,
-				Note:      "Buyurtma yaratildi",
+				Note:      "Order created",
 			},
 		},
 		CreatedAt: orderTime,
@@ -2425,7 +2075,7 @@ func createOrderHandler(c *gin.Context) {
 	if err := createOrder(order); err != nil {
 		log.Printf("Database error creating order: %v", err)
 
-		// Stock-ni qaytarish (rollback)
+		// Rollback stock
 		for _, item := range req.Items {
 			if food, err := getFoodByID(item.FoodID); err == nil {
 				food.Stock += item.Quantity
@@ -2434,7 +2084,7 @@ func createOrderHandler(c *gin.Context) {
 		}
 
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error":   "Buyurtma yaratishda xatolik",
+			"error":   "Order creation error",
 			"details": err.Error(),
 		})
 		return
@@ -2442,15 +2092,15 @@ func createOrderHandler(c *gin.Context) {
 
 	log.Printf("Order created successfully in database: %s", orderID)
 
-	// Real-time yangilanish
+	// Real-time update
 	go func() {
 		sendNewOrderNotification(order)
-		sendOrderUpdate(orderID, OrderPending, getTranslation("order_created", lang))
+		sendOrderUpdate(orderID, OrderPending, "Order created")
 	}()
 
 	c.JSON(http.StatusCreated, gin.H{
 		"order":          order,
-		"message":        getTranslation("order_created", lang),
+		"message":        "Order created successfully",
 		"estimated_time": totalPrepTime,
 		"order_tracking": fmt.Sprintf("/api/orders/%s/track", orderID),
 	})
@@ -2458,7 +2108,6 @@ func createOrderHandler(c *gin.Context) {
 
 func getOrdersHandler(c *gin.Context) {
 	user := c.MustGet("user").(*Claims)
-	getUserLanguage(c.Request.Header)
 	status := c.Query("status")
 	page, _ := strconv.Atoi(c.Query("page"))
 	limit, _ := strconv.Atoi(c.Query("limit"))
@@ -2472,7 +2121,7 @@ func getOrdersHandler(c *gin.Context) {
 
 	offset := (page - 1) * limit
 
-	// Query yaratish
+	// Build query
 	var query string
 	var args []interface{}
 	argIndex := 1
@@ -2506,7 +2155,7 @@ func getOrdersHandler(c *gin.Context) {
 
 	rows, err := db.Query(query, args...)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Data fetch error"})
 		return
 	}
 	defer rows.Close()
@@ -2572,67 +2221,28 @@ func getOrdersHandler(c *gin.Context) {
 func getOrderHandler(c *gin.Context) {
 	orderID := c.Param("order_id")
 	user := c.MustGet("user").(*Claims)
-	lang := getUserLanguage(c.Request.Header)
 
 	order, err := getOrderByID(orderID)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			c.JSON(http.StatusNotFound, createResponse("order_not_found", lang))
+			c.JSON(http.StatusNotFound, gin.H{"error": "Order not found"})
 			return
 		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Data fetch error"})
 		return
 	}
 
-	// Foydalanuvchi faqat o'z buyurtmasini ko'ra oladi
+	// User can only see their own orders
 	if user.Role != "admin" && order.UserNumber != user.Number {
-		c.JSON(http.StatusForbidden, createResponse("forbidden", lang))
+		c.JSON(http.StatusForbidden, gin.H{"error": "Access denied"})
 		return
 	}
 
 	c.JSON(http.StatusOK, order)
 }
 
-func trackOrderHandler(c *gin.Context) {
-	orderID := c.Param("order_id")
-	lang := getUserLanguage(c.Request.Header)
-
-	order, err := getOrderByID(orderID)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			c.JSON(http.StatusNotFound, createResponse("order_not_found", lang))
-			return
-		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
-		return
-	}
-
-	// Kuzatuv ma'lumotlari
-	trackingInfo := gin.H{
-		"order_id":       order.OrderID,
-		"status":         order.Status,
-		"estimated_time": order.EstimatedTime,
-		"order_time":     order.OrderTime,
-		"status_history": order.StatusHistory,
-	}
-
-	// Vaqt hisoblash
-	if order.EstimatedTime != nil {
-		elapsed := int(time.Since(order.OrderTime).Minutes())
-		remaining := *order.EstimatedTime - elapsed
-		if remaining < 0 {
-			remaining = 0
-		}
-		trackingInfo["remaining_time"] = remaining
-		trackingInfo["elapsed_time"] = elapsed
-	}
-
-	c.JSON(http.StatusOK, trackingInfo)
-}
-
 func updateOrderStatusHandler(c *gin.Context) {
 	orderID := c.Param("order_id")
-	lang := getUserLanguage(c.Request.Header)
 
 	var req struct {
 		Status OrderStatus `json:"status" binding:"required"`
@@ -2646,14 +2256,14 @@ func updateOrderStatusHandler(c *gin.Context) {
 	order, err := getOrderByID(orderID)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			c.JSON(http.StatusNotFound, createResponse("order_not_found", lang))
+			c.JSON(http.StatusNotFound, gin.H{"error": "Order not found"})
 			return
 		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Data fetch error"})
 		return
 	}
 
-	// Status history-ga qo'shish
+	// Add to status history
 	statusUpdate := StatusUpdate{
 		Status:    req.Status,
 		Timestamp: time.Now(),
@@ -2665,7 +2275,7 @@ func updateOrderStatusHandler(c *gin.Context) {
 	if req.Status == OrderDelivered {
 		now := time.Now()
 		order.DeliveredAt = &now
-		// To'lovni tasdiqlash
+		// Confirm payment
 		if order.PaymentInfo.Method == PaymentCash {
 			order.PaymentInfo.Status = PaymentPaid
 			order.PaymentInfo.PaymentTime = &now
@@ -2673,182 +2283,28 @@ func updateOrderStatusHandler(c *gin.Context) {
 	}
 
 	if err := updateOrder(order); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Buyurtma yangilashda xatolik"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Order update error"})
 		return
 	}
 
-	// Real-time yangilanish
-	message := getTranslation("order_status_updated", lang)
-	sendOrderUpdate(orderID, req.Status, message)
+	// Real-time update
+	sendOrderUpdate(orderID, req.Status, "Order status updated")
 
-	// Foydalanuvchiga Telegram orqali xabar yuborish
+	// Send Telegram message to user
 	go func() {
 		if userDB, err := getUserByNumber(order.UserNumber); err == nil && userDB.TgID != nil {
-			userMessage := formatOrderStatusUpdateForUser(order, userDB.Language)
+			userMessage := fmt.Sprintf("📋 Order: %s\n📍 Status: %s", order.OrderID, string(req.Status))
 			if err := sendTelegramMessageToUser(*userDB.TgID, userMessage); err != nil {
-				log.Printf("Telegram foydalanuvchi xabarini yuborishda xatolik: %v", err)
+				log.Printf("Telegram user message error: %v", err)
 			} else {
-				log.Printf("Telegram foydalanuvchi xabari yuborildi: %s", order.OrderID)
+				log.Printf("Telegram user message sent: %s", order.OrderID)
 			}
 		}
 	}()
 
 	c.JSON(http.StatusOK, gin.H{
-		"message": message,
+		"message": "Order status updated",
 		"order":   order,
-	})
-}
-
-func cancelOrderHandler(c *gin.Context) {
-	orderID := c.Param("order_id")
-	user := c.MustGet("user").(*Claims)
-	lang := getUserLanguage(c.Request.Header)
-
-	order, err := getOrderByID(orderID)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			c.JSON(http.StatusNotFound, createResponse("order_not_found", lang))
-			return
-		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
-		return
-	}
-
-	// Faqat buyurtma egasi yoki admin bekor qila oladi
-	if order.UserNumber != user.Number && user.Role != "admin" {
-		c.JSON(http.StatusForbidden, createResponse("forbidden", lang))
-		return
-	}
-
-	// Faqat pending yoki confirmed holatdagi buyurtmalarni bekor qilish mumkin
-	if order.Status != OrderPending && order.Status != OrderConfirmed {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Buyurtmani bekor qilib bo'lmaydi",
-		})
-		return
-	}
-
-	// Stock-ni qaytarish
-	for _, orderFood := range order.Foods {
-		if food, err := getFoodByID(orderFood.ID); err == nil {
-			food.Stock += orderFood.Count
-			updateFood(food)
-		}
-	}
-
-	// Status history-ga qo'shish
-	statusUpdate := StatusUpdate{
-		Status:    OrderCancelled,
-		Timestamp: time.Now(),
-		Note:      "Buyurtma bekor qilindi",
-	}
-	order.StatusHistory = append(order.StatusHistory, statusUpdate)
-	order.Status = OrderCancelled
-
-	if err := updateOrder(order); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Buyurtma yangilashda xatolik"})
-		return
-	}
-
-	// Real-time yangilanish
-	sendOrderUpdate(orderID, OrderCancelled, getTranslation("order_cancelled", lang))
-
-	// Foydalanuvchiga Telegram orqali xabar yuborish
-	go func() {
-		if userDB, err := getUserByNumber(order.UserNumber); err == nil && userDB.TgID != nil {
-			userMessage := formatOrderStatusUpdateForUser(order, userDB.Language)
-			if err := sendTelegramMessageToUser(*userDB.TgID, userMessage); err != nil {
-				log.Printf("Telegram foydalanuvchi xabarini yuborishda xatolik: %v", err)
-			}
-		}
-	}()
-
-	c.JSON(http.StatusOK, createResponse("order_cancelled", lang))
-}
-
-// ========== REVIEW HANDLERS ==========
-
-func createReviewHandler(c *gin.Context) {
-	var req ReviewCreate
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	user := c.MustGet("user").(*Claims)
-	lang := getUserLanguage(c.Request.Header)
-
-	// Ovqat mavjudligini tekshirish
-	if _, err := getFoodByID(req.FoodID); err != nil {
-		c.JSON(http.StatusNotFound, createResponse("food_not_found", lang))
-		return
-	}
-
-	review := &Review{
-		ID:        generateID("review"),
-		UserID:    user.UserID,
-		FoodID:    req.FoodID,
-		Rating:    req.Rating,
-		Comment:   req.Comment,
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
-	}
-
-	if err := createReview(review); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Sharh yaratishda xatolik"})
-		return
-	}
-
-	// Ovqat reytingini yangilash
-	if err := updateFoodRating(req.FoodID); err != nil {
-		log.Printf("Ovqat reytingini yangilashda xatolik: %v", err)
-	}
-
-	c.JSON(http.StatusCreated, gin.H{
-		"message": getTranslation("review_created", lang),
-		"review":  review,
-	})
-}
-
-func getFoodReviewsHandler(c *gin.Context) {
-	foodID := c.Param("food_id")
-	page, _ := strconv.Atoi(c.Query("page"))
-	limit, _ := strconv.Atoi(c.Query("limit"))
-
-	if page <= 0 {
-		page = 1
-	}
-	if limit <= 0 {
-		limit = 10
-	}
-
-	reviews, err := getReviewsByFoodID(foodID)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
-		return
-	}
-
-	// Sahifalash
-	total := len(reviews)
-	start := (page - 1) * limit
-	end := start + limit
-	if start >= total {
-		reviews = []*Review{}
-	} else {
-		if end > total {
-			end = total
-		}
-		reviews = reviews[start:end]
-	}
-
-	c.JSON(http.StatusOK, gin.H{
-		"reviews": reviews,
-		"pagination": gin.H{
-			"page":        page,
-			"limit":       limit,
-			"total":       total,
-			"total_pages": (total + limit - 1) / limit,
-		},
 	})
 }
 
@@ -2867,7 +2323,7 @@ func searchHandler(c *gin.Context) {
 		return
 	}
 
-	// Admin yoki oddiy foydalanuvchi ekanligini tekshirish
+	// Check if admin or regular user
 	isAdmin := false
 	if userInterface, exists := c.Get("user"); exists {
 		user := userInterface.(*Claims)
@@ -2876,23 +2332,23 @@ func searchHandler(c *gin.Context) {
 
 	foods, err := getAllLocalizedFoods(lang, isAdmin)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ma'lumotlarni olishda xatolik"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Data fetch error"})
 		return
 	}
 
-	// Qidiruv
+	// Search
 	searchLower := strings.ToLower(query)
 	var results []*Food
 
 	for _, food := range foods {
-		// Nom, tavsif va ingredientlarda qidirish
+		// Search in name, description and ingredients
 		if strings.Contains(strings.ToLower(food.Name), searchLower) ||
 			strings.Contains(strings.ToLower(food.Description), searchLower) {
 			results = append(results, food)
 			continue
 		}
 
-		// Ingredientlarda qidirish
+		// Search in ingredients
 		if food.Ingredients != nil {
 			if ingredientsList, ok := food.Ingredients[lang]; ok {
 				for _, ingredient := range ingredientsList {
@@ -2912,7 +2368,7 @@ func searchHandler(c *gin.Context) {
 		}
 	}
 
-	// Filtrlar
+	// Filters
 	if category != "" {
 		filtered := []*Food{}
 		for _, food := range results {
@@ -2944,7 +2400,7 @@ func searchHandler(c *gin.Context) {
 		results = filtered
 	}
 
-	// ImageURL-ni to'liq URL qilish
+	// Make ImageURL full URL
 	hostURL := getHostURL(c)
 	for _, food := range results {
 		if food.ImageURL != "" && !strings.HasPrefix(food.ImageURL, "http") {
@@ -2969,28 +2425,28 @@ func searchHandler(c *gin.Context) {
 // ========== STATISTICS HANDLER ==========
 
 func getStatisticsHandler(c *gin.Context) {
-	// Buyurtmalar statistikasi
+	// Order statistics
 	var totalOrders, pendingOrders, completedOrders, cancelledOrders, totalRevenue int
 	var todayOrders, todayRevenue int
 
-	// Umumiy statistika
+	// General statistics
 	db.QueryRow("SELECT COUNT(*) FROM orders").Scan(&totalOrders)
 	db.QueryRow("SELECT COUNT(*) FROM orders WHERE status IN ('pending', 'confirmed', 'preparing')").Scan(&pendingOrders)
 	db.QueryRow("SELECT COUNT(*) FROM orders WHERE status = 'delivered'").Scan(&completedOrders)
 	db.QueryRow("SELECT COUNT(*) FROM orders WHERE status = 'cancelled'").Scan(&cancelledOrders)
 	db.QueryRow("SELECT COALESCE(SUM(total_price), 0) FROM orders WHERE status = 'delivered'").Scan(&totalRevenue)
 
-	// Bugungi statistika
+	// Today's statistics
 	today := time.Now().Format("2006-01-02")
 	db.QueryRow("SELECT COUNT(*) FROM orders WHERE DATE(order_time) = $1", today).Scan(&todayOrders)
 	db.QueryRow("SELECT COALESCE(SUM(total_price), 0) FROM orders WHERE status = 'delivered' AND DATE(order_time) = $1", today).Scan(&todayRevenue)
 
-	// Ovqatlar statistikasi
+	// Food statistics
 	var totalFoods, popularFoods int
 	db.QueryRow("SELECT COUNT(*) FROM foods").Scan(&totalFoods)
 	db.QueryRow("SELECT COUNT(*) FROM foods WHERE is_popular = true OR rating >= 4.0").Scan(&popularFoods)
 
-	// Foydalanuvchilar statistikasi
+	// User statistics
 	var totalUsers int
 	db.QueryRow("SELECT COUNT(*) FROM users").Scan(&totalUsers)
 
@@ -3008,46 +2464,109 @@ func getStatisticsHandler(c *gin.Context) {
 	})
 }
 
+// ========== INITIALIZATION ==========
+
+func initializeTestData() error {
+	// Admin user
+	adminUser := &User{
+		ID:        generateID("user"),
+		Number:    "770451117",
+		Password:  hashPassword("samandar"),
+		Role:      "admin",
+		FullName:  "Samandar Admin",
+		Email:     stringPtr("admin@restaurant.uz"),
+		CreatedAt: time.Now(),
+		IsActive:  true,
+		TgID:      int64Ptr(1713329317),
+		Language:  "uz",
+	}
+
+	// Check if user exists
+	existingUser, err := getUserByNumber(adminUser.Number)
+	if err == sql.ErrNoRows {
+		if err := createUser(adminUser); err != nil {
+			log.Printf("Admin user creation error: %v", err)
+		} else {
+			log.Println("✅ Admin user created")
+		}
+	} else if err != nil {
+		log.Printf("User check error: %v", err)
+	} else {
+		log.Printf("✅ Admin user exists: %s", existingUser.FullName)
+	}
+
+	// Test user
+	testUser := &User{
+		ID:        generateID("user"),
+		Number:    "998901234567",
+		Password:  hashPassword("user123"),
+		Role:      "user",
+		FullName:  "Test User",
+		Email:     stringPtr("user@test.uz"),
+		CreatedAt: time.Now(),
+		IsActive:  true,
+		TgID:      int64Ptr(1066137436),
+		Language:  "uz",
+	}
+
+	existingTestUser, err := getUserByNumber(testUser.Number)
+	if err == sql.ErrNoRows {
+		if err := createUser(testUser); err != nil {
+			log.Printf("Test user creation error: %v", err)
+		} else {
+			log.Println("✅ Test user created")
+		}
+	} else if err != nil {
+		log.Printf("Test user check error: %v", err)
+	} else {
+		log.Printf("✅ Test user exists: %s", existingTestUser.FullName)
+	}
+
+	return nil
+}
+
 // ========== ROOT HANDLER ==========
 
 func rootHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
-		"message":             "Restaurant API - To'liq Funksional Versiya",
-		"version":             "5.0.0",
+		"message":             "Restaurant API - Complete Version with Integer IDs",
+		"version":             "6.0.0",
 		"supported_languages": []string{"uz", "ru", "en"},
 		"features": []string{
-			"PostgreSQL Database",
+			"PostgreSQL Database with BIGSERIAL Integer IDs",
+			"Manual ID Insertion Support",
 			"File Upload with Food Names",
-			"Telegram Bot Integration with User Notifications",
-			"Auto-incremental Food IDs (amur_1, amur_2, etc.)",
+			"Telegram Bot Integration",
 			"GPS Coordinates for Delivery",
-			"Stock Management (hide unavailable foods)",
-			"Public Foods API",
+			"Stock Management",
 			"Real-time Order Tracking",
 			"WebSocket Support",
 			"Advanced Search",
-			"Review System",
-			"Multi-language Support",
+			"Multi-language Food Support",
+			"English Error Messages",
 		},
 		"endpoints": gin.H{
-			"foods":      "/api/foods (PUBLIC)",
-			"categories": "/api/categories (PUBLIC)",
-			"search":     "/api/search (PUBLIC)",
-			"upload":     "/api/upload (PUBLIC/AUTH)",
-			"orders":     "/api/orders (AUTH)",
-			"reviews":    "/api/reviews (AUTH)",
-			"websocket":  "/ws",
-			"statistics": "/api/admin/statistics (ADMIN)",
+			"foods":       "/api/foods (PUBLIC)",
+			"food_by_id":  "/api/foods/:id (PUBLIC)",
+			"categories":  "/api/categories (PUBLIC)",
+			"search":      "/api/search (PUBLIC)",
+			"upload":      "/api/upload (PUBLIC/AUTH)",
+			"orders":      "/api/orders (AUTH)",
+			"websocket":   "/ws",
+			"statistics":  "/api/admin/statistics (ADMIN)",
+			"custom_food": "/api/admin/foods (ADMIN - supports custom_id)",
 		},
 		"database": gin.H{
-			"type":   "PostgreSQL",
-			"status": "connected",
+			"type":      "PostgreSQL",
+			"status":    "connected",
+			"id_system": "BIGSERIAL Integer (1, 2, 3, 4...)",
 		},
 		"integrations": gin.H{
 			"telegram_bot":       "enabled",
 			"user_notifications": "enabled",
 			"file_upload":        "enabled",
 			"gps_tracking":       "enabled",
+			"manual_id_support":  "enabled",
 		},
 	})
 }
@@ -3061,12 +2580,11 @@ func setupRoutes() *gin.Engine {
 	// Middleware
 	r.Use(corsMiddleware())
 
-	// Static fayllar (CORS bilan)
+	// Static files
 	if _, err := os.Stat(UPLOAD_DIR); os.IsNotExist(err) {
 		os.MkdirAll(UPLOAD_DIR, 0755)
 	}
 
-	// Static files with proper headers for web access
 	r.Static("/uploads", "./"+UPLOAD_DIR)
 	r.StaticFile("/favicon.ico", "./favicon.ico")
 
@@ -3079,28 +2597,21 @@ func setupRoutes() *gin.Engine {
 	// API group
 	api := r.Group("/api")
 
-	// PUBLIC ENDPOINTS (login not required)
+	// PUBLIC ENDPOINTS
 	public := api.Group("/")
 	{
 		// Categories
 		public.GET("/categories", getCategories)
 
-		// Foods (public - faqat mavjud ovqatlar)
+		// Foods (public - only available foods)
 		public.GET("/foods", optionalAuthMiddleware(), getAllFoodsHandler)
 		public.GET("/foods/:food_id", getFoodHandler)
 
 		// Search
 		public.GET("/search", optionalAuthMiddleware(), searchHandler)
 
-		// Order tracking (public)
-		public.GET("/orders/:order_id/track", trackOrderHandler)
-
-		// Reviews (public read)
-		public.GET("/foods/:food_id/reviews", getFoodReviewsHandler)
-
 		// File uploads (public but can be authenticated)
 		public.POST("/upload", optionalAuthMiddleware(), uploadFile)
-		public.GET("/files", optionalAuthMiddleware(), getUploadedFiles)
 	}
 
 	// Authentication endpoints
@@ -3121,13 +2632,6 @@ func setupRoutes() *gin.Engine {
 		protected.POST("/orders", createOrderHandler)
 		protected.GET("/orders", getOrdersHandler)
 		protected.GET("/orders/:order_id", getOrderHandler)
-		protected.DELETE("/orders/:order_id", cancelOrderHandler)
-
-		// Reviews
-		protected.POST("/reviews", createReviewHandler)
-
-		// File management
-		protected.DELETE("/files/:file_id", deleteFile)
 	}
 
 	// Admin endpoints
@@ -3135,7 +2639,7 @@ func setupRoutes() *gin.Engine {
 	admin.Use(adminMiddleware())
 	{
 		// Food management
-		admin.POST("/foods", createFoodHandler)
+		admin.POST("/foods", createFoodHandler) // Supports custom_id
 		admin.PUT("/foods/:food_id", updateFoodHandler)
 		admin.DELETE("/foods/:food_id", deleteFoodHandler)
 
@@ -3144,6 +2648,15 @@ func setupRoutes() *gin.Engine {
 
 		// Statistics
 		admin.GET("/statistics", getStatisticsHandler)
+
+		// Manual ID support
+		admin.POST("/update-sequence", func(c *gin.Context) {
+			if err := updateSequenceAfterManualInsert(); err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+			c.JSON(http.StatusOK, gin.H{"message": "Sequence updated successfully"})
+		})
 	}
 
 	return r
@@ -3154,12 +2667,12 @@ func setupRoutes() *gin.Engine {
 func main() {
 	// Database initialization
 	if err := initDatabase(); err != nil {
-		log.Fatalf("❌ Ma'lumotlar bazasi xatoligi: %v", err)
+		log.Fatalf("❌ Database error: %v", err)
 	}
 
 	// Test data initialization
 	if err := initializeTestData(); err != nil {
-		log.Printf("⚠️ Test ma'lumotlari yaratishda xatolik: %v", err)
+		log.Printf("⚠️ Test data creation error: %v", err)
 	}
 
 	// WebSocket handler
@@ -3169,7 +2682,7 @@ func main() {
 			case msg := <-broadcast:
 				for client := range clients {
 					if err := client.WriteMessage(websocket.TextMessage, msg); err != nil {
-						log.Printf("WebSocket xatolik: %v", err)
+						log.Printf("WebSocket error: %v", err)
 						client.Close()
 						delete(clients, client)
 					}
@@ -3187,7 +2700,7 @@ func main() {
 		port = "8000"
 	}
 
-	log.Printf("🚀 Restaurant API - To'liq Funksional Versiya ishlamoqda:")
+	log.Printf("🚀 Restaurant API - Complete Version with Integer IDs:")
 	log.Printf("📍 Server: http://localhost:%s", port)
 	log.Printf("🔗 WebSocket: ws://localhost:%s/ws", port)
 	log.Printf("📚 API Docs: http://localhost:%s/", port)
@@ -3196,12 +2709,13 @@ func main() {
 	log.Printf("📤 File Upload: http://localhost:%s/api/upload", port)
 	log.Printf("📊 Admin Stats: http://localhost:%s/api/admin/statistics", port)
 	log.Printf("🖼️ Static Files: http://localhost:%s/uploads/", port)
-	log.Printf("⭐ Reviews: http://localhost:%s/api/foods/:id/reviews", port)
+	log.Printf("🔢 ID System: BIGSERIAL Integer (1, 2, 3, 4...)")
+	log.Printf("🎯 Manual ID: POST /api/admin/foods with custom_id")
 	log.Printf("🗄️ Database: PostgreSQL")
 	log.Printf("🤖 Telegram Bot: Admin + User Notifications")
 	log.Printf("📍 GPS: Delivery Coordinates Support")
-	log.Printf("🔢 Auto ID: amur_1, amur_2, amur_3...")
 	log.Printf("👁️ Visibility: Only available foods (isThere=true, stock>0)")
+	log.Printf("🌐 Languages: Foods support UZ/RU/EN, Errors in English")
 
 	log.Fatal(r.Run(":" + port))
 }
