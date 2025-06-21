@@ -28,7 +28,7 @@ import (
 const (
 	SECRET_KEY                = "restaurant_secret_key_2024"
 	ACCESS_TOKEN_EXPIRE_HOURS = 24
-	TELEGRAM_BOT_TOKEN        = "7609705273:AAH_CsC52AiiZCeZ828HaHzYgHKpJBvSLI0"
+	tg_data                   = "7609705273:AAH_CsC52AiiZCeZ828HaHzYgHKpJBvSLI0"
 	TELEGRAM_GROUP_ID         = "-1002783983140"
 	UPLOAD_DIR                = "uploads"
 	MAX_FILE_SIZE             = 10 << 20 // 10MB
@@ -771,7 +771,7 @@ func uploadFile(c *gin.Context) {
 // ========== TELEGRAM BOT FUNCTIONS ==========
 
 func sendTelegramMessage(message string) error {
-	url := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", TELEGRAM_BOT_TOKEN)
+	url := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", tg_data)
 
 	payload := TelegramMessage{
 		ChatID: TELEGRAM_GROUP_ID,
@@ -798,7 +798,7 @@ func sendTelegramMessage(message string) error {
 }
 
 func sendTelegramMessageToUser(userTgID int64, message string) error {
-	url := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", TELEGRAM_BOT_TOKEN)
+	url := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", tg_data)
 
 	payload := TelegramMessage{
 		ChatID: fmt.Sprintf("%d", userTgID),
