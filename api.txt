@@ -1,4 +1,4 @@
-http://0.0.0.0:8000/api/login
+http://0.0.0.0:8080api/login
 {
   "number": "770451118",
   "password": "samandar"
@@ -12,7 +12,7 @@ Download
   "language": "uz"
 }
 
-http://0.0.0.0:8000/api/foods
+http://0.0.0.0:8080api/foods
 [
   {
     "id": "amur_1",
@@ -113,7 +113,7 @@ http://0.0.0.0:8000/api/foods
     "category_name": "Barbecue"
   }
 ]
-http://0.0.0.0:8000/api/foods?category=shashlik
+http://0.0.0.0:8080api/foods?category=shashlik
 [
   {
     "id": "amur_1",
@@ -193,7 +193,7 @@ http://0.0.0.0:8000/api/foods?category=shashlik
   }
 ]
 
-http://0.0.0.0:8000/api/foods?search=Beef%20Barbecue
+http://0.0.0.0:8080api/foods?search=Beef%20Barbecue
 [
   {
     "id": "amur_1",
@@ -234,7 +234,7 @@ http://0.0.0.0:8000/api/foods?search=Beef%20Barbecue
     "category_name": "Barbecue"
   }
 ]
-http://0.0.0.0:8000/api/foods/amur_1
+http://0.0.0.0:8080api/foods/amur_1
 {
   "id": "amur_1",
   "name": "Beef Barbecue",
@@ -255,7 +255,7 @@ http://0.0.0.0:8000/api/foods/amur_1
   "category_name": "Barbecue"
 }
 curl -X 'POST' \
-  'http://0.0.0.0:8000/api/orders' \
+  'http://0.0.0.0:8080api/orders' \
   -H 'accept: application/json' \
   -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3NzA0NTExMTgiLCJyb2xlIjoidXNlciIsInVzZXJfaWQiOiJ1c2VyX2I1ZjAzYzc5IiwiZXhwIjoxNzQ5OTM1Nzc0fQ.Mc8QQ2oLijrdtFDpJkPuvNYRPxt2LQ0lOoGxGBxTRlE' \
   -H 'Content-Type: application/json' \
@@ -314,7 +314,7 @@ curl -X 'POST' \
   "delivered_at": null
 }
 'GET' \
-  'http://0.0.0.0:8000/api/orders'
+  'http://0.0.0.0:8080api/orders'
   [
   {
     "order_id": "2025-06-14-1",
@@ -364,7 +364,7 @@ curl -X 'POST' \
   }
 ]
 curl -X 'GET' \
-  'http://0.0.0.0:8000/api/orders/2025-06-14-1' \
+  'http://0.0.0.0:8080api/orders/2025-06-14-1' \
   -H 'accept: application/json' \
   -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3NzA0NTExMTgiLCJyb2xlIjoidXNlciIsInVzZXJfaWQiOiJ1c2VyX2I1ZjAzYzc5IiwiZXhwIjoxNzQ5OTM1Nzc0fQ.Mc8QQ2oLijrdtFDpJkPuvNYRPxt2LQ0lOoGxGBxTRlE'
   {
@@ -414,7 +414,7 @@ curl -X 'GET' \
   "delivered_at": null
 }
 curl -X 'GET' \
-  'http://0.0.0.0:8000/api/notifications' \
+  'http://0.0.0.0:8080api/notifications' \
   -H 'accept: application/json' \
   -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3NzA0NTExMTgiLCJyb2xlIjoidXNlciIsInVzZXJfaWQiOiJ1c2VyX2I1ZjAzYzc5IiwiZXhwIjoxNzQ5OTM1Nzc0fQ.Mc8QQ2oLijrdtFDpJkPuvNYRPxt2LQ0lOoGxGBxTRlE'
 
@@ -431,14 +431,14 @@ curl -X 'GET' \
 ]
 
 curl -X 'PUT' \
-  'http://0.0.0.0:8000/api/notifications/notif_356f5f10/read' \
+  'http://0.0.0.0:8080api/notifications/notif_356f5f10/read' \
   -H 'accept: application/json' \
   -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3NzA0NTExMTgiLCJyb2xlIjoidXNlciIsInVzZXJfaWQiOiJ1c2VyX2I1ZjAzYzc5IiwiZXhwIjoxNzQ5OTM1Nzc0fQ.Mc8QQ2oLijrdtFDpJkPuvNYRPxt2LQ0lOoGxGBxTRlE'
   {
   "message": "Notification marked as read"
 }
 curl -X 'POST' \
-  'http://0.0.0.0:8000/api/tickets' \
+  'http://0.0.0.0:8080api/tickets' \
   -H 'accept: application/json' \
   -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3NzA0NTExMTgiLCJyb2xlIjoidXNlciIsInVzZXJfaWQiOiJ1c2VyX2I1ZjAzYzc5IiwiZXhwIjoxNzQ5OTM1Nzc0fQ.Mc8QQ2oLijrdtFDpJkPuvNYRPxt2LQ0lOoGxGBxTRlE' \
   -H 'Content-Type: application/json' \
@@ -456,7 +456,7 @@ curl -X 'POST' \
   "resolved_at": null
 }
 curl -X 'GET' \
-  'http://0.0.0.0:8000/api/tickets' \
+  'http://0.0.0.0:8080api/tickets' \
   -H 'accept: application/json' \
   -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3NzA0NTExMTgiLCJyb2xlIjoidXNlciIsInVzZXJfaWQiOiJ1c2VyX2I1ZjAzYzc5IiwiZXhwIjoxNzQ5OTM1Nzc0fQ.Mc8QQ2oLijrdtFDpJkPuvNYRPxt2LQ0lOoGxGBxTRlE'
   [

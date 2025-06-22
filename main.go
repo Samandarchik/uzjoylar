@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"crypto/md5"
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -15,13 +14,13 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
-	_ "github.com/lib/pq"
 )
 
 // Constants
@@ -32,10 +31,42 @@ const (
 	TELEGRAM_GROUP_ID         = "-1002783983140"
 	UPLOAD_DIR                = "uploads"
 	MAX_FILE_SIZE             = 10 << 20 // 10MB
+	DATA_DIR                  = "data"
 )
 
-// Database instance
-var db *sql.DB
+// JSON file paths
+const (
+	USERS_FILE    = "data/users.json"
+	FOODS_FILE    = "data/foods.json"
+	ORDERS_FILE   = "data/orders.json"
+	REVIEWS_FILE  = "data/reviews.json"
+	FILES_FILE    = "data/files.json"
+	COUNTERS_FILE = "data/counters.json"
+)
+
+// Global data storage with mutex for thread safety
+var (
+	users    = make(map[string]*User)
+	foods    = make(map[int64]*Food)
+	orders   = make(map[string]*Order)
+	reviews  = make(map[string]*Review)
+	files    = make(map[string]*FileUpload)
+	counters = &Counters{}
+
+	// Mutexes for thread safety
+	usersMutex    sync.RWMutex
+	foodsMutex    sync.RWMutex
+	ordersMutex   sync.RWMutex
+	reviewsMutex  sync.RWMutex
+	filesMutex    sync.RWMutex
+	countersMutex sync.RWMutex
+)
+
+// Counters for auto-incrementing IDs
+type Counters struct {
+	FoodID   int64 `json:"food_id"`
+	OrderNum int   `json:"order_num"`
+}
 
 // WebSocket upgrader
 var upgrader = websocket.Upgrader{
@@ -115,41 +146,41 @@ var FOOD_TRANSLATIONS = map[string]map[string]string{
 
 // Models
 type User struct {
-	ID        string    `json:"id" db:"id"`
-	Number    string    `json:"number" db:"number"`
-	Password  string    `json:"password,omitempty" db:"password"`
-	Role      string    `json:"role" db:"role"`
-	FullName  string    `json:"full_name" db:"full_name"`
-	Email     *string   `json:"email,omitempty" db:"email"`
-	CreatedAt time.Time `json:"created_at" db:"created_at"`
-	IsActive  bool      `json:"is_active" db:"is_active"`
-	TgID      *int64    `json:"tg_id,omitempty" db:"tg_id"`
-	Language  string    `json:"language" db:"language"`
+	ID        string    `json:"id"`
+	Number    string    `json:"number"`
+	Password  string    `json:"password,omitempty"`
+	Role      string    `json:"role"`
+	FullName  string    `json:"full_name"`
+	Email     *string   `json:"email,omitempty"`
+	CreatedAt time.Time `json:"created_at"`
+	IsActive  bool      `json:"is_active"`
+	TgID      *int64    `json:"tg_id,omitempty"`
+	Language  string    `json:"language"`
 }
 
 type Food struct {
-	ID              int64               `json:"id" db:"id"`
-	Names           map[string]string   `json:"names,omitempty" db:"names"`
-	Name            string              `json:"name" db:"name"`
-	Descriptions    map[string]string   `json:"descriptions,omitempty" db:"descriptions"`
-	Description     string              `json:"description" db:"description"`
-	Category        string              `json:"category" db:"category"`
+	ID              int64               `json:"id"`
+	Names           map[string]string   `json:"names,omitempty"`
+	Name            string              `json:"name"`
+	Descriptions    map[string]string   `json:"descriptions,omitempty"`
+	Description     string              `json:"description"`
+	Category        string              `json:"category"`
 	CategoryName    string              `json:"category_name,omitempty"`
-	Price           int                 `json:"price" db:"price"`
-	IsThere         bool                `json:"isThere" db:"is_there"`
-	ImageURL        string              `json:"imageUrl" db:"image_url"`
-	Ingredients     map[string][]string `json:"ingredients" db:"ingredients"`
-	Allergens       map[string][]string `json:"allergens" db:"allergens"`
-	Rating          float64             `json:"rating" db:"rating"`
-	ReviewCount     int                 `json:"review_count" db:"review_count"`
-	PreparationTime int                 `json:"preparation_time" db:"preparation_time"`
-	Stock           int                 `json:"stock" db:"stock"`
-	IsPopular       bool                `json:"is_popular" db:"is_popular"`
-	Discount        int                 `json:"discount" db:"discount"`
+	Price           int                 `json:"price"`
+	IsThere         bool                `json:"isThere"`
+	ImageURL        string              `json:"imageUrl"`
+	Ingredients     map[string][]string `json:"ingredients"`
+	Allergens       map[string][]string `json:"allergens"`
+	Rating          float64             `json:"rating"`
+	ReviewCount     int                 `json:"review_count"`
+	PreparationTime int                 `json:"preparation_time"`
+	Stock           int                 `json:"stock"`
+	IsPopular       bool                `json:"is_popular"`
+	Discount        int                 `json:"discount"`
 	OriginalPrice   int                 `json:"original_price"`
-	Comment         string              `json:"comment" db:"comment"`
-	CreatedAt       time.Time           `json:"created_at" db:"created_at"`
-	UpdatedAt       time.Time           `json:"updated_at" db:"updated_at"`
+	Comment         string              `json:"comment"`
+	CreatedAt       time.Time           `json:"created_at"`
+	UpdatedAt       time.Time           `json:"updated_at"`
 }
 
 type OrderFood struct {
@@ -183,22 +214,22 @@ type DeliveryInfo struct {
 }
 
 type Order struct {
-	OrderID             string                 `json:"order_id" db:"order_id"`
-	UserNumber          string                 `json:"user_number" db:"user_number"`
-	UserName            string                 `json:"user_name" db:"user_name"`
-	Foods               []OrderFood            `json:"foods" db:"foods"`
-	TotalPrice          int                    `json:"total_price" db:"total_price"`
-	OrderTime           time.Time              `json:"order_time" db:"order_time"`
-	DeliveryType        string                 `json:"delivery_type" db:"delivery_type"`
-	DeliveryInfo        map[string]interface{} `json:"delivery_info" db:"delivery_info"`
-	Status              OrderStatus            `json:"status" db:"status"`
-	PaymentInfo         PaymentInfo            `json:"payment_info" db:"payment_info"`
-	SpecialInstructions *string                `json:"special_instructions,omitempty" db:"special_instructions"`
-	EstimatedTime       *int                   `json:"estimated_time,omitempty" db:"estimated_time"`
-	DeliveredAt         *time.Time             `json:"delivered_at,omitempty" db:"delivered_at"`
-	StatusHistory       []StatusUpdate         `json:"status_history,omitempty" db:"status_history"`
-	CreatedAt           time.Time              `json:"created_at" db:"created_at"`
-	UpdatedAt           time.Time              `json:"updated_at" db:"updated_at"`
+	OrderID             string                 `json:"order_id"`
+	UserNumber          string                 `json:"user_number"`
+	UserName            string                 `json:"user_name"`
+	Foods               []OrderFood            `json:"foods"`
+	TotalPrice          int                    `json:"total_price"`
+	OrderTime           time.Time              `json:"order_time"`
+	DeliveryType        string                 `json:"delivery_type"`
+	DeliveryInfo        map[string]interface{} `json:"delivery_info"`
+	Status              OrderStatus            `json:"status"`
+	PaymentInfo         PaymentInfo            `json:"payment_info"`
+	SpecialInstructions *string                `json:"special_instructions,omitempty"`
+	EstimatedTime       *int                   `json:"estimated_time,omitempty"`
+	DeliveredAt         *time.Time             `json:"delivered_at,omitempty"`
+	StatusHistory       []StatusUpdate         `json:"status_history,omitempty"`
+	CreatedAt           time.Time              `json:"created_at"`
+	UpdatedAt           time.Time              `json:"updated_at"`
 }
 
 type StatusUpdate struct {
@@ -208,26 +239,26 @@ type StatusUpdate struct {
 }
 
 type Review struct {
-	ID        string    `json:"id" db:"id"`
-	UserID    string    `json:"user_id" db:"user_id"`
+	ID        string    `json:"id"`
+	UserID    string    `json:"user_id"`
 	UserName  string    `json:"user_name,omitempty"`
-	FoodID    int64     `json:"food_id" db:"food_id"`
-	Rating    int       `json:"rating" db:"rating"`
-	Comment   string    `json:"comment" db:"comment"`
-	CreatedAt time.Time `json:"created_at" db:"created_at"`
-	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
+	FoodID    int64     `json:"food_id"`
+	Rating    int       `json:"rating"`
+	Comment   string    `json:"comment"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 type FileUpload struct {
-	ID           string    `json:"id" db:"id"`
-	OriginalName string    `json:"original_name" db:"original_name"`
-	FileName     string    `json:"file_name" db:"file_name"`
-	FilePath     string    `json:"file_path" db:"file_path"`
-	FileSize     int64     `json:"file_size" db:"file_size"`
-	MimeType     string    `json:"mime_type" db:"mime_type"`
-	URL          string    `json:"url" db:"url"`
-	UploadedBy   string    `json:"uploaded_by" db:"uploaded_by"`
-	CreatedAt    time.Time `json:"created_at" db:"created_at"`
+	ID           string    `json:"id"`
+	OriginalName string    `json:"original_name"`
+	FileName     string    `json:"file_name"`
+	FilePath     string    `json:"file_path"`
+	FileSize     int64     `json:"file_size"`
+	MimeType     string    `json:"mime_type"`
+	URL          string    `json:"url"`
+	UploadedBy   string    `json:"uploaded_by"`
+	CreatedAt    time.Time `json:"created_at"`
 }
 
 // Request/Response structures
@@ -397,173 +428,302 @@ type WSMessage struct {
 	OrderID string      `json:"order_id,omitempty"`
 }
 
-// ========== DATABASE FUNCTIONS ==========
+// ========== JSON DATABASE FUNCTIONS ==========
 
-func initDatabase() error {
-	var err error
-
-	// Database connection string
-	dbHost := os.Getenv("DB_HOST")
-	if dbHost == "" {
-		dbHost = "localhost"
-	}
-	dbPort := os.Getenv("DB_PORT")
-	if dbPort == "" {
-		dbPort = "5432"
-	}
-	dbUser := os.Getenv("DB_USER")
-	if dbUser == "" {
-		dbUser = "postgres"
-	}
-	dbPassword := os.Getenv("DB_PASSWORD")
-	if dbPassword == "" {
-		dbPassword = "password"
-	}
-	dbName := os.Getenv("DB_NAME")
-	if dbName == "" {
-		dbName = "restaurant_db"
+func initJSONDatabase() error {
+	// Create data directory if not exists
+	if err := os.MkdirAll(DATA_DIR, 0755); err != nil {
+		return fmt.Errorf("data directory creation error: %v", err)
 	}
 
-	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		dbHost, dbPort, dbUser, dbPassword, dbName)
-
-	db, err = sql.Open("postgres", connStr)
-	if err != nil {
-		return fmt.Errorf("database connection error: %v", err)
+	// Initialize all JSON files
+	if err := loadUsers(); err != nil {
+		log.Printf("Loading users error: %v", err)
+		return err
 	}
 
-	if err = db.Ping(); err != nil {
-		return fmt.Errorf("database ping error: %v", err)
+	if err := loadFoods(); err != nil {
+		log.Printf("Loading foods error: %v", err)
+		return err
 	}
 
-	if err = createTables(); err != nil {
-		return fmt.Errorf("create tables error: %v", err)
+	if err := loadOrders(); err != nil {
+		log.Printf("Loading orders error: %v", err)
+		return err
 	}
 
-	log.Println("✅ PostgreSQL database connected successfully")
+	if err := loadReviews(); err != nil {
+		log.Printf("Loading reviews error: %v", err)
+		return err
+	}
+
+	if err := loadFiles(); err != nil {
+		log.Printf("Loading files error: %v", err)
+		return err
+	}
+
+	if err := loadCounters(); err != nil {
+		log.Printf("Loading counters error: %v", err)
+		return err
+	}
+
+	log.Println("✅ JSON Database initialized successfully")
 	return nil
 }
 
-func createTables() error {
-	queries := []string{
-		// Users table
-		`CREATE TABLE IF NOT EXISTS users (
-			id VARCHAR(255) PRIMARY KEY,
-			number VARCHAR(20) UNIQUE NOT NULL,
-			password VARCHAR(255) NOT NULL,
-			role VARCHAR(20) DEFAULT 'user',
-			full_name VARCHAR(255) NOT NULL,
-			email VARCHAR(255),
-			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-			is_active BOOLEAN DEFAULT true,
-			tg_id BIGINT,
-			language VARCHAR(5) DEFAULT 'uz'
-		)`,
+// Users JSON operations
+func loadUsers() error {
+	usersMutex.Lock()
+	defer usersMutex.Unlock()
 
-		// Foods table with BIGSERIAL ID
-		`CREATE TABLE IF NOT EXISTS foods (
-			id BIGSERIAL PRIMARY KEY,
-			names JSONB,
-			name VARCHAR(255) NOT NULL,
-			descriptions JSONB,
-			description TEXT,
-			category VARCHAR(100) NOT NULL,
-			price INTEGER NOT NULL,
-			is_there BOOLEAN DEFAULT true,
-			image_url TEXT,
-			ingredients JSONB,
-			allergens JSONB,
-			rating DECIMAL(3,2) DEFAULT 0.0,
-			review_count INTEGER DEFAULT 0,
-			preparation_time INTEGER DEFAULT 15,
-			stock INTEGER DEFAULT 100,
-			is_popular BOOLEAN DEFAULT false,
-			discount INTEGER DEFAULT 0,
-			comment TEXT,
-			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-		)`,
-
-		// Orders table
-		`CREATE TABLE IF NOT EXISTS orders (
-			order_id VARCHAR(255) PRIMARY KEY,
-			user_number VARCHAR(20) NOT NULL,
-			user_name VARCHAR(255) NOT NULL,
-			foods JSONB NOT NULL,
-			total_price INTEGER NOT NULL,
-			order_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-			delivery_type VARCHAR(50) NOT NULL,
-			delivery_info JSONB,
-			status VARCHAR(20) DEFAULT 'pending',
-			payment_info JSONB NOT NULL,
-			special_instructions TEXT,
-			estimated_time INTEGER,
-			delivered_at TIMESTAMP,
-			status_history JSONB,
-			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-		)`,
-
-		// Reviews table
-		`CREATE TABLE IF NOT EXISTS reviews (
-			id VARCHAR(255) PRIMARY KEY,
-			user_id VARCHAR(255) NOT NULL,
-			food_id BIGINT NOT NULL,
-			rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
-			comment TEXT NOT NULL,
-			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-			FOREIGN KEY (food_id) REFERENCES foods(id) ON DELETE CASCADE,
-			UNIQUE(user_id, food_id)
-		)`,
-
-		// File uploads table
-		`CREATE TABLE IF NOT EXISTS file_uploads (
-			id VARCHAR(255) PRIMARY KEY,
-			original_name VARCHAR(255) NOT NULL,
-			file_name VARCHAR(255) NOT NULL,
-			file_path VARCHAR(500) NOT NULL,
-			file_size BIGINT NOT NULL,
-			mime_type VARCHAR(100) NOT NULL,
-			url VARCHAR(500) NOT NULL,
-			uploaded_by VARCHAR(255),
-			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-		)`,
-
-		// Auto-update trigger for foods
-		`CREATE OR REPLACE FUNCTION update_updated_at_column()
-		RETURNS TRIGGER AS $$
-		BEGIN
-			NEW.updated_at = CURRENT_TIMESTAMP;
-			RETURN NEW;
-		END;
-		$$ language 'plpgsql'`,
-
-		`DROP TRIGGER IF EXISTS update_foods_updated_at ON foods`,
-
-		`CREATE TRIGGER update_foods_updated_at 
-			BEFORE UPDATE ON foods 
-			FOR EACH ROW 
-			EXECUTE FUNCTION update_updated_at_column()`,
-
-		// Indexes
-		`CREATE INDEX IF NOT EXISTS idx_foods_category ON foods(category)`,
-		`CREATE INDEX IF NOT EXISTS idx_foods_is_there ON foods(is_there)`,
-		`CREATE INDEX IF NOT EXISTS idx_foods_is_popular ON foods(is_popular)`,
-		`CREATE INDEX IF NOT EXISTS idx_orders_user_number ON orders(user_number)`,
-		`CREATE INDEX IF NOT EXISTS idx_orders_status ON orders(status)`,
-		`CREATE INDEX IF NOT EXISTS idx_orders_order_time ON orders(order_time)`,
-		`CREATE INDEX IF NOT EXISTS idx_reviews_food_id ON reviews(food_id)`,
-		`CREATE INDEX IF NOT EXISTS idx_reviews_user_id ON reviews(user_id)`,
+	if _, err := os.Stat(USERS_FILE); os.IsNotExist(err) {
+		// Create empty users file
+		users = make(map[string]*User)
+		return saveUsersUnsafe()
 	}
 
-	for _, query := range queries {
-		if _, err := db.Exec(query); err != nil {
-			return fmt.Errorf("table creation error: %v", err)
+	data, err := os.ReadFile(USERS_FILE)
+	if err != nil {
+		return err
+	}
+
+	if len(data) == 0 {
+		users = make(map[string]*User)
+		return nil
+	}
+
+	return json.Unmarshal(data, &users)
+}
+
+func saveUsers() error {
+	usersMutex.Lock()
+	defer usersMutex.Unlock()
+	return saveUsersUnsafe()
+}
+
+func saveUsersUnsafe() error {
+	data, err := json.MarshalIndent(users, "", "  ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(USERS_FILE, data, 0644)
+}
+
+// Foods JSON operations
+func loadFoods() error {
+	foodsMutex.Lock()
+	defer foodsMutex.Unlock()
+
+	if _, err := os.Stat(FOODS_FILE); os.IsNotExist(err) {
+		// Create empty foods file
+		foods = make(map[int64]*Food)
+		return saveFoodsUnsafe()
+	}
+
+	data, err := os.ReadFile(FOODS_FILE)
+	if err != nil {
+		return err
+	}
+
+	if len(data) == 0 {
+		foods = make(map[int64]*Food)
+		return nil
+	}
+
+	return json.Unmarshal(data, &foods)
+}
+
+func saveFoods() error {
+	foodsMutex.Lock()
+	defer foodsMutex.Unlock()
+	return saveFoodsUnsafe()
+}
+
+func saveFoodsUnsafe() error {
+	data, err := json.MarshalIndent(foods, "", "  ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(FOODS_FILE, data, 0644)
+}
+
+// Orders JSON operations
+func loadOrders() error {
+	ordersMutex.Lock()
+	defer ordersMutex.Unlock()
+
+	if _, err := os.Stat(ORDERS_FILE); os.IsNotExist(err) {
+		// Create empty orders file
+		orders = make(map[string]*Order)
+		return saveOrdersUnsafe()
+	}
+
+	data, err := os.ReadFile(ORDERS_FILE)
+	if err != nil {
+		return err
+	}
+
+	if len(data) == 0 {
+		orders = make(map[string]*Order)
+		return nil
+	}
+
+	return json.Unmarshal(data, &orders)
+}
+
+func saveOrders() error {
+	ordersMutex.Lock()
+	defer ordersMutex.Unlock()
+	return saveOrdersUnsafe()
+}
+
+func saveOrdersUnsafe() error {
+	data, err := json.MarshalIndent(orders, "", "  ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(ORDERS_FILE, data, 0644)
+}
+
+// Reviews JSON operations
+func loadReviews() error {
+	reviewsMutex.Lock()
+	defer reviewsMutex.Unlock()
+
+	if _, err := os.Stat(REVIEWS_FILE); os.IsNotExist(err) {
+		// Create empty reviews file
+		reviews = make(map[string]*Review)
+		return saveReviewsUnsafe()
+	}
+
+	data, err := os.ReadFile(REVIEWS_FILE)
+	if err != nil {
+		return err
+	}
+
+	if len(data) == 0 {
+		reviews = make(map[string]*Review)
+		return nil
+	}
+
+	return json.Unmarshal(data, &reviews)
+}
+
+func saveReviews() error {
+	reviewsMutex.Lock()
+	defer reviewsMutex.Unlock()
+	return saveReviewsUnsafe()
+}
+
+func saveReviewsUnsafe() error {
+	data, err := json.MarshalIndent(reviews, "", "  ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(REVIEWS_FILE, data, 0644)
+}
+
+// Files JSON operations
+func loadFiles() error {
+	filesMutex.Lock()
+	defer filesMutex.Unlock()
+
+	if _, err := os.Stat(FILES_FILE); os.IsNotExist(err) {
+		// Create empty files file
+		files = make(map[string]*FileUpload)
+		return saveFilesUnsafe()
+	}
+
+	data, err := os.ReadFile(FILES_FILE)
+	if err != nil {
+		return err
+	}
+
+	if len(data) == 0 {
+		files = make(map[string]*FileUpload)
+		return nil
+	}
+
+	return json.Unmarshal(data, &files)
+}
+
+func saveFiles() error {
+	filesMutex.Lock()
+	defer filesMutex.Unlock()
+	return saveFilesUnsafe()
+}
+
+func saveFilesUnsafe() error {
+	data, err := json.MarshalIndent(files, "", "  ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(FILES_FILE, data, 0644)
+}
+
+// Counters JSON operations
+func loadCounters() error {
+	countersMutex.Lock()
+	defer countersMutex.Unlock()
+
+	if _, err := os.Stat(COUNTERS_FILE); os.IsNotExist(err) {
+		// Create default counters
+		counters = &Counters{
+			FoodID:   1,
+			OrderNum: 1,
 		}
+		return saveCountersUnsafe()
 	}
 
-	return nil
+	data, err := os.ReadFile(COUNTERS_FILE)
+	if err != nil {
+		return err
+	}
+
+	if len(data) == 0 {
+		counters = &Counters{
+			FoodID:   1,
+			OrderNum: 1,
+		}
+		return nil
+	}
+
+	return json.Unmarshal(data, counters)
+}
+
+func saveCounters() error {
+	countersMutex.Lock()
+	defer countersMutex.Unlock()
+	return saveCountersUnsafe()
+}
+
+func saveCountersUnsafe() error {
+	data, err := json.MarshalIndent(counters, "", "  ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(COUNTERS_FILE, data, 0644)
+}
+
+// Helper functions for generating IDs
+func getNextFoodID() int64 {
+	countersMutex.Lock()
+	defer countersMutex.Unlock()
+
+	currentID := counters.FoodID
+	counters.FoodID++
+	saveCountersUnsafe() // Save immediately
+	return currentID
+}
+
+func getNextOrderNum() int {
+	countersMutex.Lock()
+	defer countersMutex.Unlock()
+
+	currentNum := counters.OrderNum
+	counters.OrderNum++
+	saveCountersUnsafe() // Save immediately
+	return currentNum
 }
 
 // ========== UTILITY FUNCTIONS ==========
@@ -610,15 +770,8 @@ func generateID(prefix string) string {
 
 func generateOrderID() string {
 	today := time.Now().Format("2006-01-02")
-	var count int
-	query := `SELECT COUNT(*) FROM orders WHERE DATE(order_time) = $1`
-	err := db.QueryRow(query, today).Scan(&count)
-	if err != nil {
-		log.Printf("Order count error: %v", err)
-		count = 0
-	}
-	count++
-	return fmt.Sprintf("%s-%d", today, count)
+	orderNum := getNextOrderNum()
+	return fmt.Sprintf("%s-%d", today, orderNum)
 }
 
 func hashPassword(password string) string {
@@ -746,14 +899,12 @@ func uploadFile(c *gin.Context) {
 		CreatedAt:    time.Now(),
 	}
 
-	query := `INSERT INTO file_uploads (id, original_name, file_name, file_path, file_size, mime_type, url, uploaded_by, created_at) 
-			  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`
+	// Save to JSON
+	filesMutex.Lock()
+	files[fileUpload.ID] = fileUpload
+	filesMutex.Unlock()
 
-	_, err = db.Exec(query, fileUpload.ID, fileUpload.OriginalName, fileUpload.FileName,
-		fileUpload.FilePath, fileUpload.FileSize, fileUpload.MimeType, fileUpload.URL,
-		fileUpload.UploadedBy, fileUpload.CreatedAt)
-
-	if err != nil {
+	if err := saveFiles(); err != nil {
 		log.Printf("File data save error: %v", err)
 		os.Remove(filePath)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Data save error"})
@@ -1033,334 +1184,142 @@ func adminMiddleware() gin.HandlerFunc {
 // ========== DATABASE HELPER FUNCTIONS ==========
 
 func getUserByNumber(number string) (*User, error) {
-	query := `SELECT id, number, password, role, full_name, email, created_at, is_active, tg_id, language 
-			  FROM users WHERE number = $1`
+	usersMutex.RLock()
+	defer usersMutex.RUnlock()
 
-	var user User
-	err := db.QueryRow(query, number).Scan(
-		&user.ID, &user.Number, &user.Password, &user.Role,
-		&user.FullName, &user.Email, &user.CreatedAt,
-		&user.IsActive, &user.TgID, &user.Language,
-	)
-
-	if err != nil {
-		return nil, err
+	for _, user := range users {
+		if user.Number == number {
+			return user, nil
+		}
 	}
-
-	return &user, nil
+	return nil, fmt.Errorf("user not found")
 }
 
 func createUser(user *User) error {
-	query := `INSERT INTO users (id, number, password, role, full_name, email, created_at, is_active, tg_id, language) 
-			  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`
+	usersMutex.Lock()
+	users[user.ID] = user
+	usersMutex.Unlock()
 
-	_, err := db.Exec(query, user.ID, user.Number, user.Password, user.Role,
-		user.FullName, user.Email, user.CreatedAt, user.IsActive, user.TgID, user.Language)
-
-	return err
+	return saveUsers()
 }
 
 func getFoodByID(foodID int64) (*Food, error) {
-	query := `SELECT id, names, name, descriptions, description, category, price, is_there, 
-			  image_url, ingredients, allergens, rating, review_count, preparation_time, 
-			  stock, is_popular, discount, comment, created_at, updated_at
-			  FROM foods WHERE id = $1`
+	foodsMutex.RLock()
+	defer foodsMutex.RUnlock()
 
-	var food Food
-	var namesJSON, descriptionsJSON, ingredientsJSON, allergensJSON []byte
-
-	err := db.QueryRow(query, foodID).Scan(
-		&food.ID, &namesJSON, &food.Name, &descriptionsJSON, &food.Description,
-		&food.Category, &food.Price, &food.IsThere, &food.ImageURL,
-		&ingredientsJSON, &allergensJSON, &food.Rating, &food.ReviewCount,
-		&food.PreparationTime, &food.Stock, &food.IsPopular, &food.Discount,
-		&food.Comment, &food.CreatedAt, &food.UpdatedAt,
-	)
-
-	if err != nil {
-		return nil, err
+	if food, exists := foods[foodID]; exists {
+		return food, nil
 	}
-
-	// JSON unmarshal
-	if namesJSON != nil {
-		json.Unmarshal(namesJSON, &food.Names)
-	}
-	if descriptionsJSON != nil {
-		json.Unmarshal(descriptionsJSON, &food.Descriptions)
-	}
-	if ingredientsJSON != nil {
-		json.Unmarshal(ingredientsJSON, &food.Ingredients)
-	}
-	if allergensJSON != nil {
-		json.Unmarshal(allergensJSON, &food.Allergens)
-	}
-
-	return &food, nil
+	return nil, fmt.Errorf("food not found")
 }
 
 func getAllFoods() ([]*Food, error) {
-	// Only available foods (isThere = true and stock > 0) ordered by ID
-	query := `SELECT id, names, name, descriptions, description, category, price, is_there, 
-			  image_url, ingredients, allergens, rating, review_count, preparation_time, 
-			  stock, is_popular, discount, comment, created_at, updated_at
-			  FROM foods WHERE is_there = true AND stock > 0 ORDER BY id ASC`
+	foodsMutex.RLock()
+	defer foodsMutex.RUnlock()
 
-	rows, err := db.Query(query)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	var foods []*Food
-	for rows.Next() {
-		var food Food
-		var namesJSON, descriptionsJSON, ingredientsJSON, allergensJSON []byte
-
-		err := rows.Scan(
-			&food.ID, &namesJSON, &food.Name, &descriptionsJSON, &food.Description,
-			&food.Category, &food.Price, &food.IsThere, &food.ImageURL,
-			&ingredientsJSON, &allergensJSON, &food.Rating, &food.ReviewCount,
-			&food.PreparationTime, &food.Stock, &food.IsPopular, &food.Discount,
-			&food.Comment, &food.CreatedAt, &food.UpdatedAt,
-		)
-
-		if err != nil {
-			continue
+	var result []*Food
+	for _, food := range foods {
+		if food.IsThere && food.Stock > 0 {
+			result = append(result, food)
 		}
-
-		// JSON unmarshal
-		if namesJSON != nil {
-			json.Unmarshal(namesJSON, &food.Names)
-		}
-		if descriptionsJSON != nil {
-			json.Unmarshal(descriptionsJSON, &food.Descriptions)
-		}
-		if ingredientsJSON != nil {
-			json.Unmarshal(ingredientsJSON, &food.Ingredients)
-		}
-		if allergensJSON != nil {
-			json.Unmarshal(allergensJSON, &food.Allergens)
-		}
-
-		foods = append(foods, &food)
 	}
 
-	return foods, nil
+	// Sort by ID ascending
+	sort.Slice(result, func(i, j int) bool {
+		return result[i].ID < result[j].ID
+	})
+
+	return result, nil
 }
 
 func getAllFoodsForAdmin() ([]*Food, error) {
-	// All foods for admin ordered by ID
-	query := `SELECT id, names, name, descriptions, description, category, price, is_there, 
-			  image_url, ingredients, allergens, rating, review_count, preparation_time, 
-			  stock, is_popular, discount, comment, created_at, updated_at
-			  FROM foods ORDER BY id ASC`
+	foodsMutex.RLock()
+	defer foodsMutex.RUnlock()
 
-	rows, err := db.Query(query)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	var foods []*Food
-	for rows.Next() {
-		var food Food
-		var namesJSON, descriptionsJSON, ingredientsJSON, allergensJSON []byte
-
-		err := rows.Scan(
-			&food.ID, &namesJSON, &food.Name, &descriptionsJSON, &food.Description,
-			&food.Category, &food.Price, &food.IsThere, &food.ImageURL,
-			&ingredientsJSON, &allergensJSON, &food.Rating, &food.ReviewCount,
-			&food.PreparationTime, &food.Stock, &food.IsPopular, &food.Discount,
-			&food.Comment, &food.CreatedAt, &food.UpdatedAt,
-		)
-
-		if err != nil {
-			continue
-		}
-
-		// JSON unmarshal
-		if namesJSON != nil {
-			json.Unmarshal(namesJSON, &food.Names)
-		}
-		if descriptionsJSON != nil {
-			json.Unmarshal(descriptionsJSON, &food.Descriptions)
-		}
-		if ingredientsJSON != nil {
-			json.Unmarshal(ingredientsJSON, &food.Ingredients)
-		}
-		if allergensJSON != nil {
-			json.Unmarshal(allergensJSON, &food.Allergens)
-		}
-
-		foods = append(foods, &food)
+	var result []*Food
+	for _, food := range foods {
+		result = append(result, food)
 	}
 
-	return foods, nil
+	// Sort by ID ascending
+	sort.Slice(result, func(i, j int) bool {
+		return result[i].ID < result[j].ID
+	})
+
+	return result, nil
 }
 
 func createFoodWithCustomID(food *Food, customID *int64) error {
-	var query string
-	var err error
-
-	namesJSON, err := json.Marshal(food.Names)
-	if err != nil {
-		return fmt.Errorf("names JSON marshal error: %w", err)
-	}
-
-	descriptionsJSON, err := json.Marshal(food.Descriptions)
-	if err != nil {
-		return fmt.Errorf("descriptions JSON marshal error: %w", err)
-	}
-
-	ingredientsJSON, err := json.Marshal(food.Ingredients)
-	if err != nil {
-		return fmt.Errorf("ingredients JSON marshal error: %w", err)
-	}
-
-	allergensJSON, err := json.Marshal(food.Allergens)
-	if err != nil {
-		return fmt.Errorf("allergens JSON marshal error: %w", err)
-	}
+	foodsMutex.Lock()
+	defer foodsMutex.Unlock()
 
 	if customID != nil {
-		// Manual ID insertion
-		query = `INSERT INTO foods (id, names, name, descriptions, description, category, price, 
-				 is_there, image_url, ingredients, allergens, rating, review_count, 
-				 preparation_time, stock, is_popular, discount, comment, created_at, updated_at) 
-				 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)`
-
-		_, err = db.Exec(query, *customID, namesJSON, food.Name, descriptionsJSON, food.Description,
-			food.Category, food.Price, food.IsThere, food.ImageURL, ingredientsJSON,
-			allergensJSON, food.Rating, food.ReviewCount, food.PreparationTime,
-			food.Stock, food.IsPopular, food.Discount, food.Comment,
-			food.CreatedAt, food.UpdatedAt)
-
-		if err != nil {
-			return fmt.Errorf("manual ID insertion error: %w", err)
+		// Check if custom ID already exists
+		if _, exists := foods[*customID]; exists {
+			return fmt.Errorf("food with ID %d already exists", *customID)
 		}
-
 		food.ID = *customID
 	} else {
-		// Automatic ID (BIGSERIAL)
-		query = `INSERT INTO foods (names, name, descriptions, description, category, price, 
-				 is_there, image_url, ingredients, allergens, rating, review_count, 
-				 preparation_time, stock, is_popular, discount, comment, created_at, updated_at) 
-				 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19)
-				 RETURNING id`
-
-		err = db.QueryRow(query, namesJSON, food.Name, descriptionsJSON, food.Description,
-			food.Category, food.Price, food.IsThere, food.ImageURL, ingredientsJSON,
-			allergensJSON, food.Rating, food.ReviewCount, food.PreparationTime,
-			food.Stock, food.IsPopular, food.Discount, food.Comment,
-			food.CreatedAt, food.UpdatedAt).Scan(&food.ID)
-
-		if err != nil {
-			return fmt.Errorf("automatic ID insertion error: %w", err)
-		}
+		// Use auto-incrementing ID
+		food.ID = getNextFoodID()
 	}
 
-	log.Printf("✅ Food created successfully with ID: %d", food.ID)
-	return nil
+	foods[food.ID] = food
+
+	return saveFoodsUnsafe()
 }
 
 func updateFood(food *Food) error {
-	namesJSON, _ := json.Marshal(food.Names)
-	descriptionsJSON, _ := json.Marshal(food.Descriptions)
-	ingredientsJSON, _ := json.Marshal(food.Ingredients)
-	allergensJSON, _ := json.Marshal(food.Allergens)
+	foodsMutex.Lock()
+	defer foodsMutex.Unlock()
 
-	query := `UPDATE foods SET names = $2, name = $3, descriptions = $4, description = $5, 
-			  category = $6, price = $7, is_there = $8, image_url = $9, ingredients = $10, 
-			  allergens = $11, rating = $12, review_count = $13, preparation_time = $14, 
-			  stock = $15, is_popular = $16, discount = $17, comment = $18, updated_at = CURRENT_TIMESTAMP
-			  WHERE id = $1`
+	if _, exists := foods[food.ID]; !exists {
+		return fmt.Errorf("food not found")
+	}
 
-	_, err := db.Exec(query, food.ID, namesJSON, food.Name, descriptionsJSON, food.Description,
-		food.Category, food.Price, food.IsThere, food.ImageURL, ingredientsJSON,
-		allergensJSON, food.Rating, food.ReviewCount, food.PreparationTime,
-		food.Stock, food.IsPopular, food.Discount, food.Comment)
+	food.UpdatedAt = time.Now()
+	foods[food.ID] = food
 
-	return err
+	return saveFoodsUnsafe()
+}
+
+func deleteFood(foodID int64) error {
+	foodsMutex.Lock()
+	defer foodsMutex.Unlock()
+
+	if _, exists := foods[foodID]; !exists {
+		return fmt.Errorf("food not found")
+	}
+
+	delete(foods, foodID)
+
+	return saveFoodsUnsafe()
 }
 
 func createOrder(order *Order) error {
-	foodsJSON, _ := json.Marshal(order.Foods)
-	deliveryInfoJSON, _ := json.Marshal(order.DeliveryInfo)
-	paymentInfoJSON, _ := json.Marshal(order.PaymentInfo)
-	statusHistoryJSON, _ := json.Marshal(order.StatusHistory)
+	ordersMutex.Lock()
+	orders[order.OrderID] = order
+	ordersMutex.Unlock()
 
-	query := `INSERT INTO orders (order_id, user_number, user_name, foods, total_price, 
-			  order_time, delivery_type, delivery_info, status, payment_info, 
-			  special_instructions, estimated_time, delivered_at, status_history, 
-			  created_at, updated_at) 
-			  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)`
-
-	_, err := db.Exec(query, order.OrderID, order.UserNumber, order.UserName, foodsJSON,
-		order.TotalPrice, order.OrderTime, order.DeliveryType, deliveryInfoJSON,
-		order.Status, paymentInfoJSON, order.SpecialInstructions, order.EstimatedTime,
-		order.DeliveredAt, statusHistoryJSON, order.CreatedAt, order.UpdatedAt)
-
-	return err
+	return saveOrders()
 }
 
 func getOrderByID(orderID string) (*Order, error) {
-	query := `SELECT order_id, user_number, user_name, foods, total_price, order_time, 
-			  delivery_type, delivery_info, status, payment_info, special_instructions, 
-			  estimated_time, delivered_at, status_history, created_at, updated_at
-			  FROM orders WHERE order_id = $1`
+	ordersMutex.RLock()
+	defer ordersMutex.RUnlock()
 
-	var order Order
-	var foodsJSON, deliveryInfoJSON, paymentInfoJSON, statusHistoryJSON []byte
-
-	err := db.QueryRow(query, orderID).Scan(
-		&order.OrderID, &order.UserNumber, &order.UserName, &foodsJSON,
-		&order.TotalPrice, &order.OrderTime, &order.DeliveryType, &deliveryInfoJSON,
-		&order.Status, &paymentInfoJSON, &order.SpecialInstructions,
-		&order.EstimatedTime, &order.DeliveredAt, &statusHistoryJSON,
-		&order.CreatedAt, &order.UpdatedAt,
-	)
-
-	if err != nil {
-		return nil, err
+	if order, exists := orders[orderID]; exists {
+		return order, nil
 	}
-
-	// JSON unmarshal
-	json.Unmarshal(foodsJSON, &order.Foods)
-	json.Unmarshal(deliveryInfoJSON, &order.DeliveryInfo)
-	json.Unmarshal(paymentInfoJSON, &order.PaymentInfo)
-	json.Unmarshal(statusHistoryJSON, &order.StatusHistory)
-
-	return &order, nil
+	return nil, fmt.Errorf("order not found")
 }
 
 func updateOrder(order *Order) error {
-	foodsJSON, _ := json.Marshal(order.Foods)
-	deliveryInfoJSON, _ := json.Marshal(order.DeliveryInfo)
-	paymentInfoJSON, _ := json.Marshal(order.PaymentInfo)
-	statusHistoryJSON, _ := json.Marshal(order.StatusHistory)
+	ordersMutex.Lock()
+	orders[order.OrderID] = order
+	ordersMutex.Unlock()
 
-	query := `UPDATE orders SET user_number = $2, user_name = $3, foods = $4, total_price = $5, 
-			  order_time = $6, delivery_type = $7, delivery_info = $8, status = $9, 
-			  payment_info = $10, special_instructions = $11, estimated_time = $12, 
-			  delivered_at = $13, status_history = $14, updated_at = CURRENT_TIMESTAMP
-			  WHERE order_id = $1`
-
-	_, err := db.Exec(query, order.OrderID, order.UserNumber, order.UserName, foodsJSON,
-		order.TotalPrice, order.OrderTime, order.DeliveryType, deliveryInfoJSON,
-		order.Status, paymentInfoJSON, order.SpecialInstructions, order.EstimatedTime,
-		order.DeliveredAt, statusHistoryJSON)
-
-	return err
-}
-
-func updateSequenceAfterManualInsert() error {
-	query := `SELECT setval('foods_id_seq', (SELECT MAX(id) FROM foods))`
-	_, err := db.Exec(query)
-	if err != nil {
-		return fmt.Errorf("sequence update error: %w", err)
-	}
-	log.Println("✅ Sequence updated")
-	return nil
+	return saveOrders()
 }
 
 // Helper functions
@@ -1663,7 +1622,11 @@ func getAllFoodsHandler(c *gin.Context) {
 	hostURL := getHostURL(c)
 	for _, food := range foods {
 		if food.ImageURL != "" && !strings.HasPrefix(food.ImageURL, "http") {
-			food.ImageURL = hostURL + food.ImageURL
+			if strings.HasPrefix(food.ImageURL, "/") {
+				food.ImageURL = hostURL + food.ImageURL
+			} else {
+				food.ImageURL = hostURL + "/" + food.ImageURL
+			}
 		}
 	}
 
@@ -1691,11 +1654,7 @@ func getFoodHandler(c *gin.Context) {
 
 	food, err := getFoodByID(foodID)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			c.JSON(http.StatusNotFound, gin.H{"error": "Food not found"})
-			return
-		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Data fetch error"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "Food not found"})
 		return
 	}
 
@@ -1721,25 +1680,6 @@ func createFoodHandler(c *gin.Context) {
 	}
 
 	log.Printf("Received food creation request: %+v", req)
-
-	// Check if custom ID already exists
-	if req.CustomID != nil {
-		var exists bool
-		checkQuery := `SELECT EXISTS(SELECT 1 FROM foods WHERE id = $1)`
-		err := db.QueryRow(checkQuery, *req.CustomID).Scan(&exists)
-		if err != nil {
-			log.Printf("ID check error: %v", err)
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"error":   "ID check error",
-				"details": err.Error(),
-			})
-			return
-		}
-		if exists {
-			c.JSON(http.StatusConflict, gin.H{"error": fmt.Sprintf("ID %d already exists", *req.CustomID)})
-			return
-		}
-	}
 
 	// Set defaults
 	if req.PreparationTime == 0 {
@@ -1810,13 +1750,6 @@ func createFoodHandler(c *gin.Context) {
 		return
 	}
 
-	// Update sequence if custom ID was used
-	if req.CustomID != nil {
-		if err := updateSequenceAfterManualInsert(); err != nil {
-			log.Printf("Sequence update warning: %v", err)
-		}
-	}
-
 	log.Printf("Food created successfully: ID=%d, Name=%s", food.ID, food.Name)
 
 	c.JSON(http.StatusCreated, gin.H{
@@ -1838,11 +1771,7 @@ func updateFoodHandler(c *gin.Context) {
 
 	food, err := getFoodByID(foodID)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			c.JSON(http.StatusNotFound, gin.H{"error": "Food not found"})
-			return
-		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Data fetch error"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "Food not found"})
 		return
 	}
 
@@ -1910,18 +1839,12 @@ func deleteFoodHandler(c *gin.Context) {
 	// Check if food exists
 	_, err = getFoodByID(foodID)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			c.JSON(http.StatusNotFound, gin.H{"error": "Food not found"})
-			return
-		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Data fetch error"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "Food not found"})
 		return
 	}
 
 	// Delete food
-	query := `DELETE FROM foods WHERE id = $1`
-	_, err = db.Exec(query, foodID)
-	if err != nil {
+	if err := deleteFood(foodID); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Food deletion error"})
 		return
 	}
@@ -2129,10 +2052,10 @@ func createOrderHandler(c *gin.Context) {
 		UpdatedAt: orderTime,
 	}
 
-	log.Printf("Order object created, attempting to save to database...")
+	log.Printf("Order object created, attempting to save to JSON...")
 
 	if err := createOrder(order); err != nil {
-		log.Printf("Database error creating order: %v", err)
+		log.Printf("JSON error creating order: %v", err)
 
 		// Rollback stock
 		for _, item := range req.Items {
@@ -2149,7 +2072,7 @@ func createOrderHandler(c *gin.Context) {
 		return
 	}
 
-	log.Printf("Order created successfully in database: %s", orderID)
+	log.Printf("Order created successfully in JSON: %s", orderID)
 
 	// Real-time update
 	go func() {
@@ -2178,96 +2101,45 @@ func getOrdersHandler(c *gin.Context) {
 		limit = 10
 	}
 
-	offset := (page - 1) * limit
+	ordersMutex.RLock()
+	defer ordersMutex.RUnlock()
 
-	// Build query
-	var query string
-	var args []interface{}
-	argIndex := 1
-
-	if user.Role == "admin" {
-		query = `SELECT order_id, user_number, user_name, foods, total_price, order_time, 
-				 delivery_type, delivery_info, status, payment_info, special_instructions, 
-				 estimated_time, delivered_at, status_history, created_at, updated_at
-				 FROM orders WHERE 1=1`
-		if status != "" {
-			query += fmt.Sprintf(" AND status = $%d", argIndex)
-			args = append(args, status)
-			argIndex++
-		}
-	} else {
-		query = `SELECT order_id, user_number, user_name, foods, total_price, order_time, 
-				 delivery_type, delivery_info, status, payment_info, special_instructions, 
-				 estimated_time, delivered_at, status_history, created_at, updated_at
-				 FROM orders WHERE user_number = $1`
-		args = append(args, user.Number)
-		argIndex++
-		if status != "" {
-			query += fmt.Sprintf(" AND status = $%d", argIndex)
-			args = append(args, status)
-			argIndex++
-		}
-	}
-
-	query += fmt.Sprintf(" ORDER BY order_time DESC LIMIT $%d OFFSET $%d", argIndex, argIndex+1)
-	args = append(args, limit, offset)
-
-	rows, err := db.Query(query, args...)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Data fetch error"})
-		return
-	}
-	defer rows.Close()
-
-	var orders []*Order
-	for rows.Next() {
-		var order Order
-		var foodsJSON, deliveryInfoJSON, paymentInfoJSON, statusHistoryJSON []byte
-
-		err := rows.Scan(
-			&order.OrderID, &order.UserNumber, &order.UserName, &foodsJSON,
-			&order.TotalPrice, &order.OrderTime, &order.DeliveryType, &deliveryInfoJSON,
-			&order.Status, &paymentInfoJSON, &order.SpecialInstructions,
-			&order.EstimatedTime, &order.DeliveredAt, &statusHistoryJSON,
-			&order.CreatedAt, &order.UpdatedAt,
-		)
-
-		if err != nil {
+	var allOrders []*Order
+	for _, order := range orders {
+		// Filter by user if not admin
+		if user.Role != "admin" && order.UserNumber != user.Number {
 			continue
 		}
 
-		// JSON unmarshal
-		json.Unmarshal(foodsJSON, &order.Foods)
-		json.Unmarshal(deliveryInfoJSON, &order.DeliveryInfo)
-		json.Unmarshal(paymentInfoJSON, &order.PaymentInfo)
-		json.Unmarshal(statusHistoryJSON, &order.StatusHistory)
+		// Filter by status
+		if status != "" && string(order.Status) != status {
+			continue
+		}
 
-		orders = append(orders, &order)
+		allOrders = append(allOrders, order)
 	}
 
-	// Total count
-	var countQuery string
-	var countArgs []interface{}
-	if user.Role == "admin" {
-		countQuery = `SELECT COUNT(*) FROM orders`
-		if status != "" {
-			countQuery += " WHERE status = $1"
-			countArgs = append(countArgs, status)
-		}
+	// Sort by order time descending
+	sort.Slice(allOrders, func(i, j int) bool {
+		return allOrders[i].OrderTime.After(allOrders[j].OrderTime)
+	})
+
+	// Pagination
+	total := len(allOrders)
+	offset := (page - 1) * limit
+	end := offset + limit
+
+	if offset >= total {
+		allOrders = []*Order{}
 	} else {
-		countQuery = `SELECT COUNT(*) FROM orders WHERE user_number = $1`
-		countArgs = append(countArgs, user.Number)
-		if status != "" {
-			countQuery += " AND status = $2"
-			countArgs = append(countArgs, status)
+		if end > total {
+			end = total
 		}
+		allOrders = allOrders[offset:end]
 	}
-
-	var total int
-	db.QueryRow(countQuery, countArgs...).Scan(&total)
 
 	c.JSON(http.StatusOK, gin.H{
-		"orders": orders,
+		"orders": allOrders,
 		"pagination": gin.H{
 			"page":        page,
 			"limit":       limit,
@@ -2283,11 +2155,7 @@ func getOrderHandler(c *gin.Context) {
 
 	order, err := getOrderByID(orderID)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			c.JSON(http.StatusNotFound, gin.H{"error": "Order not found"})
-			return
-		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Data fetch error"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "Order not found"})
 		return
 	}
 
@@ -2314,11 +2182,7 @@ func updateOrderStatusHandler(c *gin.Context) {
 
 	order, err := getOrderByID(orderID)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			c.JSON(http.StatusNotFound, gin.H{"error": "Order not found"})
-			return
-		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Data fetch error"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "Order not found"})
 		return
 	}
 
@@ -2484,30 +2348,51 @@ func searchHandler(c *gin.Context) {
 // ========== STATISTICS HANDLER ==========
 
 func getStatisticsHandler(c *gin.Context) {
+	ordersMutex.RLock()
+	foodsMutex.RLock()
+	usersMutex.RLock()
+	defer ordersMutex.RUnlock()
+	defer foodsMutex.RUnlock()
+	defer usersMutex.RUnlock()
+
 	// Order statistics
 	var totalOrders, pendingOrders, completedOrders, cancelledOrders, totalRevenue int
 	var todayOrders, todayRevenue int
 
-	// General statistics
-	db.QueryRow("SELECT COUNT(*) FROM orders").Scan(&totalOrders)
-	db.QueryRow("SELECT COUNT(*) FROM orders WHERE status IN ('pending', 'confirmed', 'preparing')").Scan(&pendingOrders)
-	db.QueryRow("SELECT COUNT(*) FROM orders WHERE status = 'delivered'").Scan(&completedOrders)
-	db.QueryRow("SELECT COUNT(*) FROM orders WHERE status = 'cancelled'").Scan(&cancelledOrders)
-	db.QueryRow("SELECT COALESCE(SUM(total_price), 0) FROM orders WHERE status = 'delivered'").Scan(&totalRevenue)
-
-	// Today's statistics
 	today := time.Now().Format("2006-01-02")
-	db.QueryRow("SELECT COUNT(*) FROM orders WHERE DATE(order_time) = $1", today).Scan(&todayOrders)
-	db.QueryRow("SELECT COALESCE(SUM(total_price), 0) FROM orders WHERE status = 'delivered' AND DATE(order_time) = $1", today).Scan(&todayRevenue)
+
+	for _, order := range orders {
+		totalOrders++
+
+		if order.Status == OrderDelivered {
+			completedOrders++
+			totalRevenue += order.TotalPrice
+		} else if order.Status == OrderCancelled {
+			cancelledOrders++
+		} else {
+			pendingOrders++
+		}
+
+		// Today's statistics
+		if order.OrderTime.Format("2006-01-02") == today {
+			todayOrders++
+			if order.Status == OrderDelivered {
+				todayRevenue += order.TotalPrice
+			}
+		}
+	}
 
 	// Food statistics
-	var totalFoods, popularFoods int
-	db.QueryRow("SELECT COUNT(*) FROM foods").Scan(&totalFoods)
-	db.QueryRow("SELECT COUNT(*) FROM foods WHERE is_popular = true OR rating >= 4.0").Scan(&popularFoods)
+	totalFoods := len(foods)
+	popularFoods := 0
+	for _, food := range foods {
+		if food.IsPopular || food.Rating >= 4.0 {
+			popularFoods++
+		}
+	}
 
 	// User statistics
-	var totalUsers int
-	db.QueryRow("SELECT COUNT(*) FROM users").Scan(&totalUsers)
+	totalUsers := len(users)
 
 	c.JSON(http.StatusOK, gin.H{
 		"total_orders":     totalOrders,
@@ -2541,17 +2426,15 @@ func initializeTestData() error {
 	}
 
 	// Check if user exists
-	existingUser, err := getUserByNumber(adminUser.Number)
-	if err == sql.ErrNoRows {
+	_, err := getUserByNumber(adminUser.Number)
+	if err != nil {
 		if err := createUser(adminUser); err != nil {
 			log.Printf("Admin user creation error: %v", err)
 		} else {
 			log.Println("✅ Admin user created")
 		}
-	} else if err != nil {
-		log.Printf("User check error: %v", err)
 	} else {
-		log.Printf("✅ Admin user exists: %s", existingUser.FullName)
+		log.Printf("✅ Admin user exists")
 	}
 
 	// Test user
@@ -2568,17 +2451,93 @@ func initializeTestData() error {
 		Language:  "uz",
 	}
 
-	existingTestUser, err := getUserByNumber(testUser.Number)
-	if err == sql.ErrNoRows {
+	_, err = getUserByNumber(testUser.Number)
+	if err != nil {
 		if err := createUser(testUser); err != nil {
 			log.Printf("Test user creation error: %v", err)
 		} else {
 			log.Println("✅ Test user created")
 		}
-	} else if err != nil {
-		log.Printf("Test user check error: %v", err)
 	} else {
-		log.Printf("✅ Test user exists: %s", existingTestUser.FullName)
+		log.Printf("✅ Test user exists")
+	}
+
+	// Create some sample foods if empty
+	foodsMutex.RLock()
+	foodsCount := len(foods)
+	foodsMutex.RUnlock()
+
+	if foodsCount == 0 {
+		log.Println("Creating sample foods...")
+
+		sampleFoods := []*Food{
+			{
+				Names: map[string]string{
+					"uz": "Osh",
+					"ru": "Плов",
+					"en": "Pilaf",
+				},
+				Name: "Osh",
+				Descriptions: map[string]string{
+					"uz": "An'anaviy o'zbek oshi",
+					"ru": "Традиционный узбекский плов",
+					"en": "Traditional Uzbek pilaf",
+				},
+				Description:     "An'anaviy o'zbek oshi",
+				Category:        "milliy_taomlar",
+				Price:           25000,
+				IsThere:         true,
+				ImageURL:        "/uploads/osh.jpg",
+				Ingredients:     map[string][]string{"uz": {"guruch", "go'sht", "sabzi", "piyoz"}, "ru": {"рис", "мясо", "морковь", "лук"}, "en": {"rice", "meat", "carrot", "onion"}},
+				Allergens:       map[string][]string{"uz": {"yo'q"}, "ru": {"нет"}, "en": {"none"}},
+				Rating:          4.8,
+				ReviewCount:     156,
+				PreparationTime: 45,
+				Stock:           50,
+				IsPopular:       true,
+				Discount:        0,
+				Comment:         "Mashxur taom",
+				CreatedAt:       time.Now(),
+				UpdatedAt:       time.Now(),
+			},
+			{
+				Names: map[string]string{
+					"uz": "Lag'mon",
+					"ru": "Лагман",
+					"en": "Lagman",
+				},
+				Name: "Lag'mon",
+				Descriptions: map[string]string{
+					"uz": "Qo'l bilan tortilgan makaron",
+					"ru": "Лапша ручной работы",
+					"en": "Hand-pulled noodles",
+				},
+				Description:     "Qo'l bilan tortilgan makaron",
+				Category:        "milliy_taomlar",
+				Price:           18000,
+				IsThere:         true,
+				ImageURL:        "/uploads/lagmon.jpg",
+				Ingredients:     map[string][]string{"uz": {"makaron", "go'sht", "sabzavot"}, "ru": {"лапша", "мясо", "овощи"}, "en": {"noodles", "meat", "vegetables"}},
+				Allergens:       map[string][]string{"uz": {"gluten"}, "ru": {"глютен"}, "en": {"gluten"}},
+				Rating:          4.5,
+				ReviewCount:     89,
+				PreparationTime: 30,
+				Stock:           30,
+				IsPopular:       false,
+				Discount:        10,
+				Comment:         "Mazali",
+				CreatedAt:       time.Now(),
+				UpdatedAt:       time.Now(),
+			},
+		}
+
+		for _, food := range sampleFoods {
+			if err := createFoodWithCustomID(food, nil); err != nil {
+				log.Printf("Sample food creation error: %v", err)
+			}
+		}
+
+		log.Println("✅ Sample foods created")
 	}
 
 	return nil
@@ -2588,11 +2547,13 @@ func initializeTestData() error {
 
 func rootHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
-		"message":             "Restaurant API - Complete Version with Integer IDs",
-		"version":             "6.0.0",
+		"message":             "Restaurant API - JSON Database Version",
+		"version":             "7.0.0",
 		"supported_languages": []string{"uz", "ru", "en"},
 		"features": []string{
-			"PostgreSQL Database with BIGSERIAL Integer IDs",
+			"JSON File Database System",
+			"Thread-Safe Operations with Mutexes",
+			"Auto-incrementing IDs",
 			"Manual ID Insertion Support",
 			"File Upload with Food Names",
 			"Telegram Bot Integration",
@@ -2616,9 +2577,17 @@ func rootHandler(c *gin.Context) {
 			"custom_food": "/api/admin/foods (ADMIN - supports custom_id)",
 		},
 		"database": gin.H{
-			"type":      "PostgreSQL",
+			"type":      "JSON Files",
 			"status":    "connected",
-			"id_system": "BIGSERIAL Integer (1, 2, 3, 4...)",
+			"id_system": "Auto-incrementing Integer (1, 2, 3, 4...)",
+			"files": gin.H{
+				"users":    USERS_FILE,
+				"foods":    FOODS_FILE,
+				"orders":   ORDERS_FILE,
+				"reviews":  REVIEWS_FILE,
+				"files":    FILES_FILE,
+				"counters": COUNTERS_FILE,
+			},
 		},
 		"integrations": gin.H{
 			"telegram_bot":       "enabled",
@@ -2626,6 +2595,7 @@ func rootHandler(c *gin.Context) {
 			"file_upload":        "enabled",
 			"gps_tracking":       "enabled",
 			"manual_id_support":  "enabled",
+			"json_persistence":   "enabled",
 		},
 	})
 }
@@ -2644,6 +2614,7 @@ func setupRoutes() *gin.Engine {
 		os.MkdirAll(UPLOAD_DIR, 0755)
 	}
 
+	// Static file route
 	r.Static("/uploads", "./"+UPLOAD_DIR)
 	r.StaticFile("/favicon.ico", "./favicon.ico")
 
@@ -2659,17 +2630,10 @@ func setupRoutes() *gin.Engine {
 	// PUBLIC ENDPOINTS
 	public := api.Group("/")
 	{
-		// Categories
 		public.GET("/categories", getCategories)
-
-		// Foods (public - only available foods)
 		public.GET("/foods", optionalAuthMiddleware(), getAllFoodsHandler)
 		public.GET("/foods/:food_id", getFoodHandler)
-
-		// Search
 		public.GET("/search", optionalAuthMiddleware(), searchHandler)
-
-		// File uploads (public but can be authenticated)
 		public.POST("/upload", optionalAuthMiddleware(), uploadFile)
 	}
 
@@ -2684,10 +2648,7 @@ func setupRoutes() *gin.Engine {
 	protected := api.Group("/")
 	protected.Use(authMiddleware())
 	{
-		// Profile
 		protected.GET("/profile", getProfile)
-
-		// Orders
 		protected.POST("/orders", createOrderHandler)
 		protected.GET("/orders", getOrdersHandler)
 		protected.GET("/orders/:order_id", getOrderHandler)
@@ -2697,24 +2658,17 @@ func setupRoutes() *gin.Engine {
 	admin := protected.Group("/admin")
 	admin.Use(adminMiddleware())
 	{
-		// Food management
 		admin.POST("/foods", createFoodHandler) // Supports custom_id
 		admin.PUT("/foods/:food_id", updateFoodHandler)
 		admin.DELETE("/foods/:food_id", deleteFoodHandler)
-
-		// Order management
 		admin.PUT("/orders/:order_id/status", updateOrderStatusHandler)
-
-		// Statistics
 		admin.GET("/statistics", getStatisticsHandler)
-
-		// Manual ID support
-		admin.POST("/update-sequence", func(c *gin.Context) {
-			if err := updateSequenceAfterManualInsert(); err != nil {
+		admin.POST("/reload-data", func(c *gin.Context) {
+			if err := initJSONDatabase(); err != nil {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 				return
 			}
-			c.JSON(http.StatusOK, gin.H{"message": "Sequence updated successfully"})
+			c.JSON(http.StatusOK, gin.H{"message": "Data reloaded successfully"})
 		})
 	}
 
@@ -2724,9 +2678,9 @@ func setupRoutes() *gin.Engine {
 // ========== MAIN FUNCTION ==========
 
 func main() {
-	// Database initialization
-	if err := initDatabase(); err != nil {
-		log.Fatalf("❌ Database error: %v", err)
+	// JSON Database initialization
+	if err := initJSONDatabase(); err != nil {
+		log.Fatalf("❌ JSON Database error: %v", err)
 	}
 
 	// Test data initialization
@@ -2740,7 +2694,7 @@ func main() {
 			select {
 			case msg := <-broadcast:
 				for client := range clients {
-					if err := client.WriteMessage(websocket.TextMessage, msg); err != nil {
+					if err := client.WriteMessage(1, msg); err != nil {
 						log.Printf("WebSocket error: %v", err)
 						client.Close()
 						delete(clients, client)
@@ -2759,7 +2713,7 @@ func main() {
 		port = "8000"
 	}
 
-	log.Printf("🚀 Restaurant API - Complete Version with Integer IDs:")
+	log.Printf("🚀 Restaurant API - JSON Database Version:")
 	log.Printf("📍 Server: http://localhost:%s", port)
 	log.Printf("🔗 WebSocket: ws://localhost:%s/ws", port)
 	log.Printf("📚 API Docs: http://localhost:%s/", port)
@@ -2768,13 +2722,14 @@ func main() {
 	log.Printf("📤 File Upload: http://localhost:%s/api/upload", port)
 	log.Printf("📊 Admin Stats: http://localhost:%s/api/admin/statistics", port)
 	log.Printf("🖼️ Static Files: http://localhost:%s/uploads/", port)
-	log.Printf("🔢 ID System: BIGSERIAL Integer (1, 2, 3, 4...)")
+	log.Printf("🔢 ID System: Auto-incrementing Integer (1, 2, 3, 4...)")
 	log.Printf("🎯 Manual ID: POST /api/admin/foods with custom_id")
-	log.Printf("🗄️ Database: PostgreSQL")
+	log.Printf("🗄️ Database: JSON Files (%s)", DATA_DIR)
 	log.Printf("🤖 Telegram Bot: Admin + User Notifications")
 	log.Printf("📍 GPS: Delivery Coordinates Support")
 	log.Printf("👁️ Visibility: Only available foods (isThere=true, stock>0)")
 	log.Printf("🌐 Languages: Foods support UZ/RU/EN, Errors in English")
+	log.Printf("🔒 Thread Safety: Mutex locks for all operations")
 
 	log.Fatal(r.Run(":" + port))
 }

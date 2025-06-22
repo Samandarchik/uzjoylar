@@ -1,0 +1,6 @@
+runtime: go123
+entrypoint: ./main
+
+handlers:
+- url: /.*
+  script: auto

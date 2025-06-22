@@ -129,7 +129,7 @@ API 3 ta tilni qo'llab-quvvatlaydi:
 
 Til o'rnatish:
 ```bash
-curl -X POST http://localhost:8000/api/settings/language \
+curl -X POST http://localhost:8080api/settings/language \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{"language": "uz"}'
@@ -140,7 +140,7 @@ curl -X POST http://localhost:8000/api/settings/language \
 ### Ro'yxatdan o'tish
 
 ```bash
-curl -X POST http://localhost:8000/api/register \
+curl -X POST http://localhost:8080api/register \
   -H "Content-Type: application/json" \
   -d '{
     "number": "998123456789",
@@ -153,7 +153,7 @@ curl -X POST http://localhost:8000/api/register \
 ### Tizimga kirish
 
 ```bash
-curl -X POST http://localhost:8000/api/login \
+curl -X POST http://localhost:8080api/login \
   -H "Content-Type: application/json" \
   -d '{
     "number": "998123456789",
@@ -164,14 +164,14 @@ curl -X POST http://localhost:8000/api/login \
 ### Ovqatlar ro'yxati
 
 ```bash
-curl -X GET http://localhost:8000/api/foods \
+curl -X GET http://localhost:8080api/foods \
   -H "Accept-Language: uz"
 ```
 
 ### Buyurtma berish
 
 ```bash
-curl -X POST http://localhost:8000/api/orders \
+curl -X POST http://localhost:8080api/orders \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -190,7 +190,7 @@ curl -X POST http://localhost:8000/api/orders \
 ### Ko'p tilli qidiruv
 
 ```bash
-curl -X GET "http://localhost:8000/api/search?q=shashlik&category=shashlik" \
+curl -X GET "http://localhost:8080api/search?q=shashlik&category=shashlik" \
   -H "Accept-Language: ru"
 ```
 
@@ -206,7 +206,7 @@ curl -X GET "http://localhost:8000/api/search?q=shashlik&category=shashlik" \
   "category_name": "Shashlik",
   "price": 23000,
   "isThere": true,
-  "imageUrl": "http://localhost:8000/uploads/moloti.png",
+  "imageUrl": "http://localhost:8080uploads/moloti.png",
   "ingredients": ["Mol go'shti", "Piyoz", "Ziravorlar"],
   "allergens": [],
   "rating": 4.5,

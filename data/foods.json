@@ -1,116 +1,407 @@
-[
-  {
-    "id": "amur_1",
+{
+  "0": {
+    "id": 0,
     "names": {
-      "en": "Shurva",
-      "ru": "Шурпа",
-      "uz": "Sho'rva"
+      "en": "Pilaf",
+      "ru": "Плов",
+      "uz": "Osh"
     },
-    "name": "Sho'rva",
+    "name": "Osh",
     "descriptions": {
-      "en": "Hearty soup with beef and vegetables",
-      "ru": "Питательный суп с говядиной и овощами",
-      "uz": "Mol go'shti va sabzavotlar bilan tayyorlangan to'yimli sho'rva"
+      "en": "Traditional Uzbek pilaf",
+      "ru": "Традиционный узбекский плов",
+      "uz": "An'anaviy o'zbek oshi"
     },
-    "description": "Mol go'shti va sabzavotlar bilan tayyorlangan to'yimli sho'rva",
+    "description": "An'anaviy o'zbek oshi",
     "category": "milliy_taomlar",
-    "price": 15000,
+    "price": 25000,
     "isThere": true,
-    "imageUrl": "/uploads/shurva_1703009999.jpg",
+    "imageUrl": "/uploads/osh.jpg",
     "ingredients": {
       "en": [
-        "Beef",
-        "Carrot",
-        "Potato",
-        "Onion",
-        "Pepper"
+        "rice",
+        "meat",
+        "carrot",
+        "onion"
       ],
       "ru": [
-        "Говядина",
-        "Морковь",
-        "Картофель",
-        "Лук",
-        "Перец"
+        "рис",
+        "мясо",
+        "морковь",
+        "лук"
       ],
       "uz": [
-        "Mol go'shti",
-        "Sabzi",
-        "Kartoshka",
-        "Piyoz",
-        "Qalampir"
+        "guruch",
+        "go'sht",
+        "sabzi",
+        "piyoz"
       ]
     },
     "allergens": {
-      "en": [],
-      "ru": [],
-      "uz": []
+      "en": [
+        "none"
+      ],
+      "ru": [
+        "нет"
+      ],
+      "uz": [
+        "yo'q"
+      ]
     },
-    "rating": 0,
-    "review_count": 0,
-    "preparation_time": 20,
-    "stock": 35,
-    "is_popular": false,
+    "rating": 4.8,
+    "review_count": 156,
+    "preparation_time": 45,
+    "stock": 50,
+    "is_popular": true,
     "discount": 0,
     "original_price": 0,
-    "comment": "Toza mahsulotlardan tayyorlangan issiq sho'rva",
-    "created_at": "2025-06-17T22:46:32.929771+05:00",
-    "updated_at": "2025-06-17T22:46:32.929771+05:00"
+    "comment": "Mashxur taom",
+    "created_at": "2025-06-22T16:58:50.508583+05:00",
+    "updated_at": "2025-06-22T16:58:50.508583+05:00"
   },
-  {
-    "id": "amur_2",
+  "1": {
+    "id": 1,
     "names": {
-      "en": "Shurva",
-      "ru": "Шурпа",
-      "uz": "Sho'rv"
+      "en": "Lagman",
+      "ru": "Лагман",
+      "uz": "Lag'mon"
     },
-    "name": "Sho'rv",
+    "name": "Lag'mon",
     "descriptions": {
-      "en": "Hearty soup with beef and vegetables",
-      "ru": "Питательный суп с говядиной и овощами",
-      "uz": "Mol go'sht va sabzavotlar bilan tayyorlangan to'yimli sho'rva"
+      "en": "Hand-pulled noodles",
+      "ru": "Лапша ручной работы",
+      "uz": "Qo'l bilan tortilgan makaron"
     },
-    "description": "Mol go'sht va sabzavotlar bilan tayyorlangan to'yimli sho'rva",
+    "description": "Qo'l bilan tortilgan makaron",
     "category": "milliy_taomlar",
-    "price": 15000,
+    "price": 18000,
     "isThere": true,
-    "imageUrl": "/uploads/shurva_1703009999.jpg",
+    "imageUrl": "/uploads/lagmon.jpg",
     "ingredients": {
       "en": [
-        "Beef",
-        "Carrot",
-        "Potato",
-        "Onion",
-        "Pepper"
+        "noodles",
+        "meat",
+        "vegetables"
       ],
       "ru": [
-        "Говядина",
-        "Морковь",
-        "Картофель",
-        "Лук",
-        "Перец"
+        "лапша",
+        "мясо",
+        "овощи"
       ],
       "uz": [
-        "Mol go'shti",
-        "Sabzi",
-        "Kartoshka",
-        "Piyoz",
-        "Qalampir"
+        "makaron",
+        "go'sht",
+        "sabzavot"
       ]
     },
     "allergens": {
-      "en": [],
-      "ru": [],
-      "uz": []
+      "en": [
+        "gluten"
+      ],
+      "ru": [
+        "глютен"
+      ],
+      "uz": [
+        "gluten"
+      ]
     },
-    "rating": 0,
+    "rating": 4.5,
+    "review_count": 89,
+    "preparation_time": 30,
+    "stock": 30,
+    "is_popular": false,
+    "discount": 10,
+    "original_price": 0,
+    "comment": "Mazali",
+    "created_at": "2025-06-22T16:58:50.508584+05:00",
+    "updated_at": "2025-06-22T16:58:50.508584+05:00"
+  },
+  "2": {
+    "id": 2,
+    "names": {
+      "en": "Men's Caprice",
+      "ru": "Мужской каприз",
+      "uz": "Muzskoy kaprizi"
+    },
+    "name": "Muzskoy kaprizi",
+    "descriptions": {
+      "en": "Turkey, smoked meat, tongue, green peas, pickles, egg, and mayonnaise",
+      "ru": "Индейка, копченое мясо, язык, горох, маринованный огурец, яйцо, майонез",
+      "uz": "Kuritsa, dudlangan go'sht, mol tili, yashil no'xat, tuzlangan bodiring, tuxum va mayonezdan tayyorlangan to'yimli salat"
+    },
+    "description": "Kuritsa, dudlangan go'sht, mol tili, yashil no'xat, tuzlangan bodiring, tuxum va mayonezdan tayyorlangan to'yimli salat",
+    "category": "Salatlar",
+    "price": 42000,
+    "isThere": true,
+    "imageUrl": "uploads/muskoy_1750352929.jpg",
+    "ingredients": {
+      "en": [
+        "Turkey",
+        "Smoked meat",
+        "Beef tongue",
+        "Green peas",
+        "Pickles",
+        "Egg",
+        "Mayonnaise"
+      ],
+      "ru": [
+        "Индейка",
+        "Копченое мясо",
+        "Язык",
+        "Горох",
+        "Маринованный огурец",
+        "Яйцо",
+        "Майонез"
+      ],
+      "uz": [
+        "Turkiya go'shti",
+        "Dudlangan go'sht",
+        "Mol tili",
+        "Yashil no'xat",
+        "Tuzlangan bodiring",
+        "Tuxum",
+        "Mayonez"
+      ]
+    },
+    "allergens": {
+      "en": [
+        "Egg",
+        "Dairy"
+      ],
+      "ru": [
+        "Яйцо",
+        "Молочные продукты"
+      ],
+      "uz": [
+        "Tuxum",
+        "Sut mahsulotlari"
+      ]
+    },
+    "rating": 4.5,
     "review_count": 0,
-    "preparation_time": 20,
-    "stock": 35,
+    "preparation_time": 10,
+    "stock": 14,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
-    "comment": "Toza mahsulotlardan tayyorlangan issiq sho'rva",
-    "created_at": "2025-06-18T00:07:36.447405+05:00",
-    "updated_at": "2025-06-18T00:07:36.447405+05:00"
+    "comment": "To'yimli va kuchli ta'mga ega salat, ayniqsa go'shtli salat ishqibozlari uchun",
+    "created_at": "2025-06-22T16:59:03.972662+05:00",
+    "updated_at": "2025-06-22T16:59:03.972662+05:00"
+  },
+  "3": {
+    "id": 3,
+    "names": {
+      "en": "Men's Caprice",
+      "ru": "Мужской каприз",
+      "uz": "Muzskasdoy kaprizi"
+    },
+    "name": "Muzskasdoy kaprizi",
+    "descriptions": {
+      "en": "Turkey, smoked meat, tongue, green peas, pickles, egg, and mayonnaise",
+      "ru": "Индейка, копченое мясо, язык, горох, маринованный огурец, яйцо, майонез",
+      "uz": "Kuritsa, dudlangan go'sht, mol tili, yashil no'xat, tuzlangan bodiring, tuxum va mayonezdan tayyorlangan to'yimli salat"
+    },
+    "description": "Kuritsa, dudlangan go'sht, mol tili, yashil no'xat, tuzlangan bodiring, tuxum va mayonezdan tayyorlangan to'yimli salat",
+    "category": "Salasdaatlar",
+    "price": 42000,
+    "isThere": true,
+    "imageUrl": "uploads/muskoy_1750352929.jpg",
+    "ingredients": {
+      "en": [
+        "Turkey",
+        "Smoked meat",
+        "Beef tongue",
+        "Green peas",
+        "Pickles",
+        "Egg",
+        "Mayonnaise"
+      ],
+      "ru": [
+        "Индейка",
+        "Копченое мясо",
+        "Язык",
+        "Горох",
+        "Маринованный огурец",
+        "Яйцо",
+        "Майонез"
+      ],
+      "uz": [
+        "Turkiya go'shti",
+        "Dudlangan go'sht",
+        "Mol tili",
+        "Yashil no'xat",
+        "Tuzlangan bodiring",
+        "Tuxum",
+        "Mayonez"
+      ]
+    },
+    "allergens": {
+      "en": [
+        "Egg",
+        "Dairy"
+      ],
+      "ru": [
+        "Яйцо",
+        "Молочные продукты"
+      ],
+      "uz": [
+        "Tuxum",
+        "Sut mahsulotlari"
+      ]
+    },
+    "rating": 4.5,
+    "review_count": 0,
+    "preparation_time": 10,
+    "stock": 14,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "To'yimli va kuchli ta'mga ega salat, ayniqsa go'shtli salat ishqibozlari uchun",
+    "created_at": "2025-06-22T18:13:04.605773+05:00",
+    "updated_at": "2025-06-22T18:13:04.605773+05:00"
+  },
+  "4": {
+    "id": 4,
+    "names": {
+      "en": "Men's Caprice",
+      "ru": "Мужской каприз",
+      "uz": "Muzskasdoy kaprizi"
+    },
+    "name": "Muzskasdoy kaprizi",
+    "descriptions": {
+      "en": "Turkey, smoked meat, tongue, green peas, pickles, egg, and mayonnaise",
+      "ru": "Индейка, копченое мясо, язык, горох, маринованный огурец, яйцо, майонез",
+      "uz": "Kuritsa, dudlangan go'sht, mol tili, yashil no'xat, tuzlangan bodiring, tuxum va mayonezdan tayyorlangan to'yimli salat"
+    },
+    "description": "Kuritsa, dudlangan go'sht, mol tili, yashil no'xat, tuzlangan bodiring, tuxum va mayonezdan tayyorlangan to'yimli salat",
+    "category": "Salasdaatlar",
+    "price": 42000,
+    "isThere": true,
+    "imageUrl": "uploads/muskoy_1750352929.jpg",
+    "ingredients": {
+      "en": [
+        "Turkey",
+        "Smoked meat",
+        "Beef tongue",
+        "Green peas",
+        "Pickles",
+        "Egg",
+        "Mayonnaise"
+      ],
+      "ru": [
+        "Индейка",
+        "Копченое мясо",
+        "Язык",
+        "Горох",
+        "Маринованный огурец",
+        "Яйцо",
+        "Майонез"
+      ],
+      "uz": [
+        "Turkiya go'shti",
+        "Dudlangan go'sht",
+        "Mol tili",
+        "Yashil no'xat",
+        "Tuzlangan bodiring",
+        "Tuxum",
+        "Mayonez"
+      ]
+    },
+    "allergens": {
+      "en": [
+        "Egg",
+        "Dairy"
+      ],
+      "ru": [
+        "Яйцо",
+        "Молочные продукты"
+      ],
+      "uz": [
+        "Tuxum",
+        "Sut mahsulotlari"
+      ]
+    },
+    "rating": 4.5,
+    "review_count": 0,
+    "preparation_time": 10,
+    "stock": 14,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "To'yimli va kuchli ta'mga ega salat, ayniqsa go'shtli salat ishqibozlari uchun",
+    "created_at": "2025-06-22T18:13:27.737345+05:00",
+    "updated_at": "2025-06-22T18:13:27.737345+05:00"
+  },
+  "9": {
+    "id": 9,
+    "names": {
+      "en": "Men's Caprice",
+      "ru": "Мужской каприз",
+      "uz": "Muzskasdoy kaprizi"
+    },
+    "name": "Muzskasdoy kaprizi",
+    "descriptions": {
+      "en": "Turkey, smoked meat, tongue, green peas, pickles, egg, and mayonnaise",
+      "ru": "Индейка, копченое мясо, язык, горох, маринованный огурец, яйцо, майонез",
+      "uz": "Kuritsa, dudlangan go'sht, mol tili, yashil no'xat, tuzlangan bodiring, tuxum va mayonezdan tayyorlangan to'yimli salat"
+    },
+    "description": "Kuritsa, dudlangan go'sht, mol tili, yashil no'xat, tuzlangan bodiring, tuxum va mayonezdan tayyorlangan to'yimli salat",
+    "category": "Salasdaatlar",
+    "price": 42000,
+    "isThere": true,
+    "imageUrl": "uploads/muskoy_1750352929.jpg",
+    "ingredients": {
+      "en": [
+        "Turkey",
+        "Smoked meat",
+        "Beef tongue",
+        "Green peas",
+        "Pickles",
+        "Egg",
+        "Mayonnaise"
+      ],
+      "ru": [
+        "Индейка",
+        "Копченое мясо",
+        "Язык",
+        "Горох",
+        "Маринованный огурец",
+        "Яйцо",
+        "Майонез"
+      ],
+      "uz": [
+        "Turkiya go'shti",
+        "Dudlangan go'sht",
+        "Mol tili",
+        "Yashil no'xat",
+        "Tuzlangan bodiring",
+        "Tuxum",
+        "Mayonez"
+      ]
+    },
+    "allergens": {
+      "en": [
+        "Egg",
+        "Dairy"
+      ],
+      "ru": [
+        "Яйцо",
+        "Молочные продукты"
+      ],
+      "uz": [
+        "Tuxum",
+        "Sut mahsulotlari"
+      ]
+    },
+    "rating": 4.5,
+    "review_count": 0,
+    "preparation_time": 10,
+    "stock": 14,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "To'yimli va kuchli ta'mga ega salat, ayniqsa go'shtli salat ishqibozlari uchun",
+    "created_at": "2025-06-22T18:13:31.069229+05:00",
+    "updated_at": "2025-06-22T18:13:31.069229+05:00"
   }
-]
+}
