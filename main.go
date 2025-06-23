@@ -27,7 +27,7 @@ import (
 const (
 	SECRET_KEY                = "restaurant_secret_key_2024"
 	ACCESS_TOKEN_EXPIRE_HOURS = 24
-	tg_data                   = "7609705273:AAH_CsC52AiiZCeZ828HaHzYgHKpJBvSLI0"
+	da                        = "7609705273:AAFoIawJBTGTFxECwhSjc7vpbgMBcveT_ko"
 	TELEGRAM_GROUP_ID         = "-1002783983140"
 	UPLOAD_DIR                = "uploads"
 	MAX_FILE_SIZE             = 10 << 20 // 10MB
@@ -47,7 +47,7 @@ const (
 // Global data storage with mutex for thread safety
 var (
 	users    = make(map[string]*User)
-	foods    = make(map[int64]*Food)
+	foods    = make(map[string]*Food) // String ID bilan
 	orders   = make(map[string]*Order)
 	reviews  = make(map[string]*Review)
 	files    = make(map[string]*FileUpload)
@@ -159,7 +159,7 @@ type User struct {
 }
 
 type Food struct {
-	ID              int64               `json:"id"`
+	ID              string              `json:"id"` // String ID
 	Names           map[string]string   `json:"names,omitempty"`
 	Name            string              `json:"name"`
 	Descriptions    map[string]string   `json:"descriptions,omitempty"`
@@ -184,7 +184,7 @@ type Food struct {
 }
 
 type OrderFood struct {
-	ID          int64  `json:"id"`
+	ID          string `json:"id"` // String ID
 	Name        string `json:"name"`
 	Category    string `json:"category"`
 	Price       int    `json:"price"`
@@ -242,7 +242,7 @@ type Review struct {
 	ID        string    `json:"id"`
 	UserID    string    `json:"user_id"`
 	UserName  string    `json:"user_name,omitempty"`
-	FoodID    int64     `json:"food_id"`
+	FoodID    string    `json:"food_id"` // String ID
 	Rating    int       `json:"rating"`
 	Comment   string    `json:"comment"`
 	CreatedAt time.Time `json:"created_at"`
@@ -284,7 +284,7 @@ type LoginResponse struct {
 }
 
 type FoodCreate struct {
-	CustomID        *int64   `json:"custom_id,omitempty"`
+	CustomID        *string  `json:"custom_id,omitempty"` // String ID
 	NameUz          string   `json:"nameUz" binding:"required"`
 	NameRu          string   `json:"nameRu" binding:"required"`
 	NameEn          string   `json:"nameEn" binding:"required"`
@@ -310,8 +310,8 @@ type FoodCreate struct {
 }
 
 type CartItem struct {
-	FoodID   int64 `json:"food_id" binding:"required"`
-	Quantity int   `json:"quantity" binding:"required,min=1"`
+	FoodID   string `json:"food_id" binding:"required"` // String ID
+	Quantity int    `json:"quantity" binding:"required,min=1"`
 }
 
 type OrderRequest struct {
@@ -330,7 +330,7 @@ type CustomerInfo struct {
 }
 
 type ReviewCreate struct {
-	FoodID  int64  `json:"food_id" binding:"required"`
+	FoodID  string `json:"food_id" binding:"required"` // String ID
 	Rating  int    `json:"rating" binding:"required,min=1,max=5"`
 	Comment string `json:"comment" binding:"required"`
 }
@@ -516,7 +516,7 @@ func loadFoods() error {
 
 	if _, err := os.Stat(FOODS_FILE); os.IsNotExist(err) {
 		// Create empty foods file
-		foods = make(map[int64]*Food)
+		foods = make(map[string]*Food)
 		return saveFoodsUnsafe()
 	}
 
@@ -526,7 +526,7 @@ func loadFoods() error {
 	}
 
 	if len(data) == 0 {
-		foods = make(map[int64]*Food)
+		foods = make(map[string]*Food)
 		return nil
 	}
 
@@ -922,7 +922,7 @@ func uploadFile(c *gin.Context) {
 // ========== TELEGRAM BOT FUNCTIONS ==========
 
 func sendTelegramMessage(message string) error {
-	url := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", tg_data)
+	url := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", da)
 
 	payload := TelegramMessage{
 		ChatID: TELEGRAM_GROUP_ID,
@@ -949,7 +949,7 @@ func sendTelegramMessage(message string) error {
 }
 
 func sendTelegramMessageToUser(userTgID int64, message string) error {
-	url := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", tg_data)
+	url := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", da)
 
 	payload := TelegramMessage{
 		ChatID: fmt.Sprintf("%d", userTgID),
@@ -1203,7 +1203,7 @@ func createUser(user *User) error {
 	return saveUsers()
 }
 
-func getFoodByID(foodID int64) (*Food, error) {
+func getFoodByID(foodID string) (*Food, error) {
 	foodsMutex.RLock()
 	defer foodsMutex.RUnlock()
 
@@ -1224,8 +1224,16 @@ func getAllFoods() ([]*Food, error) {
 		}
 	}
 
-	// Sort by ID ascending
+	// Sort by ID ascending (convert string to int for proper sorting)
 	sort.Slice(result, func(i, j int) bool {
+		idI, errI := strconv.ParseInt(result[i].ID, 10, 64)
+		idJ, errJ := strconv.ParseInt(result[j].ID, 10, 64)
+
+		// If both are numeric, sort numerically
+		if errI == nil && errJ == nil {
+			return idI < idJ
+		}
+		// Otherwise, sort lexically
 		return result[i].ID < result[j].ID
 	})
 
@@ -1241,27 +1249,36 @@ func getAllFoodsForAdmin() ([]*Food, error) {
 		result = append(result, food)
 	}
 
-	// Sort by ID ascending
+	// Sort by ID ascending (convert string to int for proper sorting)
 	sort.Slice(result, func(i, j int) bool {
+		idI, errI := strconv.ParseInt(result[i].ID, 10, 64)
+		idJ, errJ := strconv.ParseInt(result[j].ID, 10, 64)
+
+		// If both are numeric, sort numerically
+		if errI == nil && errJ == nil {
+			return idI < idJ
+		}
+		// Otherwise, sort lexically
 		return result[i].ID < result[j].ID
 	})
 
 	return result, nil
 }
 
-func createFoodWithCustomID(food *Food, customID *int64) error {
+func createFoodWithCustomID(food *Food, customID *string) error {
 	foodsMutex.Lock()
 	defer foodsMutex.Unlock()
 
-	if customID != nil {
+	if customID != nil && *customID != "" {
 		// Check if custom ID already exists
 		if _, exists := foods[*customID]; exists {
-			return fmt.Errorf("food with ID %d already exists", *customID)
+			return fmt.Errorf("food with ID %s already exists", *customID)
 		}
 		food.ID = *customID
 	} else {
-		// Use auto-incrementing ID
-		food.ID = getNextFoodID()
+		// Use auto-incrementing ID (convert to string)
+		nextID := getNextFoodID()
+		food.ID = fmt.Sprintf("%d", nextID)
 	}
 
 	foods[food.ID] = food
@@ -1283,7 +1300,7 @@ func updateFood(food *Food) error {
 	return saveFoodsUnsafe()
 }
 
-func deleteFood(foodID int64) error {
+func deleteFood(foodID string) error {
 	foodsMutex.Lock()
 	defer foodsMutex.Unlock()
 
@@ -1599,8 +1616,14 @@ func getAllFoodsHandler(c *gin.Context) {
 			return foods[i].Name < foods[j].Name
 		})
 	default:
-		// Default: ID ascending (1, 2, 3, 4...)
+		// Default: ID ascending (sort numerically if possible)
 		sort.Slice(foods, func(i, j int) bool {
+			idI, errI := strconv.ParseInt(foods[i].ID, 10, 64)
+			idJ, errJ := strconv.ParseInt(foods[j].ID, 10, 64)
+
+			if errI == nil && errJ == nil {
+				return idI < idJ
+			}
 			return foods[i].ID < foods[j].ID
 		})
 	}
@@ -1642,15 +1665,8 @@ func getAllFoodsHandler(c *gin.Context) {
 }
 
 func getFoodHandler(c *gin.Context) {
-	foodIDStr := c.Param("food_id")
+	foodID := c.Param("food_id") // String ID
 	lang := getUserLanguage(c.Request.Header)
-
-	// Convert string ID to integer
-	foodID, err := strconv.ParseInt(foodIDStr, 10, 64)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid food ID format"})
-		return
-	}
 
 	food, err := getFoodByID(foodID)
 	if err != nil {
@@ -1750,7 +1766,7 @@ func createFoodHandler(c *gin.Context) {
 		return
 	}
 
-	log.Printf("Food created successfully: ID=%d, Name=%s", food.ID, food.Name)
+	log.Printf("Food created successfully: ID=%s, Name=%s", food.ID, food.Name)
 
 	c.JSON(http.StatusCreated, gin.H{
 		"message": "Food created successfully",
@@ -1760,14 +1776,7 @@ func createFoodHandler(c *gin.Context) {
 }
 
 func updateFoodHandler(c *gin.Context) {
-	foodIDStr := c.Param("food_id")
-
-	// Convert string ID to integer
-	foodID, err := strconv.ParseInt(foodIDStr, 10, 64)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid food ID format"})
-		return
-	}
+	foodID := c.Param("food_id") // String ID
 
 	food, err := getFoodByID(foodID)
 	if err != nil {
@@ -1827,17 +1836,10 @@ func updateFoodHandler(c *gin.Context) {
 }
 
 func deleteFoodHandler(c *gin.Context) {
-	foodIDStr := c.Param("food_id")
-
-	// Convert string ID to integer
-	foodID, err := strconv.ParseInt(foodIDStr, 10, 64)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid food ID format"})
-		return
-	}
+	foodID := c.Param("food_id") // String ID
 
 	// Check if food exists
-	_, err = getFoodByID(foodID)
+	_, err := getFoodByID(foodID)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Food not found"})
 		return
@@ -1884,9 +1886,9 @@ func createOrderHandler(c *gin.Context) {
 	totalPrepTime := 0
 
 	for _, item := range req.Items {
-		log.Printf("Processing food_id: %d, quantity: %d", item.FoodID, item.Quantity)
+		log.Printf("Processing food_id: %s, quantity: %d", item.FoodID, item.Quantity)
 
-		food, err := getFoodByID(item.FoodID)
+		food, err := getFoodByID(item.FoodID) // String ID
 		if err != nil {
 			log.Printf("Food not found error: %v", err)
 			c.JSON(http.StatusBadRequest, gin.H{
@@ -1926,7 +1928,7 @@ func createOrderHandler(c *gin.Context) {
 		}
 
 		orderedFood := OrderFood{
-			ID:          food.ID,
+			ID:          food.ID, // String ID
 			Name:        localizedFood.Name,
 			Category:    localizedFood.CategoryName,
 			Price:       localizedFood.Price,
@@ -2470,66 +2472,7 @@ func initializeTestData() error {
 	if foodsCount == 0 {
 		log.Println("Creating sample foods...")
 
-		sampleFoods := []*Food{
-			{
-				Names: map[string]string{
-					"uz": "Osh",
-					"ru": "Плов",
-					"en": "Pilaf",
-				},
-				Name: "Osh",
-				Descriptions: map[string]string{
-					"uz": "An'anaviy o'zbek oshi",
-					"ru": "Традиционный узбекский плов",
-					"en": "Traditional Uzbek pilaf",
-				},
-				Description:     "An'anaviy o'zbek oshi",
-				Category:        "milliy_taomlar",
-				Price:           25000,
-				IsThere:         true,
-				ImageURL:        "/uploads/osh.jpg",
-				Ingredients:     map[string][]string{"uz": {"guruch", "go'sht", "sabzi", "piyoz"}, "ru": {"рис", "мясо", "морковь", "лук"}, "en": {"rice", "meat", "carrot", "onion"}},
-				Allergens:       map[string][]string{"uz": {"yo'q"}, "ru": {"нет"}, "en": {"none"}},
-				Rating:          4.8,
-				ReviewCount:     156,
-				PreparationTime: 45,
-				Stock:           50,
-				IsPopular:       true,
-				Discount:        0,
-				Comment:         "Mashxur taom",
-				CreatedAt:       time.Now(),
-				UpdatedAt:       time.Now(),
-			},
-			{
-				Names: map[string]string{
-					"uz": "Lag'mon",
-					"ru": "Лагман",
-					"en": "Lagman",
-				},
-				Name: "Lag'mon",
-				Descriptions: map[string]string{
-					"uz": "Qo'l bilan tortilgan makaron",
-					"ru": "Лапша ручной работы",
-					"en": "Hand-pulled noodles",
-				},
-				Description:     "Qo'l bilan tortilgan makaron",
-				Category:        "milliy_taomlar",
-				Price:           18000,
-				IsThere:         true,
-				ImageURL:        "/uploads/lagmon.jpg",
-				Ingredients:     map[string][]string{"uz": {"makaron", "go'sht", "sabzavot"}, "ru": {"лапша", "мясо", "овощи"}, "en": {"noodles", "meat", "vegetables"}},
-				Allergens:       map[string][]string{"uz": {"gluten"}, "ru": {"глютен"}, "en": {"gluten"}},
-				Rating:          4.5,
-				ReviewCount:     89,
-				PreparationTime: 30,
-				Stock:           30,
-				IsPopular:       false,
-				Discount:        10,
-				Comment:         "Mazali",
-				CreatedAt:       time.Now(),
-				UpdatedAt:       time.Now(),
-			},
-		}
+		sampleFoods := []*Food{}
 
 		for _, food := range sampleFoods {
 			if err := createFoodWithCustomID(food, nil); err != nil {
@@ -2548,13 +2491,14 @@ func initializeTestData() error {
 func rootHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message":             "Restaurant API - JSON Database Version",
-		"version":             "7.0.0",
+		"version":             "8.0.0",
 		"supported_languages": []string{"uz", "ru", "en"},
 		"features": []string{
 			"JSON File Database System",
 			"Thread-Safe Operations with Mutexes",
-			"Auto-incrementing IDs",
-			"Manual ID Insertion Support",
+			"String ID Support",
+			"Auto-incrementing IDs converted to string",
+			"Manual String ID Insertion Support",
 			"File Upload with Food Names",
 			"Telegram Bot Integration",
 			"GPS Coordinates for Delivery",
@@ -2567,19 +2511,19 @@ func rootHandler(c *gin.Context) {
 		},
 		"endpoints": gin.H{
 			"foods":       "/api/foods (PUBLIC)",
-			"food_by_id":  "/api/foods/:id (PUBLIC)",
+			"food_by_id":  "/api/foods/:id (PUBLIC - STRING ID)",
 			"categories":  "/api/categories (PUBLIC)",
 			"search":      "/api/search (PUBLIC)",
 			"upload":      "/api/upload (PUBLIC/AUTH)",
 			"orders":      "/api/orders (AUTH)",
 			"websocket":   "/ws",
 			"statistics":  "/api/admin/statistics (ADMIN)",
-			"custom_food": "/api/admin/foods (ADMIN - supports custom_id)",
+			"custom_food": "/api/admin/foods (ADMIN - supports string custom_id)",
 		},
 		"database": gin.H{
 			"type":      "JSON Files",
 			"status":    "connected",
-			"id_system": "Auto-incrementing Integer (1, 2, 3, 4...)",
+			"id_system": "String IDs (auto: '1', '2', '3'... or custom: 'FOOD_001', 'custom_id')",
 			"files": gin.H{
 				"users":    USERS_FILE,
 				"foods":    FOODS_FILE,
@@ -2594,7 +2538,8 @@ func rootHandler(c *gin.Context) {
 			"user_notifications": "enabled",
 			"file_upload":        "enabled",
 			"gps_tracking":       "enabled",
-			"manual_id_support":  "enabled",
+			"string_id_support":  "enabled",
+			"custom_string_id":   "enabled",
 			"json_persistence":   "enabled",
 		},
 	})
@@ -2658,7 +2603,7 @@ func setupRoutes() *gin.Engine {
 	admin := protected.Group("/admin")
 	admin.Use(adminMiddleware())
 	{
-		admin.POST("/foods", createFoodHandler) // Supports custom_id
+		admin.POST("/foods", createFoodHandler) // Supports string custom_id
 		admin.PUT("/foods/:food_id", updateFoodHandler)
 		admin.DELETE("/foods/:food_id", deleteFoodHandler)
 		admin.PUT("/orders/:order_id/status", updateOrderStatusHandler)
@@ -2710,10 +2655,10 @@ func main() {
 	// Server port
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8000"
+		port = "8080"
 	}
 
-	log.Printf("🚀 Restaurant API - JSON Database Version:")
+	log.Printf("🚀 Restaurant API - JSON Database Version with String IDs:")
 	log.Printf("📍 Server: http://localhost:%s", port)
 	log.Printf("🔗 WebSocket: ws://localhost:%s/ws", port)
 	log.Printf("📚 API Docs: http://localhost:%s/", port)
@@ -2722,14 +2667,15 @@ func main() {
 	log.Printf("📤 File Upload: http://localhost:%s/api/upload", port)
 	log.Printf("📊 Admin Stats: http://localhost:%s/api/admin/statistics", port)
 	log.Printf("🖼️ Static Files: http://localhost:%s/uploads/", port)
-	log.Printf("🔢 ID System: Auto-incrementing Integer (1, 2, 3, 4...)")
-	log.Printf("🎯 Manual ID: POST /api/admin/foods with custom_id")
+	log.Printf("🔢 ID System: String IDs (auto: '1', '2', '3'... or custom: 'FOOD_001')")
+	log.Printf("🎯 Manual ID: POST /api/admin/foods with string custom_id")
 	log.Printf("🗄️ Database: JSON Files (%s)", DATA_DIR)
 	log.Printf("🤖 Telegram Bot: Admin + User Notifications")
 	log.Printf("📍 GPS: Delivery Coordinates Support")
 	log.Printf("👁️ Visibility: Only available foods (isThere=true, stock>0)")
 	log.Printf("🌐 Languages: Foods support UZ/RU/EN, Errors in English")
 	log.Printf("🔒 Thread Safety: Mutex locks for all operations")
+	log.Printf("📝 String IDs: Full support for custom string identifiers")
 
 	log.Fatal(r.Run(":" + port))
 }
