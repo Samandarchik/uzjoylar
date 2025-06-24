@@ -54,7 +54,6 @@ tmp/
 temp/
 
 # Uploads (if contains sensitive data)
-uploads/*
 !uploads/.gitkeep
 
 # Docker
