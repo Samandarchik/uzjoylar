@@ -1092,10 +1092,14 @@ func sendNewOrderNotification(order *Order) {
 }
 
 // ========== MIDDLEWARE ==========
-
 func corsMiddleware() gin.HandlerFunc {
-	return gin.HandlerFunc(func(c *gin.Context) {
-		c.Header("Access-Control-Allow-Origin", "*")
+	return func(c *gin.Context) {
+		origin := c.Request.Header.Get("Origin")
+		if origin != "" {
+			c.Header("Access-Control-Allow-Origin", origin)
+			c.Header("Vary", "Origin")
+		}
+
 		c.Header("Access-Control-Allow-Credentials", "true")
 		c.Header("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
 		c.Header("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
@@ -1106,7 +1110,7 @@ func corsMiddleware() gin.HandlerFunc {
 		}
 
 		c.Next()
-	})
+	}
 }
 
 func optionalAuthMiddleware() gin.HandlerFunc {
