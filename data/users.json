@@ -1,35 +1,46 @@
 {
-  "user_70b48064": {
-    "id": "user_70b48064",
+  "user_0916d018": {
+    "id": "user_0916d018",
+    "number": "998906023813",
+    "password": "650fcacff5f6bfac65ffd74212fe4142",
+    "role": "user",
+    "full_name": "Rayxona",
+    "created_at": "2025-06-24T15:22:02.1092+05:00",
+    "is_active": true,
+    "tg_id": 1713329317,
+    "language": "en"
+  },
+  "user_b2e01ed1": {
+    "id": "user_b2e01ed1",
     "number": "770451117",
     "password": "6637e8eaf7621f4164dbaf5a1da35332",
     "role": "admin",
     "full_name": "Samandar Admin",
     "email": "admin@restaurant.uz",
-    "created_at": "2025-06-24T04:58:13.204535+05:00",
+    "created_at": "2025-06-24T15:20:57.167075+05:00",
     "is_active": true,
     "tg_id": 1713329317,
     "language": "uz"
   },
-  "user_880855d6": {
-    "id": "user_880855d6",
+  "user_b53e2cce": {
+    "id": "user_b53e2cce",
     "number": "998901234567",
     "password": "6ad14ba9986e3615423dfca256d04e3f",
     "role": "user",
     "full_name": "Test User",
     "email": "user@test.uz",
-    "created_at": "2025-06-24T04:58:13.204723+05:00",
+    "created_at": "2025-06-24T15:20:57.16735+05:00",
     "is_active": true,
     "tg_id": 1066137436,
     "language": "uz"
   },
-  "user_c5ac3316": {
-    "id": "user_c5ac3316",
+  "user_c1c20980": {
+    "id": "user_c1c20980",
     "number": "998770451117",
     "password": "5c705fd596dc7889d52cf4c4caf4cf06",
     "role": "user",
-    "full_name": "Samandar ibragimov",
-    "created_at": "2025-06-24T04:58:57.655766+05:00",
+    "full_name": "ㅤㅤㅤㅤㅤㅤ",
+    "created_at": "2025-06-24T15:21:19.9661+05:00",
     "is_active": true,
     "tg_id": 1066137436,
     "language": "en"

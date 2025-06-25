@@ -1,22 +1,79 @@
 {
+  "150": {
+    "id": "150",
+    "names": {
+      "en": "Ground Beef Shashlik",
+      "ur": "Молотый шашлык",
+      "ru": "Molotiy shashlik"
+    },
+    "name": "Molotiy shashlik",
+    "descriptions": {
+      "en": "Juicy shashlik made from ground beef with aromatic spices",
+      "ur": "Сочный шашлык из молотой говядины с ароматными специями",
+      "ru": "Maydalangan mol go‘shtidan tayyorlangan mazali va shirali shashlik"
+    },
+    "description": "Maydalangan mol go‘shtidan tayyorlangan mazali va shirali shashlik",
+    "category": "Shashlik",
+    "price": 25000,
+    "isThere": true,
+    "imageUrl": "uploads/moloti_1750852710.jpg",
+    "ingredients": {
+      "en": [
+        "Ground beef",
+        "Onion",
+        "Spices",
+        "Salt",
+        "Black pepper"
+      ],
+      "ur": [
+        "Молотая говядина",
+        "Лук",
+        "Специи",
+        "Соль",
+        "Черный перец"
+      ],
+      "ru": [
+        "Maydalangan mol go‘shti",
+        "Piyoz",
+        "Ziravorlar",
+        "Tuz",
+        "Qora murch"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ur": [],
+      "ru": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 10,
+    "stock": 60,
+    "is_popular": true,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "Shirador va xushbo‘y molotiy shashlik",
+    "created_at": "2025-06-25T17:05:01.092891+05:00",
+    "updated_at": "2025-06-25T17:05:01.092891+05:00"
+  },
   "151": {
     "id": "151",
     "names": {
-      "en": "Chunky lamb kebab",
-      "ru": "Кусковой (баранина)",
-      "uz": "Bo‘lakli qo‘y go‘shti shashlik"
+      "en": "Kuskavoy (qo'y go'shti)",
+      "ur": "Кусковой (баранина)",
+      "ru": "Bo‘lakli qo‘y go‘shti shashlik"
     },
     "name": "Bo‘lakli qo‘y go‘shti shashlik",
     "descriptions": {
       "en": "Kebab made from chunks of lamb meat",
-      "ru": "Шашлык из кусков баранины",
-      "uz": "Bo‘laklab kesilgan qo‘y go‘shtidan tayyorlangan shashlik"
+      "ur": "Шашлык из кусков баранины",
+      "ru": "Bo‘laklab kesilgan qo‘y go‘shtidan tayyorlangan shashlik"
     },
     "description": "Bo‘laklab kesilgan qo‘y go‘shtidan tayyorlangan shashlik",
     "category": "Shashlik",
     "price": 22000,
     "isThere": true,
-    "imageUrl": "uploads/kuskavoy_1750687952.jpg",
+    "imageUrl": "uploads/achuchu_1750740652.jpg",
     "ingredients": {
       "en": [
         "Lamb meat",
@@ -24,13 +81,13 @@
         "Spices",
         "Onion"
       ],
-      "ru": [
+      "ur": [
         "Баранина",
         "Соль",
         "Специи",
         "Лук"
       ],
-      "uz": [
+      "ru": [
         "Qo‘y go‘shti",
         "Tuz",
         "Ziravorlar",
@@ -39,8 +96,8 @@
     },
     "allergens": {
       "en": [],
-      "ru": [],
-      "uz": []
+      "ur": [],
+      "ru": []
     },
     "rating": 0,
     "review_count": 0,
@@ -57,14 +114,14 @@
     "id": "17",
     "names": {
       "en": "Achik chuchuk",
-      "ru": "Ачик чучук",
-      "uz": "Achchiq chuchuk"
+      "ur": "Ачик чучук",
+      "ru": "Achchiq chuchuk"
     },
     "name": "Achchiq chuchuk",
     "descriptions": {
       "en": "Salad made of tomatoes, white onion, basil, and chili pepper",
-      "ru": "Салат из томатов, белого лука, базилика и перца чили",
-      "uz": "Pomidor, oq piyoz, rayhon va chili qalampiridan tayyorlangan salat"
+      "ur": "Салат из томатов, белого лука, базилика и перца чили",
+      "ru": "Pomidor, oq piyoz, rayhon va chili qalampiridan tayyorlangan salat"
     },
     "description": "Pomidor, oq piyoz, rayhon va chili qalampiridan tayyorlangan salat",
     "category": "Salat",
@@ -78,13 +135,13 @@
         "Basil",
         "Chili pepper"
       ],
-      "ru": [
+      "ur": [
         "Томаты",
         "Белый лук",
         "Базилик",
         "Перец чили"
       ],
-      "uz": [
+      "ru": [
         "Pomidor",
         "Oq piyoz",
         "Rayhon",
@@ -93,8 +150,8 @@
     },
     "allergens": {
       "en": [],
-      "ru": [],
-      "uz": []
+      "ur": [],
+      "ru": []
     },
     "rating": 0,
     "review_count": 0,
