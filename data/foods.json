@@ -1,16 +1,73 @@
 {
+  "1": {
+    "id": "1",
+    "names": {
+      "en": "Assorted Fresh Vegetables and Greens",
+      "ru": "Ассорти из свежих овощей и зелени",
+      "uz": "Yangi sabzavotlar assortisi"
+    },
+    "name": "Yangi sabzavotlar assortisi",
+    "descriptions": {
+      "en": "A healthy mix of sweet bell pepper, cucumbers, tomatoes, daikon, and fresh herbs",
+      "ru": "Сладкий перец, огурцы, помидоры, дайкон, свежая зелень — полезное овощное ассорти",
+      "uz": "Shirin bulg‘or qalampiri, bodring, pomidor, daikon va yangi ko‘katlardan tashkil topgan foydali salat"
+    },
+    "description": "Shirin bulg‘or qalampiri, bodring, pomidor, daikon va yangi ko‘katlardan tashkil topgan foydali salat",
+    "category": "Gazaklar",
+    "price": 40000,
+    "isThere": true,
+    "imageUrl": "uploads/ovishi_1750917436.jpg",
+    "ingredients": {
+      "en": [
+        "Sweet bell pepper",
+        "Cucumbers",
+        "Tomatoes",
+        "Daikon",
+        "Fresh herbs"
+      ],
+      "ru": [
+        "Сладкий перец",
+        "Огурцы",
+        "Помидоры",
+        "Дайкон",
+        "Свежая зелень"
+      ],
+      "uz": [
+        "Shirin bulg‘or qalampiri",
+        "Bodring",
+        "Pomidor",
+        "Daikon",
+        "Yangi ko‘katlar"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 5,
+    "stock": 50,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "Yengil va vitaminlarga boy sabzavotli salat",
+    "created_at": "2025-06-26T10:59:26.431738+05:00",
+    "updated_at": "2025-06-26T10:59:26.431738+05:00"
+  },
   "150": {
     "id": "150",
     "names": {
       "en": "Ground Beef Shashlik",
-      "ur": "Молотый шашлык",
-      "ru": "Molotiy shashlik"
+      "ru": "Молотый шашлык",
+      "uz": "Molotiy shashlik"
     },
     "name": "Molotiy shashlik",
     "descriptions": {
       "en": "Juicy shashlik made from ground beef with aromatic spices",
-      "ur": "Сочный шашлык из молотой говядины с ароматными специями",
-      "ru": "Maydalangan mol go‘shtidan tayyorlangan mazali va shirali shashlik"
+      "ru": "Сочный шашлык из молотой говядины с ароматными специями",
+      "uz": "Maydalangan mol go‘shtidan tayyorlangan mazali va shirali shashlik"
     },
     "description": "Maydalangan mol go‘shtidan tayyorlangan mazali va shirali shashlik",
     "category": "Shashlik",
@@ -25,14 +82,14 @@
         "Salt",
         "Black pepper"
       ],
-      "ur": [
+      "ru": [
         "Молотая говядина",
         "Лук",
         "Специи",
         "Соль",
         "Черный перец"
       ],
-      "ru": [
+      "uz": [
         "Maydalangan mol go‘shti",
         "Piyoz",
         "Ziravorlar",
@@ -42,8 +99,8 @@
     },
     "allergens": {
       "en": [],
-      "ur": [],
-      "ru": []
+      "ru": [],
+      "uz": []
     },
     "rating": 0,
     "review_count": 0,
@@ -59,69 +116,177 @@
   "151": {
     "id": "151",
     "names": {
-      "en": "Kuskavoy (qo'y go'shti)",
-      "ur": "Кусковой (баранина)",
-      "ru": "Bo‘lakli qo‘y go‘shti shashlik"
+      "en": "Chunk Lamb Shashlik",
+      "ru": "Кусковой (баранина)",
+      "uz": "Kuskavoy (qo‘y go‘shti)"
     },
-    "name": "Bo‘lakli qo‘y go‘shti shashlik",
+    "name": "Kuskavoy (qo‘y go‘shti)",
     "descriptions": {
-      "en": "Kebab made from chunks of lamb meat",
-      "ur": "Шашлык из кусков баранины",
-      "ru": "Bo‘laklab kesilgan qo‘y go‘shtidan tayyorlangan shashlik"
+      "en": "Chunky lamb shashlik grilled over charcoal",
+      "ru": "Шашлык из кусочков баранины, приготовленный на углях",
+      "uz": "Qo‘y go‘shtidan bo‘laklab tayyorlangan shashlik, ko‘mirda pishirilgan"
     },
-    "description": "Bo‘laklab kesilgan qo‘y go‘shtidan tayyorlangan shashlik",
+    "description": "Qo‘y go‘shtidan bo‘laklab tayyorlangan shashlik, ko‘mirda pishirilgan",
     "category": "Shashlik",
     "price": 22000,
     "isThere": true,
-    "imageUrl": "uploads/achuchu_1750740652.jpg",
+    "imageUrl": "uploads/kuskavoy_1750918852.jpg",
     "ingredients": {
       "en": [
-        "Lamb meat",
+        "Lamb",
         "Salt",
-        "Spices",
-        "Onion"
-      ],
-      "ur": [
-        "Баранина",
-        "Соль",
-        "Специи",
-        "Лук"
+        "Black pepper",
+        "Spices"
       ],
       "ru": [
+        "Баранина",
+        "Соль",
+        "Черный перец",
+        "Специи"
+      ],
+      "uz": [
         "Qo‘y go‘shti",
         "Tuz",
-        "Ziravorlar",
-        "Piyoz"
+        "Qora murch",
+        "Ziravorlar"
       ]
     },
     "allergens": {
       "en": [],
-      "ur": [],
-      "ru": []
+      "ru": [],
+      "uz": []
     },
     "rating": 0,
     "review_count": 0,
-    "preparation_time": 15,
-    "stock": 100,
+    "preparation_time": 12,
+    "stock": 60,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
-    "comment": "Mazali bo‘lakli qo‘y go‘shtidan tayyorlangan shashlik",
-    "created_at": "2025-06-24T09:29:37.513296+05:00",
-    "updated_at": "2025-06-24T09:29:37.513296+05:00"
+    "comment": "Mazali va yumshoq qo‘y go‘shtidan tayyorlangan shashlik",
+    "created_at": "2025-06-26T11:21:25.717742+05:00",
+    "updated_at": "2025-06-26T11:21:25.717743+05:00"
+  },
+  "152": {
+    "id": "152",
+    "names": {
+      "en": "Beef Tenderloin",
+      "ru": "Говядина вырезка",
+      "uz": "Mol go‘shti filesi"
+    },
+    "name": "Mol go‘shti filesi",
+    "descriptions": {
+      "en": "Tender and juicy shashlik made from beef tenderloin",
+      "ru": "Нежный и сочный шашлык из говяжьей вырезки",
+      "uz": "Mol go‘shti filesidan tayyorlangan yumshoq va mazali shashlik"
+    },
+    "description": "Mol go‘shti filesidan tayyorlangan yumshoq va mazali shashlik",
+    "category": "Shashlik",
+    "price": 28000,
+    "isThere": true,
+    "imageUrl": "uploads/viriska_1750919002.png",
+    "ingredients": {
+      "en": [
+        "Beef tenderloin",
+        "Salt",
+        "Black pepper",
+        "Spices"
+      ],
+      "ru": [
+        "Говяжья вырезка",
+        "Соль",
+        "Черный перец",
+        "Специи"
+      ],
+      "uz": [
+        "Mol go‘shti filesi",
+        "Tuz",
+        "Qora murch",
+        "Ziravorlar"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 12,
+    "stock": 50,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "Yumshoq va boy ta’mli mol go‘shtli shashlik",
+    "created_at": "2025-06-26T11:23:31.093719+05:00",
+    "updated_at": "2025-06-26T11:23:31.093719+05:00"
+  },
+  "153": {
+    "id": "153",
+    "names": {
+      "en": "Napaleon",
+      "ru": "Наполеон",
+      "uz": "Napaleon"
+    },
+    "name": "Napaleon",
+    "descriptions": {
+      "en": "Juicy and flavorful shashlik made from beef and tail fat",
+      "ru": "Шашлык из говядины и курдючного жира — сочный и ароматный",
+      "uz": "Mol go‘shti va dumba yog‘idan tayyorlangan mazali va shirali shashlik"
+    },
+    "description": "Mol go‘shti va dumba yog‘idan tayyorlangan mazali va shirali shashlik",
+    "category": "Shashlik",
+    "price": 22000,
+    "isThere": true,
+    "imageUrl": "uploads/napaliyon_1750919070.png",
+    "ingredients": {
+      "en": [
+        "Beef",
+        "Tail fat",
+        "Salt",
+        "Spices"
+      ],
+      "ru": [
+        "Говядина",
+        "Курдючный жир",
+        "Соль",
+        "Специи"
+      ],
+      "uz": [
+        "Mol go‘shti",
+        "Dumba yog‘i",
+        "Tuz",
+        "Ziravorlar"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 10,
+    "stock": 50,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "Dumba yog‘i bilan shirador shashlik",
+    "created_at": "2025-06-26T11:26:35.631475+05:00",
+    "updated_at": "2025-06-26T11:26:35.631475+05:00"
   },
   "17": {
     "id": "17",
     "names": {
       "en": "Achik chuchuk",
-      "ur": "Ачик чучук",
-      "ru": "Achchiq chuchuk"
+      "ru": "Ачик чучук",
+      "uz": "Achchiq chuchuk"
     },
     "name": "Achchiq chuchuk",
     "descriptions": {
       "en": "Salad made of tomatoes, white onion, basil, and chili pepper",
-      "ur": "Салат из томатов, белого лука, базилика и перца чили",
-      "ru": "Pomidor, oq piyoz, rayhon va chili qalampiridan tayyorlangan salat"
+      "ru": "Салат из томатов, белого лука, базилика и перца чили",
+      "uz": "Pomidor, oq piyoz, rayhon va chili qalampiridan tayyorlangan salat"
     },
     "description": "Pomidor, oq piyoz, rayhon va chili qalampiridan tayyorlangan salat",
     "category": "Salat",
@@ -135,13 +300,13 @@
         "Basil",
         "Chili pepper"
       ],
-      "ur": [
+      "ru": [
         "Томаты",
         "Белый лук",
         "Базилик",
         "Перец чили"
       ],
-      "ru": [
+      "uz": [
         "Pomidor",
         "Oq piyoz",
         "Rayhon",
@@ -150,8 +315,8 @@
     },
     "allergens": {
       "en": [],
-      "ur": [],
-      "ru": []
+      "ru": [],
+      "uz": []
     },
     "rating": 0,
     "review_count": 0,
@@ -163,5 +328,239 @@
     "comment": "Mazali va achchiq salat",
     "created_at": "2025-06-24T09:51:22.480781+05:00",
     "updated_at": "2025-06-24T09:51:22.480782+05:00"
+  },
+  "21": {
+    "id": "21",
+    "names": {
+      "en": "Chaban Salad",
+      "ru": "Чабан",
+      "uz": "Chaban salati"
+    },
+    "name": "Chaban salati",
+    "descriptions": {
+      "en": "Salad made with tomatoes, cucumbers, parsley, red onion, narsharab, lemon juice, and pomegranate",
+      "ru": "Томаты, огурцы, петрушка, красный лук, наршараб, лимонный сок, гранат",
+      "uz": "Pomidor, bodring, petrushka, qizil piyoz, narsharab, limon sharbati va anor bilan tayyorlangan salat"
+    },
+    "description": "Pomidor, bodring, petrushka, qizil piyoz, narsharab, limon sharbati va anor bilan tayyorlangan salat",
+    "category": "Salatlar",
+    "price": 26000,
+    "isThere": true,
+    "imageUrl": "uploads/chaban_1750918010.jpg",
+    "ingredients": {
+      "en": [
+        "Tomatoes",
+        "Cucumbers",
+        "Parsley",
+        "Red onion",
+        "Narsharab",
+        "Lemon juice",
+        "Pomegranate"
+      ],
+      "ru": [
+        "Томаты",
+        "Огурцы",
+        "Петрушка",
+        "Красный лук",
+        "Наршараб",
+        "Лимонный сок",
+        "Гранат"
+      ],
+      "uz": [
+        "Pomidor",
+        "Bodring",
+        "Petrushka",
+        "Qizil piyoz",
+        "Narsharab",
+        "Limon sharbati",
+        "Anor"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 5,
+    "stock": 45,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "Sharqona ta’mga ega vitaminlarga boy salat",
+    "created_at": "2025-06-26T11:09:56.680061+05:00",
+    "updated_at": "2025-06-26T11:09:56.680061+05:00"
+  },
+  "22": {
+    "id": "22",
+    "names": {
+      "en": "Fresh Vegetable and Herb Salad",
+      "ru": "Салат из свежих овощей и зелени",
+      "uz": "Yangi sabzavotlar va ko‘katlar salati"
+    },
+    "name": "Yangi sabzavotlar va ko‘katlar salati",
+    "descriptions": {
+      "en": "Fresh tomatoes, cucumbers, and red onion with fragrant herbs: cilantro, basil, dill — dressed with olive oil",
+      "ru": "Свежие помидоры, огурцы и красный лук, с ароматной зеленью: кинза, райхон, укроп, заправляется оливковым маслом",
+      "uz": "Yangi pomidor, bodring va qizil piyoz, aromatik ko‘katlar (kashnich, rayhon, ukrop) bilan, zaytun moyi bilan aralashtirilgan"
+    },
+    "description": "Yangi pomidor, bodring va qizil piyoz, aromatik ko‘katlar (kashnich, rayhon, ukrop) bilan, zaytun moyi bilan aralashtirilgan",
+    "category": "Salatlar",
+    "price": 25000,
+    "isThere": true,
+    "imageUrl": "uploads/siveji_1750918634.jpg",
+    "ingredients": {
+      "en": [
+        "Tomatoes",
+        "Cucumbers",
+        "Red onion",
+        "Cilantro",
+        "Basil",
+        "Dill",
+        "Olive oil"
+      ],
+      "ru": [
+        "Свежие помидоры",
+        "Огурцы",
+        "Красный лук",
+        "Кинза",
+        "Райхон",
+        "Укроп",
+        "Оливковое масло"
+      ],
+      "uz": [
+        "Pomidor",
+        "Bodring",
+        "Qizil piyoz",
+        "Kashnich",
+        "Rayhon",
+        "Ukrop",
+        "Zaytun moyi"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 5,
+    "stock": 50,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "Yengil va sog‘lom sabzavotli salat",
+    "created_at": "2025-06-26T11:18:35.27314+05:00",
+    "updated_at": "2025-06-26T11:18:35.273141+05:00"
+  },
+  "7": {
+    "id": "7",
+    "names": {
+      "en": "Meat Assortment",
+      "ru": "Мясное ассорти",
+      "uz": "Go‘shtli assorti"
+    },
+    "name": "Go‘shtli assorti",
+    "descriptions": {
+      "en": "Beef tongue, kazy (horse sausage), chicken roulade — served with mustard",
+      "ru": "Язык говяжий, казы, куриный рулет — подается с горчицей",
+      "uz": "Mol tili, qazi, tovuq ruleti — xantal bilan birga tortiladi"
+    },
+    "description": "Mol tili, qazi, tovuq ruleti — xantal bilan birga tortiladi",
+    "category": "Salatlar",
+    "price": 160000,
+    "isThere": true,
+    "imageUrl": "uploads/misnoy_1750917597.jpg",
+    "ingredients": {
+      "en": [
+        "Beef tongue",
+        "Kazy",
+        "Chicken roulade",
+        "Mustard"
+      ],
+      "ru": [
+        "Язык говяжий",
+        "Казы",
+        "Куриный рулет",
+        "Горчица"
+      ],
+      "uz": [
+        "Mol tili",
+        "Qazi",
+        "Tovuq ruleti",
+        "Xantal"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 7,
+    "stock": 40,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "Bir nechta go‘sht turlaridan tashkil topgan boy va mazali taom",
+    "created_at": "2025-06-26T11:02:52.426308+05:00",
+    "updated_at": "2025-06-26T11:02:52.426308+05:00"
+  },
+  "8": {
+    "id": "8",
+    "names": {
+      "en": "Beef Tongue",
+      "ru": "Язык говяжий",
+      "uz": "Mol tili"
+    },
+    "name": "Mol tili",
+    "descriptions": {
+      "en": "Boiled beef tongue served with mustard, cherry tomatoes, and salad",
+      "ru": "Отварной говяжий язык, подается с горчицей, помидорами черри и салатом",
+      "uz": "Qaynatilgan mol tili xantal, cherri pomidorlari va salat bilan tortiladi"
+    },
+    "description": "Qaynatilgan mol tili xantal, cherri pomidorlari va salat bilan tortiladi",
+    "category": "Salatlar",
+    "price": 55000,
+    "isThere": true,
+    "imageUrl": "uploads/yazikmol_1750917916.jpg",
+    "ingredients": {
+      "en": [
+        "Beef tongue",
+        "Mustard",
+        "Cherry tomatoes",
+        "Lettuce"
+      ],
+      "ru": [
+        "Говяжий язык",
+        "Горчица",
+        "Помидоры черри",
+        "Салат"
+      ],
+      "uz": [
+        "Mol tili",
+        "Xantal",
+        "Cherri pomidorlari",
+        "Salat barglari"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 6,
+    "stock": 35,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "Yengil va foydali go‘shtli gazak",
+    "created_at": "2025-06-26T11:05:45.995791+05:00",
+    "updated_at": "2025-06-26T11:05:45.995791+05:00"
   }
 }
