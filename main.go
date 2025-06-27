@@ -1523,11 +1523,11 @@ func getCategories(c *gin.Context) {
 	lang := getUserLanguage(c.Request.Header)
 
 	categories := []gin.H{
-		{"key": "gazaklar", "name": getFoodTranslation("Gazaklar", lang)},
-		{"key": "shashlik", "name": getFoodTranslation("shashlik", lang)},
-		{"key": "milliy_taomlar", "name": getFoodTranslation("milliy_taomlar", lang)},
-		{"key": "ichimliklar", "name": getFoodTranslation("ichimliklar", lang)},
+		{"key": "gazaklar", "name": getFoodTranslation("gazaklar", lang)},
 		{"key": "salatlar", "name": getFoodTranslation("salatlar", lang)},
+		{"key": "milliy_taomlar", "name": getFoodTranslation("milliy_taomlar", lang)},
+		{"key": "shashlik", "name": getFoodTranslation("shashlik", lang)},
+		{"key": "ichimliklar", "name": getFoodTranslation("ichimliklar", lang)},
 		{"key": "shirinliklar", "name": getFoodTranslation("shirinliklar", lang)},
 	}
 
