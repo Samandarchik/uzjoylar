@@ -21,6 +21,28 @@
     "uploaded_by": "",
     "created_at": "2025-06-26T11:20:52.119044+05:00"
   },
+  "file_21f4361c": {
+    "id": "file_21f4361c",
+    "original_name": "majnun.jpg",
+    "file_name": "majnun_1751006041.jpg",
+    "file_path": "uploads/majnun_1751006041.jpg",
+    "file_size": 133742,
+    "mime_type": "image/jpeg",
+    "url": "/uploads/majnun_1751006041.jpg",
+    "uploaded_by": "",
+    "created_at": "2025-06-27T11:34:01.325143+05:00"
+  },
+  "file_2e025a18": {
+    "id": "file_2e025a18",
+    "original_name": "home.png",
+    "file_name": "home_1750923373.png",
+    "file_path": "uploads/home_1750923373.png",
+    "file_size": 147659,
+    "mime_type": "image/png",
+    "url": "/uploads/home_1750923373.png",
+    "uploaded_by": "",
+    "created_at": "2025-06-26T12:36:13.871709+05:00"
+  },
   "file_33b0b38f": {
     "id": "file_33b0b38f",
     "original_name": "chaban.jpg",

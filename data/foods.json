@@ -13,7 +13,7 @@
       "uz": "Shirin bulg‘or qalampiri, bodring, pomidor, daikon va yangi ko‘katlardan tashkil topgan foydali salat"
     },
     "description": "Shirin bulg‘or qalampiri, bodring, pomidor, daikon va yangi ko‘katlardan tashkil topgan foydali salat",
-    "category": "Gazaklar",
+    "category": "gazaklar",
     "price": 40000,
     "isThere": true,
     "imageUrl": "uploads/ovishi_1750917436.jpg",
@@ -70,7 +70,7 @@
       "uz": "Maydalangan mol go‘shtidan tayyorlangan mazali va shirali shashlik"
     },
     "description": "Maydalangan mol go‘shtidan tayyorlangan mazali va shirali shashlik",
-    "category": "Shashlik",
+    "category": "shashlik",
     "price": 25000,
     "isThere": true,
     "imageUrl": "uploads/moloti_1750852710.jpg",
@@ -127,7 +127,7 @@
       "uz": "Qo‘y go‘shtidan bo‘laklab tayyorlangan shashlik, ko‘mirda pishirilgan"
     },
     "description": "Qo‘y go‘shtidan bo‘laklab tayyorlangan shashlik, ko‘mirda pishirilgan",
-    "category": "Shashlik",
+    "category": "shashlik",
     "price": 22000,
     "isThere": true,
     "imageUrl": "uploads/kuskavoy_1750918852.jpg",
@@ -181,7 +181,7 @@
       "uz": "Mol go‘shti filesidan tayyorlangan yumshoq va mazali shashlik"
     },
     "description": "Mol go‘shti filesidan tayyorlangan yumshoq va mazali shashlik",
-    "category": "Shashlik",
+    "category": "shashlik",
     "price": 28000,
     "isThere": true,
     "imageUrl": "uploads/viriska_1750919002.png",
@@ -235,7 +235,7 @@
       "uz": "Mol go‘shti va dumba yog‘idan tayyorlangan mazali va shirali shashlik"
     },
     "description": "Mol go‘shti va dumba yog‘idan tayyorlangan mazali va shirali shashlik",
-    "category": "Shashlik",
+    "category": "shashlik",
     "price": 22000,
     "isThere": true,
     "imageUrl": "uploads/napaliyon_1750919070.png",
@@ -275,8 +275,8 @@
     "created_at": "2025-06-26T11:26:35.631475+05:00",
     "updated_at": "2025-06-26T11:26:35.631475+05:00"
   },
-  "17": {
-    "id": "17",
+  "20": {
+    "id": "20",
     "names": {
       "en": "Achik chuchuk",
       "ru": "Ачик чучук",
@@ -289,10 +289,10 @@
       "uz": "Pomidor, oq piyoz, rayhon va chili qalampiridan tayyorlangan salat"
     },
     "description": "Pomidor, oq piyoz, rayhon va chili qalampiridan tayyorlangan salat",
-    "category": "Salat",
+    "category": "salatlar",
     "price": 22000,
     "isThere": true,
-    "imageUrl": "uploads/kuskavoy_1750740532.jpg",
+    "imageUrl": "uploads/achuchu_1750740652.jpg",
     "ingredients": {
       "en": [
         "Tomatoes",
@@ -343,7 +343,7 @@
       "uz": "Pomidor, bodring, petrushka, qizil piyoz, narsharab, limon sharbati va anor bilan tayyorlangan salat"
     },
     "description": "Pomidor, bodring, petrushka, qizil piyoz, narsharab, limon sharbati va anor bilan tayyorlangan salat",
-    "category": "Salatlar",
+    "category": "salatlar",
     "price": 26000,
     "isThere": true,
     "imageUrl": "uploads/chaban_1750918010.jpg",
@@ -406,7 +406,7 @@
       "uz": "Yangi pomidor, bodring va qizil piyoz, aromatik ko‘katlar (kashnich, rayhon, ukrop) bilan, zaytun moyi bilan aralashtirilgan"
     },
     "description": "Yangi pomidor, bodring va qizil piyoz, aromatik ko‘katlar (kashnich, rayhon, ukrop) bilan, zaytun moyi bilan aralashtirilgan",
-    "category": "Salatlar",
+    "category": "salatlar",
     "price": 25000,
     "isThere": true,
     "imageUrl": "uploads/siveji_1750918634.jpg",
@@ -469,7 +469,7 @@
       "uz": "Mol tili, qazi, tovuq ruleti — xantal bilan birga tortiladi"
     },
     "description": "Mol tili, qazi, tovuq ruleti — xantal bilan birga tortiladi",
-    "category": "Salatlar",
+    "category": "salatlar",
     "price": 160000,
     "isThere": true,
     "imageUrl": "uploads/misnoy_1750917597.jpg",
@@ -523,7 +523,7 @@
       "uz": "Qaynatilgan mol tili xantal, cherri pomidorlari va salat bilan tortiladi"
     },
     "description": "Qaynatilgan mol tili xantal, cherri pomidorlari va salat bilan tortiladi",
-    "category": "Salatlar",
+    "category": "salatlar",
     "price": 55000,
     "isThere": true,
     "imageUrl": "uploads/yazikmol_1750917916.jpg",

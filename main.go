@@ -122,24 +122,27 @@ const (
 // Multi-language support for foods only
 var FOOD_TRANSLATIONS = map[string]map[string]string{
 	"uz": {
-		"shashlik":       "Shashlik",
-		"milliy_taomlar": "Milliy taomlar",
-		"ichimliklar":    "Ichimliklar",
+		"gazaklar":       "Gazaklar",
 		"salatlar":       "Salatlar",
+		"milliy_taomlar": "Milliy taomlar",
+		"shashlik":       "Shashlik",
+		"ichimliklar":    "Ichimliklar",
 		"shirinliklar":   "Shirinliklar",
 	},
 	"ru": {
-		"shashlik":       "Шашлык",
-		"milliy_taomlar": "Национальные блюда",
-		"ichimliklar":    "Напитки",
+		"gazaklar":       "Закуски",
 		"salatlar":       "Салаты",
+		"milliy_taomlar": "Национальные блюда",
+		"shashlik":       "Шашлык",
+		"ichimliklar":    "Напитки",
 		"shirinliklar":   "Десерты",
 	},
 	"en": {
-		"shashlik":       "Barbecue",
-		"milliy_taomlar": "National dishes",
-		"ichimliklar":    "Drinks",
+		"gazaklar":       "Snacks",
 		"salatlar":       "Salads",
+		"milliy_taomlar": "National dishes",
+		"shashlik":       "Barbecue",
+		"ichimliklar":    "Drinks",
 		"shirinliklar":   "Desserts",
 	},
 }
