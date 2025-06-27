@@ -1570,6 +1570,7 @@ func getCategories(c *gin.Context) {
 }
 
 // ========== FOOD HANDLERS ==========
+// /
 
 func getAllFoodsHandler(c *gin.Context) {
 	lang := getUserLanguage(c.Request.Header)
@@ -2722,3 +2723,5 @@ func main() {
 
 	log.Fatal(r.Run(":" + port))
 }
+
+//asdasds
