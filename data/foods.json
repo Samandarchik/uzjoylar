@@ -56,6 +56,711 @@
     "created_at": "2025-06-26T10:59:26.431738+05:00",
     "updated_at": "2025-06-26T10:59:26.431738+05:00"
   },
+  "105": {
+    "id": "105",
+    "names": {
+      "en": "Umakay Jiz with Beef",
+      "ru": "Умакай джиз из говядины",
+      "uz": "Umakay jiz mol go‘shti bilan"
+    },
+    "name": "Umakay jiz mol go‘shti bilan",
+    "descriptions": {
+      "en": "Served with potatoes",
+      "ru": "Подается с картофелем",
+      "uz": "Kartoshka bilan tortiladi"
+    },
+    "description": "Kartoshka bilan tortiladi",
+    "category": "issiq_taom",
+    "price": 90000,
+    "isThere": true,
+    "imageUrl": "uploads/umakaygovya_1751154903.jpg",
+    "ingredients": {
+      "en": [
+        "Beef",
+        "Potatoes",
+        "Spices"
+      ],
+      "ru": [
+        "Говядина",
+        "Картофель",
+        "Специи"
+      ],
+      "uz": [
+        "Mol go‘shti",
+        "Kartoshka",
+        "Baharatlar"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 12,
+    "stock": 20,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "500 gr porsiyada xizmat qilinadi",
+    "created_at": "2025-06-29T04:59:47.896263+05:00",
+    "updated_at": "2025-06-29T04:59:47.896263+05:00"
+  },
+  "106": {
+    "id": "106",
+    "names": {
+      "en": "Umakay Jiz with Lamb",
+      "ru": "Умакай джиз из баранины",
+      "uz": "Umakay jiz qo‘y go‘shti bilan"
+    },
+    "name": "Umakay jiz qo‘y go‘shti bilan",
+    "descriptions": {
+      "en": "Served with potatoes",
+      "ru": "Подаётся с картофелем",
+      "uz": "Kartoshka bilan tortiladi"
+    },
+    "description": "Kartoshka bilan tortiladi",
+    "category": "issiq_taom",
+    "price": 90000,
+    "isThere": true,
+    "imageUrl": "uploads/umakaybaraniniy_1751154941.jpg",
+    "ingredients": {
+      "en": [
+        "Lamb",
+        "Potatoes",
+        "Spices"
+      ],
+      "ru": [
+        "Баранина",
+        "Картофель",
+        "Специи"
+      ],
+      "uz": [
+        "Qo‘y go‘shti",
+        "Kartoshka",
+        "Baharatlar"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 12,
+    "stock": 20,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "500 gr porsiyada xizmat qilinadi",
+    "created_at": "2025-06-29T04:59:53.152713+05:00",
+    "updated_at": "2025-06-29T04:59:53.152713+05:00"
+  },
+  "107": {
+    "id": "107",
+    "names": {
+      "en": "Braised Beef Ribs (Parra)",
+      "ru": "Томленые говяжьи ребра (Парра)",
+      "uz": "Mol go‘shti qovurg‘asi (Parra)"
+    },
+    "name": "Mol go‘shti qovurg‘asi (Parra)",
+    "descriptions": {
+      "en": "Braised beef ribs for 4 people",
+      "ru": "Томлённые говяжьи рёбра на 4 персоны",
+      "uz": "Mol go‘shti qovurg‘asi 4 kishilik taom"
+    },
+    "description": "Mol go‘shti qovurg‘asi 4 kishilik taom",
+    "category": "issiq_taom",
+    "price": 220000,
+    "isThere": true,
+    "imageUrl": "uploads/parra_1751154988.jpg",
+    "ingredients": {
+      "en": [
+        "Beef ribs",
+        "Spices"
+      ],
+      "ru": [
+        "Говяжьи рёбра",
+        "Специи"
+      ],
+      "uz": [
+        "Mol go‘shti qovurg‘asi",
+        "Baharatlar"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 25,
+    "stock": 10,
+    "is_popular": true,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "4 kishilik porsiya",
+    "created_at": "2025-06-29T04:59:57.568373+05:00",
+    "updated_at": "2025-06-29T04:59:57.568373+05:00"
+  },
+  "108": {
+    "id": "108",
+    "names": {
+      "en": "Braised Lamb Shoulder",
+      "ru": "Лопатка баранья",
+      "uz": "Qo‘y yelka (Lopatka)"
+    },
+    "name": "Qo‘y yelka (Lopatka)",
+    "descriptions": {
+      "en": "Braised in its own juice, served with mix salad and demi-glace sauce",
+      "ru": "Томленая в собственном соку. Подается с микс салатом и соусом демиглас",
+      "uz": "O‘z sharbatida dimlangan qo‘y yelka, miks salat va demi-glass sous bilan"
+    },
+    "description": "O‘z sharbatida dimlangan qo‘y yelka, miks salat va demi-glass sous bilan",
+    "category": "issiq_taom",
+    "price": 260000,
+    "isThere": true,
+    "imageUrl": "uploads/lapatka_1751155059.jpg",
+    "ingredients": {
+      "en": [
+        "Lamb shoulder",
+        "Mix salad",
+        "Demi-glace sauce"
+      ],
+      "ru": [
+        "Баранья лопатка",
+        "Микс салат",
+        "Соус демиглас"
+      ],
+      "uz": [
+        "Qo‘y yelka",
+        "Miks salat",
+        "Demi-glass sous"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 30,
+    "stock": 6,
+    "is_popular": true,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "4 kishilik porsiya",
+    "created_at": "2025-06-29T05:00:03.587425+05:00",
+    "updated_at": "2025-06-29T05:00:03.587426+05:00"
+  },
+  "109": {
+    "id": "109",
+    "names": {
+      "en": "Lamb Neck",
+      "ru": "Шея баранья",
+      "uz": "Qo‘y bo‘yni"
+    },
+    "name": "Qo‘y bo‘yni",
+    "descriptions": {
+      "en": "Lamb neck braised in its own juice, served with mix salad and demi-glace sauce",
+      "ru": "Баранья шея томленая в собственном соку, подается с микс салатом и соусом демиглас",
+      "uz": "O‘z sharbatida dimlangan qo‘y bo‘yni, miks salat va demi-glass sous bilan tortiladi"
+    },
+    "description": "O‘z sharbatida dimlangan qo‘y bo‘yni, miks salat va demi-glass sous bilan tortiladi",
+    "category": "issiq_taom",
+    "price": 200000,
+    "isThere": true,
+    "imageUrl": "uploads/sheya_1751155107.jpg",
+    "ingredients": {
+      "en": [
+        "Lamb neck",
+        "Mix salad",
+        "Demi-glace sauce"
+      ],
+      "ru": [
+        "Шея",
+        "Микс салат",
+        "Соус демиглас"
+      ],
+      "uz": [
+        "Qo‘y bo‘yni",
+        "Miks salat",
+        "Demi-glass sous"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 30,
+    "stock": 8,
+    "is_popular": true,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "4 kishilik porsiya",
+    "created_at": "2025-06-29T05:00:07.968048+05:00",
+    "updated_at": "2025-06-29T05:00:07.968048+05:00"
+  },
+  "110": {
+    "id": "110",
+    "names": {
+      "en": "Lamb Leg",
+      "ru": "Ножка баранья",
+      "uz": "Qo‘y oyog‘i"
+    },
+    "name": "Qo‘y oyog‘i",
+    "descriptions": {
+      "en": "Lamb leg braised in its own juice. Served with mashed potatoes and grilled vegetables",
+      "ru": "Баранья ножка томлённая в собственном соку. Подаются с картофельным пюре и овощами на гриле",
+      "uz": "O‘z sharbatida dimlangan qo‘y oyog‘i, kartoshka pyuresi va grilda pishgan sabzavotlar bilan"
+    },
+    "description": "O‘z sharbatida dimlangan qo‘y oyog‘i, kartoshka pyuresi va grilda pishgan sabzavotlar bilan",
+    "category": "issiq_taom",
+    "price": 80000,
+    "isThere": true,
+    "imageUrl": "uploads/noshka_1751155160.jpg",
+    "ingredients": {
+      "en": [
+        "Lamb leg",
+        "Mashed potatoes",
+        "Grilled vegetables"
+      ],
+      "ru": [
+        "Ножка",
+        "Картофельное пюре",
+        "Овощи на гриле"
+      ],
+      "uz": [
+        "Qo‘y oyog‘i",
+        "Kartoshka pyuresi",
+        "Grilda sabzavotlar"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 25,
+    "stock": 10,
+    "is_popular": true,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "To‘yimli maxsus taom",
+    "created_at": "2025-06-29T05:00:13.169986+05:00",
+    "updated_at": "2025-06-29T05:00:13.169986+05:00"
+  },
+  "121": {
+    "id": "121",
+    "names": {
+      "en": "Fried Carp",
+      "ru": "Сазан жареный",
+      "uz": "Qovurilgan sazan"
+    },
+    "name": "Qovurilgan sazan",
+    "descriptions": {
+      "en": "Fried carp with garlic, greens and lemon",
+      "ru": "Сазан, чеснок, зелень, лимон.",
+      "uz": "Qovurilgan sazan baliği sarimsoq, limon va ko‘katlar bilan"
+    },
+    "description": "Qovurilgan sazan baliği sarimsoq, limon va ko‘katlar bilan",
+    "category": "baliq",
+    "price": 140000,
+    "isThere": true,
+    "imageUrl": "uploads/sazansharenniy_1751155483.jpg",
+    "ingredients": {
+      "en": [
+        "Carp",
+        "Garlic",
+        "Greens",
+        "Lemon"
+      ],
+      "ru": [
+        "Сазан",
+        "Чеснок",
+        "Зелень",
+        "Лимон"
+      ],
+      "uz": [
+        "Sazan baliği",
+        "Sarimsoq",
+        "Ko‘katlar",
+        "Limon"
+      ]
+    },
+    "allergens": {
+      "en": [
+        "Fish"
+      ],
+      "ru": [
+        "Рыба"
+      ],
+      "uz": [
+        "Baliq"
+      ]
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 20,
+    "stock": 10,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "1 kg porsiya",
+    "created_at": "2025-06-29T05:07:07.076516+05:00",
+    "updated_at": "2025-06-29T05:07:07.076516+05:00"
+  },
+  "122": {
+    "id": "122",
+    "names": {
+      "en": "Live Carp (by selection)",
+      "ru": "Сазан (живая рыба на выбор)",
+      "uz": "Jonli sazan (tanlov asosida)"
+    },
+    "name": "Jonli sazan (tanlov asosida)",
+    "descriptions": {
+      "en": "Live carp prepared based on your preference",
+      "ru": "Живая рыба на выбор, готовится по желанию",
+      "uz": "Jonli sazan baliği, tanlovga ko‘ra tayyorlanadi"
+    },
+    "description": "Jonli sazan baliği, tanlovga ko‘ra tayyorlanadi",
+    "category": "baliq",
+    "price": 100000,
+    "isThere": true,
+    "imageUrl": "uploads/sazanjevaya_1751155527.jpg",
+    "ingredients": {
+      "en": [
+        "Live carp"
+      ],
+      "ru": [
+        "Живая рыба (сазан)"
+      ],
+      "uz": [
+        "Jonli sazan baliği"
+      ]
+    },
+    "allergens": {
+      "en": [
+        "Fish"
+      ],
+      "ru": [
+        "Рыба"
+      ],
+      "uz": [
+        "Baliq"
+      ]
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 25,
+    "stock": 8,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "1 kg jonli baliqdan tanlab tayyorlanadi",
+    "created_at": "2025-06-29T05:07:11.524246+05:00",
+    "updated_at": "2025-06-29T05:07:11.524246+05:00"
+  },
+  "123": {
+    "id": "123",
+    "names": {
+      "en": "Grilled Carp on Mangal",
+      "ru": "Сазан на Мангале",
+      "uz": "Mangalda pishirilgan sazan"
+    },
+    "name": "Mangalda pishirilgan sazan",
+    "descriptions": {
+      "en": "Carp grilled over charcoal",
+      "ru": "Сазан, приготовленный на мангале",
+      "uz": "Mangalda ko‘mirda pishirilgan sazan baliği"
+    },
+    "description": "Mangalda ko‘mirda pishirilgan sazan baliği",
+    "category": "baliq",
+    "price": 140000,
+    "isThere": true,
+    "imageUrl": "uploads/sazanmangale_1751155591.jpg",
+    "ingredients": {
+      "en": [
+        "Carp",
+        "Spices",
+        "Lemon"
+      ],
+      "ru": [
+        "Сазан",
+        "Специи",
+        "Лимон"
+      ],
+      "uz": [
+        "Sazan baliği",
+        "Baharatlar",
+        "Limon"
+      ]
+    },
+    "allergens": {
+      "en": [
+        "Fish"
+      ],
+      "ru": [
+        "Рыба"
+      ],
+      "uz": [
+        "Baliq"
+      ]
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 25,
+    "stock": 10,
+    "is_popular": true,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "1 kg porsiya",
+    "created_at": "2025-06-29T05:07:18.210602+05:00",
+    "updated_at": "2025-06-29T05:07:18.210602+05:00"
+  },
+  "124": {
+    "id": "124",
+    "names": {
+      "en": "Amur – Chef's Signature Dish",
+      "ru": "Амур – фирменное блюдо от шефа",
+      "uz": "Amur – Shefdan maxsus taom"
+    },
+    "name": "Amur – Shefdan maxsus taom",
+    "descriptions": {
+      "en": "A true delicacy for fish lovers",
+      "ru": "Настоящее лакомство для тех, кто любит рыбные блюда.",
+      "uz": "Baliqni sevuvchilar uchun mo‘ljallangan haqiqiy lazzat"
+    },
+    "description": "Baliqni sevuvchilar uchun mo‘ljallangan haqiqiy lazzat",
+    "category": "baliq",
+    "price": 140000,
+    "isThere": true,
+    "imageUrl": "uploads/amurmayi_1751181563.png",
+    "ingredients": {
+      "en": [
+        "Amur fish",
+        "Spices",
+        "Lemon"
+      ],
+      "ru": [
+        "Амур",
+        "Специи",
+        "Лимон"
+      ],
+      "uz": [
+        "Amur baliği",
+        "Baharatlar",
+        "Limon"
+      ]
+    },
+    "allergens": {
+      "en": [
+        "Fish"
+      ],
+      "ru": [
+        "Рыба"
+      ],
+      "uz": [
+        "Baliq"
+      ]
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 20,
+    "stock": 8,
+    "is_popular": true,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "1 kg porsiya",
+    "created_at": "2025-06-29T12:23:29.64473+05:00",
+    "updated_at": "2025-06-29T12:23:29.64473+05:00"
+  },
+  "125": {
+    "id": "125",
+    "names": {
+      "en": "Salmon in Cream Sauce",
+      "ru": "Лосось в сливочном соусе",
+      "uz": "Losos qaymoqli sousda"
+    },
+    "name": "Losos qaymoqli sousda",
+    "descriptions": {
+      "en": "Served with mashed potatoes",
+      "ru": "Подаётся с картофельным пюре",
+      "uz": "Kartoshka pyuresi bilan tortiladi"
+    },
+    "description": "Kartoshka pyuresi bilan tortiladi",
+    "category": "baliq",
+    "price": 180000,
+    "isThere": true,
+    "imageUrl": "uploads/farel_1751181668.jpg",
+    "ingredients": {
+      "en": [
+        "Salmon",
+        "Cream",
+        "Mashed potatoes",
+        "Spices"
+      ],
+      "ru": [
+        "Лосось",
+        "Сливки",
+        "Картофельное пюре",
+        "Специи"
+      ],
+      "uz": [
+        "Losos",
+        "Qaymoq",
+        "Kartoshka pyuresi",
+        "Baharatlar"
+      ]
+    },
+    "allergens": {
+      "en": [
+        "Fish",
+        "Dairy"
+      ],
+      "ru": [
+        "Рыба",
+        "Молочные продукты"
+      ],
+      "uz": [
+        "Baliq",
+        "Sut mahsuloti"
+      ]
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 20,
+    "stock": 6,
+    "is_popular": true,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "",
+    "created_at": "2025-06-29T12:23:33.915482+05:00",
+    "updated_at": "2025-06-29T12:23:33.915482+05:00"
+  },
+  "126": {
+    "id": "126",
+    "names": {
+      "en": "Smoked Trout",
+      "ru": "Форель (копчения с дымком)",
+      "uz": "Tutatib pishirilgan forel"
+    },
+    "name": "Tutatib pishirilgan forel",
+    "descriptions": {
+      "en": "Smoked with a touch of aroma",
+      "ru": "Копчения с дымком",
+      "uz": "Tutatib pishirilgan forel baliği"
+    },
+    "description": "Tutatib pishirilgan forel baliği",
+    "category": "baliq",
+    "price": 175000,
+    "isThere": true,
+    "imageUrl": "uploads/forel_1751181714.jpg",
+    "ingredients": {
+      "en": [
+        "Trout",
+        "Smoking",
+        "Spices"
+      ],
+      "ru": [
+        "Форель",
+        "Копчение",
+        "Специи"
+      ],
+      "uz": [
+        "Forel baliği",
+        "Dumanli tutatish",
+        "Baharatlar"
+      ]
+    },
+    "allergens": {
+      "en": [
+        "Fish"
+      ],
+      "ru": [
+        "Рыба"
+      ],
+      "uz": [
+        "Baliq"
+      ]
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 25,
+    "stock": 5,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "1 kg porsiya",
+    "created_at": "2025-06-29T12:23:45.69905+05:00",
+    "updated_at": "2025-06-29T12:23:45.69905+05:00"
+  },
+  "127": {
+    "id": "127",
+    "names": {
+      "en": "Dorado Fish",
+      "ru": "Рыба Дорадо",
+      "uz": "Dorado baliği"
+    },
+    "name": "Dorado baliği",
+    "descriptions": {
+      "en": "Served with vegetables and lemon",
+      "ru": "Подаётся с овощами и лимоном",
+      "uz": "Sabzavotlar va limon bilan tortiladi"
+    },
+    "description": "Sabzavotlar va limon bilan tortiladi",
+    "category": "baliq",
+    "price": 90000,
+    "isThere": true,
+    "imageUrl": "uploads/riba_1751181781.jpg",
+    "ingredients": {
+      "en": [
+        "Dorado",
+        "Vegetables",
+        "Lemon"
+      ],
+      "ru": [
+        "Дорадо",
+        "Овощи",
+        "Лимон"
+      ],
+      "uz": [
+        "Dorado baliği",
+        "Sabzavotlar",
+        "Limon"
+      ]
+    },
+    "allergens": {
+      "en": [
+        "Fish"
+      ],
+      "ru": [
+        "Рыба"
+      ],
+      "uz": [
+        "Baliq"
+      ]
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 18,
+    "stock": 12,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "",
+    "created_at": "2025-06-29T12:23:49.823859+05:00",
+    "updated_at": "2025-06-29T12:23:49.823859+05:00"
+  },
   "150": {
     "id": "150",
     "names": {
@@ -289,7 +994,7 @@
       "uz": "Pomidor, oq piyoz, rayhon va chili qalampiridan tayyorlangan salat"
     },
     "description": "Pomidor, oq piyoz, rayhon va chili qalampiridan tayyorlangan salat",
-    "category": "salatlar",
+    "category": "salat",
     "price": 22000,
     "isThere": true,
     "imageUrl": "uploads/achuchu_1750740652.jpg",
@@ -343,7 +1048,7 @@
       "uz": "Pomidor, bodring, petrushka, qizil piyoz, narsharab, limon sharbati va anor bilan tayyorlangan salat"
     },
     "description": "Pomidor, bodring, petrushka, qizil piyoz, narsharab, limon sharbati va anor bilan tayyorlangan salat",
-    "category": "salatlar",
+    "category": "salat",
     "price": 26000,
     "isThere": true,
     "imageUrl": "uploads/chaban_1750918010.jpg",
@@ -395,6 +1100,75 @@
   "22": {
     "id": "22",
     "names": {
+      "en": "Majnun Salad",
+      "ru": "Мажнун",
+      "uz": "Majnun salati"
+    },
+    "name": "Majnun salati",
+    "descriptions": {
+      "en": "Chicken fillet, cucumbers, iceberg, corn, bell pepper, pickles, and mayonnaise salad",
+      "ru": "Куриное филе, огурцы, айсберг, кукуруза, сладкий перец, соленые огурцы, майонез",
+      "uz": "Tovuq filesi, bodring, aysberg, makkajo‘xori, bulg‘or qalampiri, tuzlangan bodring va mayonezli salat"
+    },
+    "description": "Tovuq filesi, bodring, aysberg, makkajo‘xori, bulg‘or qalampiri, tuzlangan bodring va mayonezli salat",
+    "category": "salat",
+    "price": 34000,
+    "isThere": true,
+    "imageUrl": "uploads/majnun_1751006041.jpg",
+    "ingredients": {
+      "en": [
+        "Chicken fillet",
+        "Cucumbers",
+        "Iceberg",
+        "Corn",
+        "Bell pepper",
+        "Pickles",
+        "Mayonnaise"
+      ],
+      "ru": [
+        "Куриное филе",
+        "Огурцы",
+        "Айсберг",
+        "Кукуруза",
+        "Сладкий перец",
+        "Соленые огурцы",
+        "Майонез"
+      ],
+      "uz": [
+        "Tovuq filesi",
+        "Bodring",
+        "Aysberg",
+        "Makkajo‘xori",
+        "Bulg‘or qalampiri",
+        "Tuzlangan bodring",
+        "Mayonez"
+      ]
+    },
+    "allergens": {
+      "en": [
+        "Mayonnaise"
+      ],
+      "ru": [
+        "Майонез"
+      ],
+      "uz": [
+        "Mayonez"
+      ]
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 7,
+    "stock": 40,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "Tovuq va sabzavotlardan tayyorlangan to‘yimli salat",
+    "created_at": "2025-06-27T18:04:48.428023+05:00",
+    "updated_at": "2025-06-27T18:04:48.428023+05:00"
+  },
+  "23": {
+    "id": "23",
+    "names": {
       "en": "Fresh Vegetable and Herb Salad",
       "ru": "Салат из свежих овощей и зелени",
       "uz": "Yangi sabzavotlar va ko‘katlar salati"
@@ -406,7 +1180,7 @@
       "uz": "Yangi pomidor, bodring va qizil piyoz, aromatik ko‘katlar (kashnich, rayhon, ukrop) bilan, zaytun moyi bilan aralashtirilgan"
     },
     "description": "Yangi pomidor, bodring va qizil piyoz, aromatik ko‘katlar (kashnich, rayhon, ukrop) bilan, zaytun moyi bilan aralashtirilgan",
-    "category": "salatlar",
+    "category": "salat",
     "price": 25000,
     "isThere": true,
     "imageUrl": "uploads/siveji_1750918634.jpg",
@@ -455,6 +1229,573 @@
     "created_at": "2025-06-26T11:18:35.27314+05:00",
     "updated_at": "2025-06-26T11:18:35.273141+05:00"
   },
+  "24": {
+    "id": "24",
+    "names": {
+      "en": "Olivier with Chicken Fillet",
+      "ru": "Столичный с куриным филе",
+      "uz": "Stolichniy tovuqli salat"
+    },
+    "name": "Stolichniy tovuqli salat",
+    "descriptions": {
+      "en": "Olivier salad served with chicken, dressed with mayonnaise, garnished with quail egg and greens",
+      "ru": "Оливье подается с курицей, заправляется майонезом, украшается перепелиным яйцом и салатом",
+      "uz": "Olivye salati tovuq filesi bilan, mayonez bilan aralashtirilgan, bedana tuxumi va ko‘katlar bilan bezatilgan"
+    },
+    "description": "Olivye salati tovuq filesi bilan, mayonez bilan aralashtirilgan, bedana tuxumi va ko‘katlar bilan bezatilgan",
+    "category": "salat",
+    "price": 28000,
+    "isThere": true,
+    "imageUrl": "uploads/olivye_1751029680.png",
+    "ingredients": {
+      "en": [
+        "Chicken fillet",
+        "Potatoes",
+        "Carrots",
+        "Pickles",
+        "Peas",
+        "Mayonnaise",
+        "Quail egg",
+        "Greens"
+      ],
+      "ru": [
+        "Куриное филе",
+        "Картофель",
+        "Морковь",
+        "Соленые огурцы",
+        "Горошек",
+        "Майонез",
+        "Перепелиное яйцо",
+        "Зелень"
+      ],
+      "uz": [
+        "Tovuq filesi",
+        "Kartoshka",
+        "Sabzi",
+        "Tuzlangan bodring",
+        "No‘xat",
+        "Mayonez",
+        "Bedana tuxumi",
+        "Ko‘katlar"
+      ]
+    },
+    "allergens": {
+      "en": [
+        "Eggs",
+        "Mayonnaise"
+      ],
+      "ru": [
+        "Яйца",
+        "Майонез"
+      ],
+      "uz": [
+        "Tuxum",
+        "Mayonez"
+      ]
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 6,
+    "stock": 35,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "An’anaviy Olivye salatining tovuqli versiyasi",
+    "created_at": "2025-06-27T18:09:09.37876+05:00",
+    "updated_at": "2025-06-27T18:09:09.37876+05:00"
+  },
+  "25": {
+    "id": "25",
+    "names": {
+      "en": "Men’s Delight",
+      "ru": "Мужской каприз",
+      "uz": "Мужской kaprizi"
+    },
+    "name": "Мужской kaprizi",
+    "descriptions": {
+      "en": "Indeyka, smoked meat, tongue, mayonnaise, peas, pickles, and egg salad",
+      "ru": "Индейка, копчение мяса, язык, майонез, горох, маринованный огурец, яйцо",
+      "uz": "Indeyka go‘shti, dudlangan go‘sht, til, mayonez, no‘xat, tuzlangan bodring va tuxumdan tayyorlangan salat"
+    },
+    "description": "Indeyka go‘shti, dudlangan go‘sht, til, mayonez, no‘xat, tuzlangan bodring va tuxumdan tayyorlangan salat",
+    "category": "salat",
+    "price": 42000,
+    "isThere": true,
+    "imageUrl": "uploads/muskoy_1751029969.jpg",
+    "ingredients": {
+      "en": [
+        "Indeyka",
+        "Smoked meat",
+        "Tongue",
+        "Mayonnaise",
+        "Peas",
+        "Pickles",
+        "Egg"
+      ],
+      "ru": [
+        "Индейка",
+        "Копчёное мясо",
+        "Язык",
+        "Майонез",
+        "Горох",
+        "Маринованный огурец",
+        "Яйцо"
+      ],
+      "uz": [
+        "Indeyka go‘shti",
+        "Dudlangan go‘sht",
+        "Til",
+        "Mayonez",
+        "No‘xat",
+        "Tuzlangan bodring",
+        "Tuxum"
+      ]
+    },
+    "allergens": {
+      "en": [
+        "Eggs",
+        "Mayonnaise"
+      ],
+      "ru": [
+        "Яйца",
+        "Майонез"
+      ],
+      "uz": [
+        "Tuxum",
+        "Mayonez"
+      ]
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 7,
+    "stock": 30,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "Go‘shtli va to‘yimli erkaklarga xos salat",
+    "created_at": "2025-06-27T18:17:16.828128+05:00",
+    "updated_at": "2025-06-27T18:17:16.828129+05:00"
+  },
+  "26": {
+    "id": "26",
+    "names": {
+      "en": "Greek Salad",
+      "ru": "Греческий",
+      "uz": "Grekcha salat"
+    },
+    "name": "Grekcha salat",
+    "descriptions": {
+      "en": "Tomatoes, cucumbers, olives, black olives, red onion, Balkar pepper, and Fetaxa cheese",
+      "ru": "Помидоры, огурцы, оливки, маслины, красный лук, балкарский перец, сыр фетакса",
+      "uz": "Pomidor, bodring, zaytun, maslin, qizil piyoz, balkar qalampiri va fetaksa pishlog‘i bilan salat"
+    },
+    "description": "Pomidor, bodring, zaytun, maslin, qizil piyoz, balkar qalampiri va fetaksa pishlog‘i bilan salat",
+    "category": "salat",
+    "price": 38000,
+    "isThere": true,
+    "imageUrl": "uploads/2025-06-27_6.21.05_PM_1751030478.jpg",
+    "ingredients": {
+      "en": [
+        "Tomatoes",
+        "Cucumbers",
+        "Olives",
+        "Black olives",
+        "Red onion",
+        "Balkar pepper",
+        "Fetaxa cheese"
+      ],
+      "ru": [
+        "Помидоры",
+        "Огурцы",
+        "Оливки",
+        "Маслины",
+        "Красный лук",
+        "Балкарский перец",
+        "Сыр фетакса"
+      ],
+      "uz": [
+        "Pomidor",
+        "Bodring",
+        "Zaytun",
+        "Maslin",
+        "Qizil piyoz",
+        "Balkar qalampiri",
+        "Fetaksa pishlog‘i"
+      ]
+    },
+    "allergens": {
+      "en": [
+        "Dairy (cheese)"
+      ],
+      "ru": [
+        "Молочные продукты (сыр)"
+      ],
+      "uz": [
+        "Sut mahsuloti (pishloq)"
+      ]
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 5,
+    "stock": 40,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "Yengil, vitaminlarga boy va sog‘lom Grekcha salat",
+    "created_at": "2025-06-27T18:24:13.827809+05:00",
+    "updated_at": "2025-06-27T18:24:13.827809+05:00"
+  },
+  "27": {
+    "id": "27",
+    "names": {
+      "en": "Rusalka Salad",
+      "ru": "Русалка",
+      "uz": "Rusalka salati"
+    },
+    "name": "Rusalka salati",
+    "descriptions": {
+      "en": "Light salad made of cabbage, sorrel, and beef. Dressed with lemon and olive oil",
+      "ru": "Лёгкий салат из капусты, щавеля и говядины. Заправляется лимоном и оливковым маслом",
+      "uz": "Karam, shovul va mol go‘shtidan tayyorlangan yengil salat. Limon va zaytun moyi bilan aralashtiriladi"
+    },
+    "description": "Karam, shovul va mol go‘shtidan tayyorlangan yengil salat. Limon va zaytun moyi bilan aralashtiriladi",
+    "category": "salat",
+    "price": 32000,
+    "isThere": true,
+    "imageUrl": "uploads/rusalka_1751030804.jpg",
+    "ingredients": {
+      "en": [
+        "Cabbage",
+        "Sorrel",
+        "Beef",
+        "Lemon juice",
+        "Olive oil"
+      ],
+      "ru": [
+        "Капуста",
+        "Щавель",
+        "Говядина",
+        "Лимонный сок",
+        "Оливковое масло"
+      ],
+      "uz": [
+        "Karam",
+        "Shovul",
+        "Mol go‘shti",
+        "Limon sharbati",
+        "Zaytun moyi"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 6,
+    "stock": 40,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "Vitaminlarga boy, go‘shtli va yengil salat",
+    "created_at": "2025-06-27T18:29:13.317028+05:00",
+    "updated_at": "2025-06-27T18:29:13.317028+05:00"
+  },
+  "28": {
+    "id": "28",
+    "names": {
+      "en": "Mix Salad",
+      "ru": "Микс салат",
+      "uz": "Miks salat"
+    },
+    "name": "Miks salat",
+    "descriptions": {
+      "en": "Mixed salad greens, cucumbers, red onion, cherry tomatoes, feta cheese, and cashew sauce dressing",
+      "ru": "Микс салат, огурцы, лук красный, томаты черри, фета, кешью соус дрессинг",
+      "uz": "Miks salat barglari, bodring, qizil piyoz, cherri pomidor, feta pishloq va keşyu sousi bilan aralashtirilgan salat"
+    },
+    "description": "Miks salat barglari, bodring, qizil piyoz, cherri pomidor, feta pishloq va keşyu sousi bilan aralashtirilgan salat",
+    "category": "salat",
+    "price": 32000,
+    "isThere": true,
+    "imageUrl": "uploads/mikis_1751031111.png",
+    "ingredients": {
+      "en": [
+        "Mix salad",
+        "Cucumbers",
+        "Red onion",
+        "Cherry tomatoes",
+        "Feta cheese",
+        "Cashew sauce"
+      ],
+      "ru": [
+        "Микс салат",
+        "Огурцы",
+        "Лук красный",
+        "Томаты черри",
+        "Фета",
+        "Кешью соус"
+      ],
+      "uz": [
+        "Miks salat",
+        "Bodring",
+        "Qizil piyoz",
+        "Cherri pomidor",
+        "Feta pishloq",
+        "Keshyu sousi"
+      ]
+    },
+    "allergens": {
+      "en": [
+        "Dairy (feta cheese)",
+        "Nuts (cashew)"
+      ],
+      "ru": [
+        "Молочные продукты (фета)",
+        "Орехи (кешью)"
+      ],
+      "uz": [
+        "Sut mahsuloti (pishloq)",
+        "Yong‘oq (keshyu)"
+      ]
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 5,
+    "stock": 35,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "Yengil va foydali vitaminlarga boy salat",
+    "created_at": "2025-06-27T18:32:37.394852+05:00",
+    "updated_at": "2025-06-27T18:32:37.394852+05:00"
+  },
+  "29": {
+    "id": "29",
+    "names": {
+      "en": "Caesar Salad with Chicken",
+      "ru": "Цезарь с курицей",
+      "uz": "Sezar tovuqli salat"
+    },
+    "name": "Sezar tovuqli salat",
+    "descriptions": {
+      "en": "Iceberg and romaine lettuce with Caesar dressing, grilled chicken breast, cherry tomatoes, parmesan, and croutons",
+      "ru": "Айсберг, романо, заправляется фирменным соусом 'Цезарь', обжаренной куриной грудкой, черри, пармезаном и сухарями",
+      "uz": "Aysberg va romano barglari, Sezar sousi, qovurilgan tovuq go‘shti, cherri pomidorlari, parmezan pishloq va suxarilar bilan salat"
+    },
+    "description": "Aysberg va romano barglari, Sezar sousi, qovurilgan tovuq go‘shti, cherri pomidorlari, parmezan pishloq va suxarilar bilan salat",
+    "category": "salat",
+    "price": 38000,
+    "isThere": true,
+    "imageUrl": "uploads/sezar_1751031307.jpg",
+    "ingredients": {
+      "en": [
+        "Iceberg",
+        "Romaine",
+        "Caesar sauce",
+        "Chicken breast",
+        "Cherry tomatoes",
+        "Parmesan",
+        "Croutons"
+      ],
+      "ru": [
+        "Айсберг",
+        "Романо",
+        "Соус Цезарь",
+        "Куриная грудка",
+        "Томаты черри",
+        "Пармезан",
+        "Сухари"
+      ],
+      "uz": [
+        "Aysberg",
+        "Romano barglari",
+        "Sezar sousi",
+        "Tovuq go‘shti",
+        "Cherri pomidor",
+        "Parmezan",
+        "Suxari"
+      ]
+    },
+    "allergens": {
+      "en": [
+        "Dairy (parmesan)",
+        "Eggs (sauce)",
+        "Bread (croutons)"
+      ],
+      "ru": [
+        "Молочные продукты (пармезан)",
+        "Яйца (соус)",
+        "Хлеб (сухари)"
+      ],
+      "uz": [
+        "Sut mahsuloti (pishloq)",
+        "Tuxum (sous)",
+        "Non (suxari)"
+      ]
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 6,
+    "stock": 40,
+    "is_popular": true,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "Klassik Sezar salati tovuq bilan",
+    "created_at": "2025-06-27T18:35:46.573156+05:00",
+    "updated_at": "2025-06-27T18:35:46.573157+05:00"
+  },
+  "33": {
+    "id": "33",
+    "names": {
+      "en": "Crispy Eggplant",
+      "ru": "Хрустящий Баклажаны",
+      "uz": "Qarsildoq baqlajon"
+    },
+    "name": "Qarsildoq baqlajon",
+    "descriptions": {
+      "en": "Eggplant, tomato, cilantro, sesame, unagi, and sweet aroy sauce",
+      "ru": "Баклажан, помидор, кинза, кунжут, унаги, арой сладкий",
+      "uz": "Baqlajon, pomidor, kashnich, kunjut, unagi va aroiy shirin sous bilan tayyorlangan salat"
+    },
+    "description": "Baqlajon, pomidor, kashnich, kunjut, unagi va aroiy shirin sous bilan tayyorlangan salat",
+    "category": "salat",
+    "price": 38000,
+    "isThere": true,
+    "imageUrl": "uploads/xurustashi_1751031998.jpg",
+    "ingredients": {
+      "en": [
+        "Eggplant",
+        "Tomato",
+        "Cilantro",
+        "Sesame",
+        "Unagi sauce",
+        "Aroy sweet sauce"
+      ],
+      "ru": [
+        "Баклажан",
+        "Помидор",
+        "Кинза",
+        "Кунжут",
+        "Унаги",
+        "Арой сладкий соус"
+      ],
+      "uz": [
+        "Baqlajon",
+        "Pomidor",
+        "Kashnich",
+        "Kunjut",
+        "Unagi sous",
+        "Aroy shirin sous"
+      ]
+    },
+    "allergens": {
+      "en": [
+        "Sesame",
+        "Fish sauce (unagi)"
+      ],
+      "ru": [
+        "Кунжут",
+        "Рыбный соус (унаги)"
+      ],
+      "uz": [
+        "Kunjut",
+        "Baliq sousi (unagi)"
+      ]
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 5,
+    "stock": 30,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "Sharqona ta’mli va qarsildoq sabzavotli salat",
+    "created_at": "2025-06-27T18:48:21.581752+05:00",
+    "updated_at": "2025-06-27T18:48:21.581752+05:00"
+  },
+  "35": {
+    "id": "35",
+    "names": {
+      "en": "Majnuntol Salad",
+      "ru": "Салат Мажнунтол",
+      "uz": "Majnuntol salati"
+    },
+    "name": "Majnuntol salati",
+    "descriptions": {
+      "en": "Sorrel, beef, tomatoes, cucumbers, cilantro, dill, brynza cheese, potato straws, olive oil, salt, and lemon juice salad",
+      "ru": "Щавель, мясо говяжий, помидор, огурцы, кинза, укроп, брынза, картошка пай, оливковое масло, соль, лимонный сок",
+      "uz": "Shovul, mol go‘shti, pomidor, bodring, kashnich, ukrop, brynza pishlog‘i, kartoshka pay, zaytun moyi, tuz va limon sharbati bilan salat"
+    },
+    "description": "Shovul, mol go‘shti, pomidor, bodring, kashnich, ukrop, brynza pishlog‘i, kartoshka pay, zaytun moyi, tuz va limon sharbati bilan salat",
+    "category": "salat",
+    "price": 38000,
+    "isThere": true,
+    "imageUrl": "uploads/majnuntol_1751033338.jpg",
+    "ingredients": {
+      "en": [
+        "Sorrel",
+        "Beef",
+        "Tomato",
+        "Cucumber",
+        "Cilantro",
+        "Dill",
+        "Brynza",
+        "Potato straws",
+        "Olive oil",
+        "Salt",
+        "Lemon juice"
+      ],
+      "ru": [
+        "Щавель",
+        "Говядина",
+        "Помидор",
+        "Огурцы",
+        "Кинза",
+        "Укроп",
+        "Брынза",
+        "Картошка пай",
+        "Оливковое масло",
+        "Соль",
+        "Лимонный сок"
+      ],
+      "uz": [
+        "Shovul",
+        "Mol go‘shti",
+        "Pomidor",
+        "Bodring",
+        "Kashnich",
+        "Ukrop",
+        "Brynza",
+        "Kartoshka pay",
+        "Zaytun moyi",
+        "Tuz",
+        "Limon sharbati"
+      ]
+    },
+    "allergens": {
+      "en": [
+        "Dairy (brynza)"
+      ],
+      "ru": [
+        "Молочные продукты (брынза)"
+      ],
+      "uz": [
+        "Sut mahsuloti (brynza)"
+      ]
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 6,
+    "stock": 30,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "Yengil, foydali va o‘zgacha ta’mli go‘shtli salat",
+    "created_at": "2025-06-27T19:12:00.319462+05:00",
+    "updated_at": "2025-06-27T19:12:00.319462+05:00"
+  },
   "7": {
     "id": "7",
     "names": {
@@ -469,7 +1810,7 @@
       "uz": "Mol tili, qazi, tovuq ruleti — xantal bilan birga tortiladi"
     },
     "description": "Mol tili, qazi, tovuq ruleti — xantal bilan birga tortiladi",
-    "category": "salatlar",
+    "category": "gazak",
     "price": 160000,
     "isThere": true,
     "imageUrl": "uploads/misnoy_1750917597.jpg",
@@ -523,7 +1864,7 @@
       "uz": "Qaynatilgan mol tili xantal, cherri pomidorlari va salat bilan tortiladi"
     },
     "description": "Qaynatilgan mol tili xantal, cherri pomidorlari va salat bilan tortiladi",
-    "category": "salatlar",
+    "category": "gazak",
     "price": 55000,
     "isThere": true,
     "imageUrl": "uploads/yazikmol_1750917916.jpg",
@@ -562,5 +1903,845 @@
     "comment": "Yengil va foydali go‘shtli gazak",
     "created_at": "2025-06-26T11:05:45.995791+05:00",
     "updated_at": "2025-06-26T11:05:45.995791+05:00"
+  },
+  "80": {
+    "id": "80",
+    "names": {
+      "en": "Tashkent-style Mastava",
+      "ru": "Мастава по ташкентски",
+      "uz": "Toshkentcha Mastava"
+    },
+    "name": "Toshkentcha Mastava",
+    "descriptions": {
+      "en": "Beef, rice, carrots, bell pepper, herbs, and sour milk soup",
+      "ru": "Говядина, рис, морковь, болгарский перец, зелень, чакка",
+      "uz": "Mol go‘shti, guruch, sabzi, bulg‘or qalampiri, ko‘katlar va chakka bilan tayyorlangan issiq sho‘rva"
+    },
+    "description": "Mol go‘shti, guruch, sabzi, bulg‘or qalampiri, ko‘katlar va chakka bilan tayyorlangan issiq sho‘rva",
+    "category": "birinchi_taom",
+    "price": 22000,
+    "isThere": true,
+    "imageUrl": "uploads/mastava_1751126420.jpg",
+    "ingredients": {
+      "en": [
+        "Beef",
+        "Rice",
+        "Carrots",
+        "Bell pepper",
+        "Greens",
+        "Sour milk"
+      ],
+      "ru": [
+        "Говядина",
+        "Рис",
+        "Морковь",
+        "Болгарский перец",
+        "Зелень",
+        "Чакка"
+      ],
+      "uz": [
+        "Mol go‘shti",
+        "Guruch",
+        "Sabzi",
+        "Bulg‘or qalampiri",
+        "Ko‘katlar",
+        "Chakka"
+      ]
+    },
+    "allergens": {
+      "en": [
+        "Dairy (sour milk)"
+      ],
+      "ru": [
+        "Молочные продукты (чакка)"
+      ],
+      "uz": [
+        "Sut mahsuloti (chakka)"
+      ]
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 10,
+    "stock": 25,
+    "is_popular": true,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "Toshkent uslubidagi an’anaviy va to‘yimli mastava sho‘rvasi",
+    "created_at": "2025-06-28T21:02:51.726072+05:00",
+    "updated_at": "2025-06-28T21:02:51.726072+05:00"
+  },
+  "81": {
+    "id": "81",
+    "names": {
+      "en": "Chicken Noodle Soup",
+      "ru": "Куриный суп с лапшой",
+      "uz": "Tovuq sho‘rva lapsha bilan"
+    },
+    "name": "Tovuq sho‘rva lapsha bilan",
+    "descriptions": {
+      "en": "Chicken broth with homemade noodles, vegetables, and herbs",
+      "ru": "Куриный бульон с домашней лапшой, овощами и зеленью",
+      "uz": "Tovuq bulyoni, qo‘l bilan tayyorlangan lapsha, sabzavotlar va ko‘katlar bilan"
+    },
+    "description": "Tovuq bulyoni, qo‘l bilan tayyorlangan lapsha, sabzavotlar va ko‘katlar bilan",
+    "category": "birinchi_taom",
+    "price": 20000,
+    "isThere": true,
+    "imageUrl": "uploads/kuriniy_sup_1751126769.jpg",
+    "ingredients": {
+      "en": [
+        "Chicken broth",
+        "Noodles",
+        "Vegetables",
+        "Herbs"
+      ],
+      "ru": [
+        "Куриный бульон",
+        "Лапша",
+        "Овощи",
+        "Зелень"
+      ],
+      "uz": [
+        "Tovuq bulyoni",
+        "Lapsha",
+        "Sabzavotlar",
+        "Ko‘katlar"
+      ]
+    },
+    "allergens": {
+      "en": [
+        "Eggs",
+        "Flour"
+      ],
+      "ru": [
+        "Яйца",
+        "Мука"
+      ],
+      "uz": [
+        "Tuxum",
+        "Un"
+      ]
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 8,
+    "stock": 25,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "Yengil va foydali tovuqli sho‘rva",
+    "created_at": "2025-06-28T21:19:39.50409+05:00",
+    "updated_at": "2025-06-28T21:19:39.50409+05:00"
+  },
+  "82": {
+    "id": "82",
+    "names": {
+      "en": "Shchi Soup",
+      "ru": "Щи",
+      "uz": "Shchi sho‘rvasi"
+    },
+    "name": "Shchi sho‘rvasi",
+    "descriptions": {
+      "en": "Light soup made of young sorrel, meatballs, and vegetables",
+      "ru": "Лёгкий суп из молодого щавеля, фрикаделек и овощей",
+      "uz": "Shovul, frikadelka va sabzavotlardan tayyorlangan yengil sho‘rva"
+    },
+    "description": "Shovul, frikadelka va sabzavotlardan tayyorlangan yengil sho‘rva",
+    "category": "birinchi_taom",
+    "price": 22000,
+    "isThere": true,
+    "imageUrl": "uploads/shi_1751126791.jpg",
+    "ingredients": {
+      "en": [
+        "Sorrel",
+        "Meatballs",
+        "Vegetables"
+      ],
+      "ru": [
+        "Щавель",
+        "Фрикадельки",
+        "Овощи"
+      ],
+      "uz": [
+        "Shovul",
+        "Frikadelka",
+        "Sabzavotlar"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 7,
+    "stock": 20,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "Vitaminlarga boy yengil sho‘rva",
+    "created_at": "2025-06-28T21:19:47.341942+05:00",
+    "updated_at": "2025-06-28T21:19:47.341943+05:00"
+  },
+  "83": {
+    "id": "83",
+    "names": {
+      "en": "Guzha Soup",
+      "ru": "Гужа",
+      "uz": "Gujja"
+    },
+    "name": "Gujja",
+    "descriptions": {
+      "en": "National rich beef soup",
+      "ru": "Национальный насыщенный говяжий суп",
+      "uz": "Milliy, boy ta’mga ega mol go‘shtli sho‘rva"
+    },
+    "description": "Milliy, boy ta’mga ega mol go‘shtli sho‘rva",
+    "category": "birinchi_taom",
+    "price": 22000,
+    "isThere": true,
+    "imageUrl": "uploads/guja_1751126828.jpg",
+    "ingredients": {
+      "en": [
+        "Beef",
+        "Vegetables",
+        "Spices"
+      ],
+      "ru": [
+        "Говядина",
+        "Овощи",
+        "Специи"
+      ],
+      "uz": [
+        "Mol go‘shti",
+        "Sabzavotlar",
+        "Baharatlar"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 10,
+    "stock": 25,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "To‘yimli va an’anaviy sho‘rva",
+    "created_at": "2025-06-28T21:19:53.248462+05:00",
+    "updated_at": "2025-06-28T21:19:53.248462+05:00"
+  },
+  "84": {
+    "id": "84",
+    "names": {
+      "en": "Tushonka",
+      "ru": "Тушенка",
+      "uz": "Tushyonka"
+    },
+    "name": "Tushyonka",
+    "descriptions": {
+      "en": "Rich beef broth with tender beef pieces",
+      "ru": "Насыщенный говяжий бульон, с нежными кусочками говядины",
+      "uz": "Boy mol go‘shti bulyoni, mayin mol go‘shti bo‘laklari bilan"
+    },
+    "description": "Boy mol go‘shti bulyoni, mayin mol go‘shti bo‘laklari bilan",
+    "category": "birinchi_taom",
+    "price": 27000,
+    "isThere": true,
+    "imageUrl": "uploads/tushonka_1751126857.jpg",
+    "ingredients": {
+      "en": [
+        "Beef",
+        "Broth",
+        "Spices"
+      ],
+      "ru": [
+        "Говядина",
+        "Бульон",
+        "Специи"
+      ],
+      "uz": [
+        "Mol go‘shti",
+        "Bulyon",
+        "Baharatlar"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 9,
+    "stock": 20,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "Mazali va kuchli bulyonli sho‘rva",
+    "created_at": "2025-06-28T21:19:58.18239+05:00",
+    "updated_at": "2025-06-28T21:19:58.18239+05:00"
+  },
+  "85": {
+    "id": "85",
+    "names": {
+      "en": "Tashkent Lamb Shurpa with Chickpeas and Vegetables",
+      "ru": "Ташкентская Шурпа из ягненка с нутом и овощами",
+      "uz": "Toshkentcha shurva qo‘y go‘shti bilan"
+    },
+    "name": "Toshkentcha shurva qo‘y go‘shti bilan",
+    "descriptions": {
+      "en": "Aromatic and hearty dish with lamb, chickpeas, and vegetables",
+      "ru": "Ароматное и сытное блюдо",
+      "uz": "Qo‘y go‘shti, no‘xat va sabzavotlardan tayyorlangan xushbo‘y va to‘yimli taom"
+    },
+    "description": "Qo‘y go‘shti, no‘xat va sabzavotlardan tayyorlangan xushbo‘y va to‘yimli taom",
+    "category": "birinchi_taom",
+    "price": 27000,
+    "isThere": true,
+    "imageUrl": "uploads/shurpo_1751126681.jpg",
+    "ingredients": {
+      "en": [
+        "Lamb",
+        "Chickpeas",
+        "Vegetables",
+        "Spices"
+      ],
+      "ru": [
+        "Ягнятина",
+        "Нут",
+        "Овощи",
+        "Специи"
+      ],
+      "uz": [
+        "Qo‘y go‘shti",
+        "No‘xat",
+        "Sabzavotlar",
+        "Baharatlar"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 12,
+    "stock": 18,
+    "is_popular": true,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "Qo‘y go‘shti bilan tayyorlangan klassik shurpa",
+    "created_at": "2025-06-28T21:20:03.750982+05:00",
+    "updated_at": "2025-06-28T21:20:03.750982+05:00"
+  },
+  "86": {
+    "id": "86",
+    "names": {
+      "en": "Uyghur Lagman",
+      "ru": "Уйгурски Лагман",
+      "uz": "Uyg‘urcha lag‘mon"
+    },
+    "name": "Uyg‘urcha lag‘mon",
+    "descriptions": {
+      "en": "Lagman noodles, beef, daikon, pepper, and spices",
+      "ru": "Лагман, мясо, дайкон, перец, приправа",
+      "uz": "Lag‘mon, mol go‘shti, daikon, qalampir va maxsus ziravorlar bilan"
+    },
+    "description": "Lag‘mon, mol go‘shti, daikon, qalampir va maxsus ziravorlar bilan",
+    "category": "birinchi_taom",
+    "price": 35000,
+    "isThere": true,
+    "imageUrl": "uploads/lagman_1751127513.png",
+    "ingredients": {
+      "en": [
+        "Lagman",
+        "Beef",
+        "Daikon",
+        "Pepper",
+        "Spices"
+      ],
+      "ru": [
+        "Лагман",
+        "Мясо",
+        "Дайкон",
+        "Перец",
+        "Приправа"
+      ],
+      "uz": [
+        "Lag‘mon",
+        "Mol go‘shti",
+        "Daikon",
+        "Qalampir",
+        "Baharatlar"
+      ]
+    },
+    "allergens": {
+      "en": [
+        "Flour"
+      ],
+      "ru": [
+        "Мука"
+      ],
+      "uz": [
+        "Un"
+      ]
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 10,
+    "stock": 22,
+    "is_popular": true,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "Sharqona uslubdagi boy ta’mli lag‘mon",
+    "created_at": "2025-06-28T21:20:10.573685+05:00",
+    "updated_at": "2025-06-28T21:20:10.573685+05:00"
+  },
+  "91": {
+    "id": "91",
+    "names": {
+      "en": "Tandoor Meat (1 kg)",
+      "ru": "Тандир 1 кг",
+      "uz": "Tandir go‘shti (1 kg)"
+    },
+    "name": "Tandir go‘shti (1 kg)",
+    "descriptions": {
+      "en": "1 kg of soft and flavorful meat cooked in a tandoor",
+      "ru": "1 кг мягкого и ароматного мяса, приготовленного в тандыре",
+      "uz": "1 kilogramm tandirda pishirilgan yumshoq va mazali go‘sht"
+    },
+    "description": "1 kilogramm tandirda pishirilgan yumshoq va mazali go‘sht",
+    "category": "issiq_taom",
+    "price": 190000,
+    "isThere": true,
+    "imageUrl": "uploads/tandir_1751153799.jpg",
+    "ingredients": {
+      "en": [
+        "Meat",
+        "Spices",
+        "Salt"
+      ],
+      "ru": [
+        "Мясо",
+        "Специи",
+        "Соль"
+      ],
+      "uz": [
+        "Qo‘y go‘shti",
+        "Baharatlar",
+        "Tuz"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 15,
+    "stock": 10,
+    "is_popular": true,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "An’anaviy tandirda pishirilgan go‘sht",
+    "created_at": "2025-06-29T04:38:39.406465+05:00",
+    "updated_at": "2025-06-29T04:38:39.406465+05:00"
+  },
+  "92": {
+    "id": "92",
+    "names": {
+      "en": "Tabaka Chicken (1 kg)",
+      "ru": "Табака 1 кг",
+      "uz": "Tabaka (1 kg)"
+    },
+    "name": "Tabaka (1 kg)",
+    "descriptions": {
+      "en": "1 kg of chicken grilled with aromatic spices",
+      "ru": "1 кг курицы, приготовленной с ароматными специями",
+      "uz": "1 kilogramm ziravorlar bilan pishirilgan tovuq go‘shti"
+    },
+    "description": "1 kilogramm ziravorlar bilan pishirilgan tovuq go‘shti",
+    "category": "issiq_taom",
+    "price": 75000,
+    "isThere": true,
+    "imageUrl": "uploads/tabaka_1751153746.jpg",
+    "ingredients": {
+      "en": [
+        "Chicken",
+        "Spices",
+        "Salt",
+        "Butter"
+      ],
+      "ru": [
+        "Курица",
+        "Специи",
+        "Соль",
+        "Масло"
+      ],
+      "uz": [
+        "Tovuq go‘shti",
+        "Baharatlar",
+        "Tuz",
+        "Sariyog‘"
+      ]
+    },
+    "allergens": {
+      "en": [
+        "Dairy (butter)"
+      ],
+      "ru": [
+        "Молочные продукты (масло)"
+      ],
+      "uz": [
+        "Sut mahsuloti (sariyog‘)"
+      ]
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 12,
+    "stock": 15,
+    "is_popular": true,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "Qovurilgan tovuq go‘shti tabaka uslubida",
+    "created_at": "2025-06-29T04:38:44.087161+05:00",
+    "updated_at": "2025-06-29T04:38:44.087161+05:00"
+  },
+  "93": {
+    "id": "93",
+    "names": {
+      "en": "Fried Chicken Wings (1 kg)",
+      "ru": "Жареные Крылышки 1 кг",
+      "uz": "Qovurilgan qanotchalar (1 kg)"
+    },
+    "name": "Qovurilgan qanotchalar (1 kg)",
+    "descriptions": {
+      "en": "Delicious fried chicken wings",
+      "ru": "Вкусные жареные куриные крылышки",
+      "uz": "Mazali va xushta’m qovurilgan tovuq qanotchalari"
+    },
+    "description": "Mazali va xushta’m qovurilgan tovuq qanotchalari",
+    "category": "issiq_taom",
+    "price": 75000,
+    "isThere": true,
+    "imageUrl": "uploads/kirilichka_1751153677.jpg",
+    "ingredients": {
+      "en": [
+        "Chicken wings",
+        "Spices",
+        "Oil",
+        "Salt"
+      ],
+      "ru": [
+        "Крылышки",
+        "Специи",
+        "Масло",
+        "Соль"
+      ],
+      "uz": [
+        "Tovuq qanotchalari",
+        "Ziravorlar",
+        "Yog‘",
+        "Tuz"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 10,
+    "stock": 20,
+    "is_popular": true,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "Qarsildoq va mazali tovuq qanotchalari",
+    "created_at": "2025-06-29T04:38:48.92843+05:00",
+    "updated_at": "2025-06-29T04:38:48.92843+05:00"
+  },
+  "95": {
+    "id": "95",
+    "names": {
+      "en": "Oxtail Stew",
+      "ru": "Думгаза",
+      "uz": "Dumg‘aza"
+    },
+    "name": "Dumg‘aza",
+    "descriptions": {
+      "en": "Slow-cooked oxtails in signature sauce, served with greens and sour milk",
+      "ru": "Томленые бычьи хвосты в фирменном соусе, подаются с зеленью и кислым молоком",
+      "uz": "Firmen sousda dimlangan buqa dumlari, ko‘kat va qatiq bilan tortiladi"
+    },
+    "description": "Firmen sousda dimlangan buqa dumlari, ko‘kat va qatiq bilan tortiladi",
+    "category": "issiq_taom",
+    "price": 90000,
+    "isThere": true,
+    "imageUrl": "uploads/dumgoza_1751154155.jpg",
+    "ingredients": {
+      "en": [
+        "Oxtail",
+        "Signature sauce",
+        "Greens",
+        "Sour milk"
+      ],
+      "ru": [
+        "Бычьи хвосты",
+        "Фирменный соус",
+        "Зелень",
+        "Кислое молоко"
+      ],
+      "uz": [
+        "Buqa dumlari",
+        "Firmen sous",
+        "Ko‘katlar",
+        "Qatiq"
+      ]
+    },
+    "allergens": {
+      "en": [
+        "Dairy"
+      ],
+      "ru": [
+        "Молочные продукты"
+      ],
+      "uz": [
+        "Sut mahsuloti"
+      ]
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 15,
+    "stock": 10,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "500 gr porsiyada xizmat qilinadi",
+    "created_at": "2025-06-29T04:47:46.951259+05:00",
+    "updated_at": "2025-06-29T04:47:46.951259+05:00"
+  },
+  "96": {
+    "id": "96",
+    "names": {
+      "en": "Jiz from Lamb Ribs",
+      "ru": "Джиз-быз из бараньей корейки",
+      "uz": "Qo‘y qovurg‘asidan jiz"
+    },
+    "name": "Qo‘y qovurg‘asidan jiz",
+    "descriptions": {
+      "en": "Served with potato chips, salad, and pickled onion",
+      "ru": "Подается с картофелем чипсы, салатом и маринованным луком",
+      "uz": "Kartoshka chip, salat va tuzlangan piyoz bilan tortiladi"
+    },
+    "description": "Kartoshka chip, salat va tuzlangan piyoz bilan tortiladi",
+    "category": "issiq_taom",
+    "price": 125000,
+    "isThere": true,
+    "imageUrl": "uploads/jizkareka_1751154217.jpg",
+    "ingredients": {
+      "en": [
+        "Lamb ribs",
+        "Potato chips",
+        "Salad",
+        "Pickled onion"
+      ],
+      "ru": [
+        "Корейка",
+        "Картофель чипсы",
+        "Салат",
+        "Маринованный лук"
+      ],
+      "uz": [
+        "Qo‘y qovurg‘asi",
+        "Kartoshka chip",
+        "Salat",
+        "Tuzlangan piyoz"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 12,
+    "stock": 15,
+    "is_popular": true,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "500 gr porsiyada xizmat qilinadi",
+    "created_at": "2025-06-29T04:47:53.843004+05:00",
+    "updated_at": "2025-06-29T04:47:53.843004+05:00"
+  },
+  "97": {
+    "id": "97",
+    "names": {
+      "en": "Jiz from Lamb Testicles",
+      "ru": "Джиз из бараньих семечек",
+      "uz": "Qo‘y urug‘idan jiz"
+    },
+    "name": "Qo‘y urug‘idan jiz",
+    "descriptions": {
+      "en": "Served with potato chips, salad, and pickled onion",
+      "ru": "Подается с картофелем чипсы, салатом и маринованным луком",
+      "uz": "Kartoshka chip, salat va tuzlangan piyoz bilan tortiladi"
+    },
+    "description": "Kartoshka chip, salat va tuzlangan piyoz bilan tortiladi",
+    "category": "issiq_taom",
+    "price": 90000,
+    "isThere": true,
+    "imageUrl": "uploads/jizsemichka_1751154292.jpg",
+    "ingredients": {
+      "en": [
+        "Lamb testicles",
+        "Potato chips",
+        "Salad",
+        "Pickled onion"
+      ],
+      "ru": [
+        "Семечки",
+        "Картофель чипсы",
+        "Салат",
+        "Маринованный лук"
+      ],
+      "uz": [
+        "Qo‘y urug‘i",
+        "Kartoshka chip",
+        "Salat",
+        "Tuzlangan piyoz"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 12,
+    "stock": 12,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "500 gr porsiyada xizmat qilinadi",
+    "created_at": "2025-06-29T04:47:58.705737+05:00",
+    "updated_at": "2025-06-29T04:47:58.705737+05:00"
+  },
+  "98": {
+    "id": "98",
+    "names": {
+      "en": "Jiz from Beef Tenderloin",
+      "ru": "Джиз-быз из вырезки",
+      "uz": "Mol go‘shti filesidan jiz"
+    },
+    "name": "Mol go‘shti filesidan jiz",
+    "descriptions": {
+      "en": "Served with potato chips, salad, and pickled onion",
+      "ru": "Подается с картофелем чипсы, салатом и маринованным луком",
+      "uz": "Kartoshka chip, salat va tuzlangan piyoz bilan tortiladi"
+    },
+    "description": "Kartoshka chip, salat va tuzlangan piyoz bilan tortiladi",
+    "category": "issiq_taom",
+    "price": 130000,
+    "isThere": true,
+    "imageUrl": "uploads/jizviriska_1751154332.jpg",
+    "ingredients": {
+      "en": [
+        "Beef tenderloin",
+        "Potato chips",
+        "Salad",
+        "Pickled onion"
+      ],
+      "ru": [
+        "Вырезка",
+        "Картофель чипсы",
+        "Салат",
+        "Маринованный лук"
+      ],
+      "uz": [
+        "Mol filesi",
+        "Kartoshka chip",
+        "Salat",
+        "Tuzlangan piyoz"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 12,
+    "stock": 14,
+    "is_popular": true,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "500 gr porsiyada xizmat qilinadi",
+    "created_at": "2025-06-29T04:48:03.655296+05:00",
+    "updated_at": "2025-06-29T04:48:03.655296+05:00"
+  },
+  "99": {
+    "id": "99",
+    "names": {
+      "en": "Jiz-biz Vaguri",
+      "ru": "Джиз-быз вагури",
+      "uz": "Jiz-biz vaguri"
+    },
+    "name": "Jiz-biz vaguri",
+    "descriptions": {
+      "en": "Served with potato chips, salad, and pickled onion",
+      "ru": "Подается с картофелем чипсы, салатом и маринованным луком",
+      "uz": "Kartoshka chip, salat va tuzlangan piyoz bilan tortiladi"
+    },
+    "description": "Kartoshka chip, salat va tuzlangan piyoz bilan tortiladi",
+    "category": "issiq_taom",
+    "price": 100000,
+    "isThere": true,
+    "imageUrl": "uploads/jizvaguri_1751154396.jpg",
+    "ingredients": {
+      "en": [
+        "Vaguri",
+        "Potato chips",
+        "Salad",
+        "Pickled onion"
+      ],
+      "ru": [
+        "Вагури",
+        "Картофель чипсы",
+        "Салат",
+        "Маринованный лук"
+      ],
+      "uz": [
+        "Mol yoki qo‘y vaguri",
+        "Kartoshka chip",
+        "Salat",
+        "Tuzlangan piyoz"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 12,
+    "stock": 12,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "500 gr porsiyada xizmat qilinadi",
+    "created_at": "2025-06-29T04:48:08.472851+05:00",
+    "updated_at": "2025-06-29T04:48:08.472851+05:00"
   }
 }

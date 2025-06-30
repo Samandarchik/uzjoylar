@@ -123,7 +123,7 @@ const (
 var FOOD_TRANSLATIONS = map[string]map[string]string{
 	"uz": {
 		"gazak":         "Gazaklar",
-		"salat":         "Salatlar",
+		"salat":         "Salat",
 		"birinchi_taom": "Birinchi taomlar",
 		"issiq_taom":    "Issiq taomlar",
 		"baliq":         "Baliq",
