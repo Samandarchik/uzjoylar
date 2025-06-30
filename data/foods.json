@@ -815,23 +815,23 @@
     "discount": 0,
     "original_price": 0,
     "comment": "Shirador va xushbo‘y molotiy shashlik",
-    "created_at": "2025-06-25T17:05:01.092891+05:00",
-    "updated_at": "2025-06-25T17:05:01.092891+05:00"
+    "created_at": "2025-06-30T14:33:20.46854+05:00",
+    "updated_at": "2025-06-30T14:33:20.46854+05:00"
   },
   "151": {
     "id": "151",
     "names": {
-      "en": "Chunk Lamb Shashlik",
+      "en": "Chunky Lamb Shashlik",
       "ru": "Кусковой (баранина)",
-      "uz": "Kuskavoy (qo‘y go‘shti)"
+      "uz": "Kesma qo‘y shashlik"
     },
-    "name": "Kuskavoy (qo‘y go‘shti)",
+    "name": "Kesma qo‘y shashlik",
     "descriptions": {
-      "en": "Chunky lamb shashlik grilled over charcoal",
-      "ru": "Шашлык из кусочков баранины, приготовленный на углях",
-      "uz": "Qo‘y go‘shtidan bo‘laklab tayyorlangan shashlik, ko‘mirda pishirilgan"
+      "en": "Lamb shashlik made from chunky pieces",
+      "ru": "Шашлык из кусков баранины",
+      "uz": "Kesma usulda tayyorlangan qo‘y go‘shtli shashlik"
     },
-    "description": "Qo‘y go‘shtidan bo‘laklab tayyorlangan shashlik, ko‘mirda pishirilgan",
+    "description": "Kesma usulda tayyorlangan qo‘y go‘shtli shashlik",
     "category": "shashlik",
     "price": 22000,
     "isThere": true,
@@ -840,19 +840,16 @@
       "en": [
         "Lamb",
         "Salt",
-        "Black pepper",
         "Spices"
       ],
       "ru": [
         "Баранина",
         "Соль",
-        "Черный перец",
         "Специи"
       ],
       "uz": [
         "Qo‘y go‘shti",
         "Tuz",
-        "Qora murch",
         "Ziravorlar"
       ]
     },
@@ -863,14 +860,14 @@
     },
     "rating": 0,
     "review_count": 0,
-    "preparation_time": 12,
-    "stock": 60,
+    "preparation_time": 10,
+    "stock": 40,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
-    "comment": "Mazali va yumshoq qo‘y go‘shtidan tayyorlangan shashlik",
-    "created_at": "2025-06-26T11:21:25.717742+05:00",
-    "updated_at": "2025-06-26T11:21:25.717743+05:00"
+    "comment": "",
+    "created_at": "2025-06-30T14:33:37.945334+05:00",
+    "updated_at": "2025-06-30T14:33:37.945334+05:00"
   },
   "152": {
     "id": "152",
@@ -881,11 +878,11 @@
     },
     "name": "Mol go‘shti filesi",
     "descriptions": {
-      "en": "Tender and juicy shashlik made from beef tenderloin",
-      "ru": "Нежный и сочный шашлык из говяжьей вырезки",
-      "uz": "Mol go‘shti filesidan tayyorlangan yumshoq va mazali shashlik"
+      "en": "Tender and juicy beef tenderloin",
+      "ru": "Нежная и сочная вырезка говядины",
+      "uz": "Yumshoq va shirali mol go‘shti filesi"
     },
-    "description": "Mol go‘shti filesidan tayyorlangan yumshoq va mazali shashlik",
+    "description": "Yumshoq va shirali mol go‘shti filesi",
     "category": "shashlik",
     "price": 28000,
     "isThere": true,
@@ -894,19 +891,19 @@
       "en": [
         "Beef tenderloin",
         "Salt",
-        "Black pepper",
+        "Pepper",
         "Spices"
       ],
       "ru": [
         "Говяжья вырезка",
         "Соль",
-        "Черный перец",
+        "Перец",
         "Специи"
       ],
       "uz": [
-        "Mol go‘shti filesi",
+        "Mol filesi",
         "Tuz",
-        "Qora murch",
+        "Qalampir",
         "Ziravorlar"
       ]
     },
@@ -918,28 +915,28 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 12,
-    "stock": 50,
-    "is_popular": false,
+    "stock": 30,
+    "is_popular": true,
     "discount": 0,
     "original_price": 0,
-    "comment": "Yumshoq va boy ta’mli mol go‘shtli shashlik",
-    "created_at": "2025-06-26T11:23:31.093719+05:00",
-    "updated_at": "2025-06-26T11:23:31.093719+05:00"
+    "comment": "",
+    "created_at": "2025-06-30T14:33:45.384639+05:00",
+    "updated_at": "2025-06-30T14:33:45.384639+05:00"
   },
   "153": {
     "id": "153",
     "names": {
-      "en": "Napaleon",
+      "en": "Napoleon Shashlik",
       "ru": "Наполеон",
-      "uz": "Napaleon"
+      "uz": "Napaleon shashlik"
     },
-    "name": "Napaleon",
+    "name": "Napaleon shashlik",
     "descriptions": {
-      "en": "Juicy and flavorful shashlik made from beef and tail fat",
-      "ru": "Шашлык из говядины и курдючного жира — сочный и ароматный",
-      "uz": "Mol go‘shti va dumba yog‘idan tayyorlangan mazali va shirali shashlik"
+      "en": "Shashlik made from beef and fat tail",
+      "ru": "Шашлык из говядины и курдючного жира",
+      "uz": "Mol go‘shti va dumba yog‘i aralashmasidan tayyorlangan shashlik"
     },
-    "description": "Mol go‘shti va dumba yog‘idan tayyorlangan mazali va shirali shashlik",
+    "description": "Mol go‘shti va dumba yog‘i aralashmasidan tayyorlangan shashlik",
     "category": "shashlik",
     "price": 22000,
     "isThere": true,
@@ -947,13 +944,13 @@
     "ingredients": {
       "en": [
         "Beef",
-        "Tail fat",
+        "Fat tail",
         "Salt",
         "Spices"
       ],
       "ru": [
         "Говядина",
-        "Курдючный жир",
+        "Курдюк",
         "Соль",
         "Специи"
       ],
@@ -972,13 +969,64 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 10,
-    "stock": 50,
+    "stock": 35,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
-    "comment": "Dumba yog‘i bilan shirador shashlik",
-    "created_at": "2025-06-26T11:26:35.631475+05:00",
-    "updated_at": "2025-06-26T11:26:35.631475+05:00"
+    "comment": "",
+    "created_at": "2025-06-30T14:33:51.281325+05:00",
+    "updated_at": "2025-06-30T14:33:51.281325+05:00"
+  },
+  "154": {
+    "id": "154",
+    "names": {
+      "en": "Roll Shashlik",
+      "ru": "Рулет",
+      "uz": "Rulet shashlik"
+    },
+    "name": "Rulet shashlik",
+    "descriptions": {
+      "en": "Rolled shashlik made from thinly sliced meat",
+      "ru": "Рулет из тонко нарезанного мяса",
+      "uz": "Yupqa kesilgan go‘shtdan tayyorlangan o‘ralgan shashlik"
+    },
+    "description": "Yupqa kesilgan go‘shtdan tayyorlangan o‘ralgan shashlik",
+    "category": "shashlik",
+    "price": 22000,
+    "isThere": true,
+    "imageUrl": "uploads/rulet1751275798.png",
+    "ingredients": {
+      "en": [
+        "Meat",
+        "Salt",
+        "Spices"
+      ],
+      "ru": [
+        "Мясо",
+        "Соль",
+        "Специи"
+      ],
+      "uz": [
+        "Go‘sht",
+        "Tuz",
+        "Ziravorlar"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 10,
+    "stock": 25,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "",
+    "created_at": "2025-06-30T14:33:56.270705+05:00",
+    "updated_at": "2025-06-30T14:33:56.270705+05:00"
   },
   "20": {
     "id": "20",
