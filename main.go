@@ -760,7 +760,7 @@ func getNextOrderNum() int {
 
 func getFoodTranslation(key, lang string) string {
 	if lang == "" {
-		lang = "uz"
+		lang = "ru"
 	}
 	if translations, exists := FOOD_TRANSLATIONS[lang]; exists {
 		if translation, exists := translations[key]; exists {
@@ -768,7 +768,7 @@ func getFoodTranslation(key, lang string) string {
 		}
 	}
 	// Default uzbek language
-	if translations, exists := FOOD_TRANSLATIONS["uz"]; exists {
+	if translations, exists := FOOD_TRANSLATIONS["ru"]; exists {
 		if translation, exists := translations[key]; exists {
 			return translation
 		}
@@ -791,7 +791,7 @@ func getUserLanguage(headers map[string][]string) string {
 			}
 		}
 	}
-	return "uz"
+	return "ru"
 }
 
 func generateID(prefix string) string {
@@ -1389,7 +1389,7 @@ func getLocalizedFood(food *Food, lang string) *Food {
 	if food.Names != nil {
 		if name, exists := food.Names[lang]; exists {
 			localizedFood.Name = name
-		} else if name, exists := food.Names["uz"]; exists {
+		} else if name, exists := food.Names["ru"]; exists {
 			localizedFood.Name = name
 		}
 	}
@@ -1398,7 +1398,7 @@ func getLocalizedFood(food *Food, lang string) *Food {
 	if food.Descriptions != nil {
 		if desc, exists := food.Descriptions[lang]; exists {
 			localizedFood.Description = desc
-		} else if desc, exists := food.Descriptions["uz"]; exists {
+		} else if desc, exists := food.Descriptions["ru"]; exists {
 			localizedFood.Description = desc
 		}
 	}
@@ -1450,7 +1450,7 @@ func register(c *gin.Context) {
 
 	lang := req.Language
 	if lang == "" {
-		lang = "uz"
+		lang = "ru"
 	}
 
 	// Check if user exists
@@ -1964,7 +1964,7 @@ func createOrderHandler(c *gin.Context) {
 			return
 		}
 
-		localizedFood := getLocalizedFood(food, "uz")
+		localizedFood := getLocalizedFood(food, "ru")
 		foodTotalPrice := localizedFood.Price * item.Quantity
 		prepTime := food.PreparationTime
 		if prepTime > totalPrepTime {
@@ -2326,7 +2326,7 @@ func searchHandler(c *gin.Context) {
 						break
 					}
 				}
-			} else if ingredientsList, ok := food.Ingredients["uz"]; ok {
+			} else if ingredientsList, ok := food.Ingredients["ru"]; ok {
 				for _, ingredient := range ingredientsList {
 					if strings.Contains(strings.ToLower(ingredient), searchLower) {
 						results = append(results, food)
@@ -2468,7 +2468,7 @@ func initializeTestData() error {
 		CreatedAt: time.Now(),
 		IsActive:  true,
 		TgID:      int64Ptr(1713329317),
-		Language:  "uz",
+		Language:  "ru",
 	}
 
 	// Check if user exists

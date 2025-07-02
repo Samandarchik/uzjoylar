@@ -1,18 +1,18 @@
 {
-  "user_0916d018": {
-    "id": "user_0916d018",
-    "number": "998906023813",
-    "password": "650fcacff5f6bfac65ffd74212fe4142",
+  "user_83199b21": {
+    "id": "user_83199b21",
+    "number": "+998770451117",
+    "password": "5c705fd596dc7889d52cf4c4caf4cf06",
     "role": "user",
-    "full_name": "Rayxona",
-    "created_at": "2025-06-24T15:22:02.1092+05:00",
+    "full_name": "Samandar ibragimov",
+    "created_at": "2025-06-30T16:13:37.822688+05:00",
     "is_active": true,
-    "tg_id": 1713329317,
+    "tg_id": 123,
     "language": "en"
   },
   "user_b2e01ed1": {
     "id": "user_b2e01ed1",
-    "number": "770451117",
+    "number": "770451118",
     "password": "6637e8eaf7621f4164dbaf5a1da35332",
     "role": "admin",
     "full_name": "Samandar Admin",
