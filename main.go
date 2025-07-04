@@ -2262,11 +2262,30 @@ func updateOrderStatusHandler(c *gin.Context) {
 	// Send Telegram message to user
 	go func() {
 		if userDB, err := getUserByNumber(order.UserNumber); err == nil && userDB.TgID != nil {
-			userMessage := fmt.Sprintf("📋 Order: %s\n📍 Status: %s", order.OrderID, string(req.Status))
+			// Rus tilidagi status tarjimalari
+			var statusText string
+			switch req.Status {
+			case OrderPending:
+				statusText = "В ожидании"
+			case OrderConfirmed:
+				statusText = "Подтвержден"
+			case OrderPreparing:
+				statusText = "Готовится"
+			case OrderReady:
+				statusText = "Готов к выдаче"
+			case OrderDelivered:
+				statusText = "Доставлен"
+			case OrderCancelled:
+				statusText = "Отменён"
+			default:
+				statusText = string(req.Status)
+			}
+
+			userMessage := fmt.Sprintf("📋 Заказ: %s\n📍 Статус: %s", order.OrderID, statusText)
 			if err := sendTelegramMessageToUser(*userDB.TgID, userMessage); err != nil {
-				log.Printf("Telegram user message error: %v", err)
+				log.Printf("Ошибка при отправке сообщения пользователю в Telegram: %v", err)
 			} else {
-				log.Printf("Telegram user message sent: %s", order.OrderID)
+				log.Printf("Сообщение пользователю отправлено в Telegram: %s", order.OrderID)
 			}
 		}
 	}()

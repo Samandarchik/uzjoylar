@@ -48,13 +48,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 5,
-    "stock": 45,
+    "stock": 40,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "Yengil va vitaminlarga boy sabzavotli salat",
     "created_at": "2025-06-26T10:59:26.431738+05:00",
-    "updated_at": "2025-06-30T16:57:04.387561+05:00"
+    "updated_at": "2025-07-02T16:26:03.97876+05:00"
   },
   "105": {
     "id": "105",
@@ -249,13 +249,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 30,
-    "stock": 6,
+    "stock": 0,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "4 kishilik porsiya",
     "created_at": "2025-06-29T05:00:03.587425+05:00",
-    "updated_at": "2025-06-29T05:00:03.587426+05:00"
+    "updated_at": "2025-07-02T16:26:03.983427+05:00"
   },
   "109": {
     "id": "109",
@@ -300,13 +300,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 30,
-    "stock": 8,
+    "stock": 2,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "4 kishilik porsiya",
     "created_at": "2025-06-29T05:00:07.968048+05:00",
-    "updated_at": "2025-06-29T05:00:07.968048+05:00"
+    "updated_at": "2025-07-02T16:26:03.984458+05:00"
   },
   "110": {
     "id": "110",
@@ -351,13 +351,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 25,
-    "stock": 10,
+    "stock": 4,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "To‘yimli maxsus taom",
     "created_at": "2025-06-29T05:00:13.169986+05:00",
-    "updated_at": "2025-06-29T05:00:13.169986+05:00"
+    "updated_at": "2025-07-02T16:26:03.985591+05:00"
   },
   "121": {
     "id": "121",
@@ -1020,13 +1020,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 10,
-    "stock": 25,
+    "stock": 20,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-06-30T14:33:56.270705+05:00",
-    "updated_at": "2025-06-30T14:33:56.270705+05:00"
+    "updated_at": "2025-07-02T16:26:03.986672+05:00"
   },
   "20": {
     "id": "20",
@@ -1890,13 +1890,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 7,
-    "stock": 40,
+    "stock": 35,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "Bir nechta go‘sht turlaridan tashkil topgan boy va mazali taom",
     "created_at": "2025-06-26T11:02:52.426308+05:00",
-    "updated_at": "2025-06-26T11:02:52.426308+05:00"
+    "updated_at": "2025-07-02T16:26:03.981371+05:00"
   },
   "8": {
     "id": "8",
@@ -1944,13 +1944,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 6,
-    "stock": 35,
+    "stock": 30,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "Yengil va foydali go‘shtli gazak",
     "created_at": "2025-06-26T11:05:45.995791+05:00",
-    "updated_at": "2025-06-26T11:05:45.995791+05:00"
+    "updated_at": "2025-07-02T16:26:03.982555+05:00"
   },
   "80": {
     "id": "80",
