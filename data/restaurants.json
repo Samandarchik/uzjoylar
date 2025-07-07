@@ -1,0 +1,106 @@
+{
+  "0": {
+    "id": "0",
+    "name": "Amur Restaurant",
+    "slug_name": "amur",
+    "names": {
+      "en": "Amur Restaurant",
+      "ru": "Ресторан Амур",
+      "uz": "Amur Restorani"
+    },
+    "description": "Luxury dining experience with international cuisine",
+    "descriptions": {
+      "en": "Luxury dining experience with international cuisine",
+      "ru": "Роскошный ресторан с международной кухней",
+      "uz": "Xalqaro taomlar bilan hashamatli ovqatlanish tajribasi"
+    },
+    "address": "Tashkent, Yunusobod district, Amir Temur avenue 108",
+    "phone": "+998712345678",
+    "email": "info@amur.uz",
+    "image_url": "/uploads/amur.jpg",
+    "is_active": true,
+    "working_hours": {
+      "friday": "10:00-24:00",
+      "monday": "10:00-23:00",
+      "saturday": "10:00-24:00",
+      "sunday": "10:00-23:00",
+      "thursday": "10:00-23:00",
+      "tuesday": "10:00-23:00",
+      "wednesday": "10:00-23:00"
+    },
+    "location": {
+      "latitude": 41.31111,
+      "longitude": 69.24014
+    },
+    "rating": 4.5,
+    "review_count": 125,
+    "created_at": "2025-07-05T22:32:08.146253+05:00",
+    "updated_at": "2025-07-05T22:32:08.146253+05:00"
+  },
+  "1": {
+    "id": "1",
+    "name": "Deluxe Pizza",
+    "slug_name": "deluxe",
+    "names": {
+      "en": "Deluxe Pizza",
+      "ru": "Делюкс Пицца",
+      "uz": "Deluxe Pizza"
+    },
+    "description": "Authentic Italian pizza and pasta",
+    "descriptions": {
+      "en": "Authentic Italian pizza and pasta",
+      "ru": "Аутентичная итальянская пицца и паста",
+      "uz": "Asl italyan pizza va pasta"
+    },
+    "address": "Tashkent, Chilanzar district, Bunyodkor avenue 53",
+    "phone": "+998712345679",
+    "email": "info@deluxe.uz",
+    "image_url": "/uploads/deluxe.jpg",
+    "is_active": true,
+    "working_hours": {
+      "friday": "11:00-23:00",
+      "monday": "11:00-22:00",
+      "saturday": "11:00-23:00",
+      "sunday": "11:00-22:00",
+      "thursday": "11:00-22:00",
+      "tuesday": "11:00-22:00",
+      "wednesday": "11:00-22:00"
+    },
+    "location": {
+      "latitude": 41.28845,
+      "longitude": 69.20328
+    },
+    "rating": 4.2,
+    "review_count": 87,
+    "created_at": "2025-07-05T22:32:08.146369+05:00",
+    "updated_at": "2025-07-05T22:32:08.146369+05:00"
+  },
+  "2": {
+    "id": "2",
+    "name": "New Restaurant",
+    "slug_name": "new-restaurant",
+    "names": {
+      "en": "New Restaurant",
+      "ru": "Новый Ресторан",
+      "uz": "Yangi Restoran"
+    },
+    "description": "Great food",
+    "address": "Tashkent",
+    "phone": "+998901234567",
+    "image_url": "",
+    "is_active": true,
+    "working_hours": {
+      "friday": "09:00-22:00",
+      "monday": "09:00-22:00",
+      "saturday": "09:00-22:00",
+      "sunday": "09:00-22:00",
+      "thursday": "09:00-22:00",
+      "tuesday": "09:00-22:00",
+      "wednesday": "09:00-22:00"
+    },
+    "rating": 0,
+    "review_count": 0,
+    "created_at": "2025-07-05T22:35:10.932301+05:00",
+    "updated_at": "2025-07-05T22:35:10.932301+05:00"
+  }
+}

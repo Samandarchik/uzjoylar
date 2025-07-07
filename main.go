@@ -122,8 +122,9 @@ const (
 // Multi-language support for foods only
 var FOOD_TRANSLATIONS = map[string]map[string]string{
 	"uz": {
-		"gazak":         "Gazaklar",
+		"gazak":         "Sovuq Gazaklar",
 		"salat":         "Salat",
+		"zakuska":       "Issi Zakuskalar",
 		"birinchi_taom": "Birinchi taomlar",
 		"issiq_taom":    "Issiq taomlar",
 		"baliq":         "Baliq",
@@ -139,8 +140,9 @@ var FOOD_TRANSLATIONS = map[string]map[string]string{
 		"bir_martalik":  "Bir martalik idishlar",
 	},
 	"ru": {
-		"gazak":         "Закуски",
+		"gazak":         "Холодные закуски",
 		"salat":         "Салаты",
+		"zakuska":       "Горячие Закуски",
 		"birinchi_taom": "Первые блюда",
 		"issiq_taom":    "Горячие блюда",
 		"baliq":         "Рыба",
@@ -158,6 +160,7 @@ var FOOD_TRANSLATIONS = map[string]map[string]string{
 	"en": {
 		"gazak":         "Appetizers",
 		"salat":         "Salads",
+		"zakuska":       "Hot appetizers",
 		"birinchi_taom": "First courses",
 		"issiq_taom":    "Hot dishes",
 		"baliq":         "Fish",
@@ -1551,6 +1554,8 @@ func getCategories(c *gin.Context) {
 	categories := []gin.H{
 		{"key": "gazak", "name": getFoodTranslation("gazak", lang)},
 		{"key": "salat", "name": getFoodTranslation("salat", lang)},
+		{"key": "zakuska", "name": getFoodTranslation("zakuska", lang)},
+
 		{"key": "birinchi_taom", "name": getFoodTranslation("birinchi_taom", lang)},
 		{"key": "issiq_taom", "name": getFoodTranslation("issiq_taom", lang)},
 		{"key": "baliq", "name": getFoodTranslation("baliq", lang)},
