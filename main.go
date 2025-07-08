@@ -2483,14 +2483,14 @@ func initializeTestData() error {
 	// Admin user
 	adminUser := &User{
 		ID:        generateID("user"),
-		Number:    "770451117",
+		Number:    "770451119",
 		Password:  hashPassword("samandar"),
 		Role:      "admin",
 		FullName:  "Samandar Admin",
 		Email:     stringPtr("admin@restaurant.uz"),
 		CreatedAt: time.Now(),
 		IsActive:  true,
-		TgID:      int64Ptr(1713329317),
+		TgID:      int64Ptr(1066137436),
 		Language:  "ru",
 	}
 
