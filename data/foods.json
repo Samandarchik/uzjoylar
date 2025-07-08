@@ -1712,6 +1712,483 @@
     "created_at": "2025-07-08T04:13:31.699346+05:00",
     "updated_at": "2025-07-08T04:13:31.699346+05:00"
   },
+  "161": {
+    "id": "161",
+    "names": {
+      "en": "Flatbread on Grill",
+      "ru": "Лепешки на мангале",
+      "uz": "Tandir non (mangalda)"
+    },
+    "name": "Tandir non (mangalda)",
+    "descriptions": {
+      "en": "Flatbread grilled on mangal",
+      "ru": "Лепешки, приготовленные на мангале",
+      "uz": "Mangalda qizartirilgan tandir non"
+    },
+    "description": "Mangalda qizartirilgan tandir non",
+    "category": "mangal",
+    "price": 6000,
+    "isThere": true,
+    "imageUrl": "uploads/sixnon_1751952542.jpg",
+    "ingredients": {
+      "en": [
+        "Flour",
+        "Salt",
+        "Water"
+      ],
+      "ru": [
+        "Мука",
+        "Соль",
+        "Вода"
+      ],
+      "uz": [
+        "Un",
+        "Tuz",
+        "Suv"
+      ]
+    },
+    "allergens": {
+      "en": [
+        "Wheat"
+      ],
+      "ru": [
+        "Пшеница"
+      ],
+      "uz": [
+        "Bug'doy"
+      ]
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 3,
+    "stock": 50,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "",
+    "created_at": "2025-07-08T10:41:05.163468+05:00",
+    "updated_at": "2025-07-08T10:41:05.163469+05:00"
+  },
+  "162": {
+    "id": "162",
+    "names": {
+      "en": "Grilled Potato",
+      "ru": "Картофель",
+      "uz": "Kartoshka (mangalda)"
+    },
+    "name": "Kartoshka (mangalda)",
+    "descriptions": {
+      "en": "Potato grilled on mangal",
+      "ru": "Картофель, запечённый на мангале",
+      "uz": "Mangalda pishirilgan kartoshka"
+    },
+    "description": "Mangalda pishirilgan kartoshka",
+    "category": "mangal",
+    "price": 6000,
+    "isThere": true,
+    "imageUrl": "uploads/kartofel_1751277204.jpg",
+    "ingredients": {
+      "en": [
+        "Potato",
+        "Oil",
+        "Salt"
+      ],
+      "ru": [
+        "Картофель",
+        "Масло",
+        "Соль"
+      ],
+      "uz": [
+        "Kartoshka",
+        "Yog‘",
+        "Tuz"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 5,
+    "stock": 30,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "",
+    "created_at": "2025-07-08T10:41:11.579079+05:00",
+    "updated_at": "2025-07-08T10:41:11.579079+05:00"
+  },
+  "163": {
+    "id": "163",
+    "names": {
+      "en": "Grilled Tomatoes",
+      "ru": "Помидоры",
+      "uz": "Pomidor (mangalda)"
+    },
+    "name": "Pomidor (mangalda)",
+    "descriptions": {
+      "en": "Tomatoes grilled on mangal",
+      "ru": "Помидоры, запечённые на мангале",
+      "uz": "Mangalda qovurilgan yangi pomidor"
+    },
+    "description": "Mangalda qovurilgan yangi pomidor",
+    "category": "mangal",
+    "price": 15000,
+    "isThere": true,
+    "imageUrl": "uploads/pomidor_1751952653.jpg",
+    "ingredients": {
+      "en": [
+        "Tomatoes",
+        "Spices"
+      ],
+      "ru": [
+        "Помидоры",
+        "Специи"
+      ],
+      "uz": [
+        "Pomidor",
+        "Ziravorlar"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 4,
+    "stock": 25,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "",
+    "created_at": "2025-07-08T10:41:16.460242+05:00",
+    "updated_at": "2025-07-08T10:41:16.460242+05:00"
+  },
+  "164": {
+    "id": "164",
+    "names": {
+      "en": "Grilled Champignons",
+      "ru": "Шампиньоны на мангале",
+      "uz": "Shampinyon (mangalda)"
+    },
+    "name": "Shampinyon (mangalda)",
+    "descriptions": {
+      "en": "Champignons grilled on mangal",
+      "ru": "Шампиньоны, запечённые на мангале",
+      "uz": "Shampinyon qo‘ziqorinlari mangalda pishirilgan"
+    },
+    "description": "Shampinyon qo‘ziqorinlari mangalda pishirilgan",
+    "category": "mangal",
+    "price": 16000,
+    "isThere": true,
+    "imageUrl": "uploads/shampanyon_1751952700.jpg",
+    "ingredients": {
+      "en": [
+        "Champignons",
+        "Spices"
+      ],
+      "ru": [
+        "Шампиньоны",
+        "Специи"
+      ],
+      "uz": [
+        "Shampinyon",
+        "Ziravorlar"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 6,
+    "stock": 20,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "",
+    "created_at": "2025-07-08T10:41:21.439474+05:00",
+    "updated_at": "2025-07-08T10:41:21.439474+05:00"
+  },
+  "165": {
+    "id": "165",
+    "names": {
+      "en": "Grilled Vegetables",
+      "ru": "Овощи на мангале",
+      "uz": "Sabzavotlar (mangalda)"
+    },
+    "name": "Sabzavotlar (mangalda)",
+    "descriptions": {
+      "en": "Assorted vegetables grilled on mangal",
+      "ru": "Ассорти овощей, запечённых на мангале",
+      "uz": "Turli xil sabzavotlar to‘plami mangalda pishirilgan"
+    },
+    "description": "Turli xil sabzavotlar to‘plami mangalda pishirilgan",
+    "category": "mangal",
+    "price": 20000,
+    "isThere": true,
+    "imageUrl": "uploads/ovishinagirele_1751952756.jpg",
+    "ingredients": {
+      "en": [
+        "Tomato",
+        "Cucumber",
+        "Pepper",
+        "Onion",
+        "Carrot"
+      ],
+      "ru": [
+        "Помидоры",
+        "Огурцы",
+        "Перец",
+        "Лук",
+        "Морковь"
+      ],
+      "uz": [
+        "Pomidor",
+        "Bodring",
+        "Qalampir",
+        "Piyoz",
+        "Sabzi"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 6,
+    "stock": 20,
+    "is_popular": true,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "",
+    "created_at": "2025-07-08T10:41:26.532719+05:00",
+    "updated_at": "2025-07-08T10:41:26.532719+05:00"
+  },
+  "166": {
+    "id": "166",
+    "names": {
+      "en": "French Fries",
+      "ru": "Картофель фри",
+      "uz": "Kartoshka fri"
+    },
+    "name": "Kartoshka fri",
+    "descriptions": {
+      "en": "Crispy French fries",
+      "ru": "Хрустящий картофель фри",
+      "uz": "Qizartirilgan, tiniq kartoshka fri"
+    },
+    "description": "Qizartirilgan, tiniq kartoshka fri",
+    "category": "garnir",
+    "price": 18000,
+    "isThere": true,
+    "imageUrl": "uploads/kartofelfir_1751952815.jpg",
+    "ingredients": {
+      "en": [
+        "Potato",
+        "Oil",
+        "Salt"
+      ],
+      "ru": [
+        "Картофель",
+        "Масло",
+        "Соль"
+      ],
+      "uz": [
+        "Kartoshka",
+        "Yog‘",
+        "Tuz"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 6,
+    "stock": 30,
+    "is_popular": true,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "",
+    "created_at": "2025-07-08T10:48:34.506165+05:00",
+    "updated_at": "2025-07-08T10:48:34.506165+05:00"
+  },
+  "167": {
+    "id": "167",
+    "names": {
+      "en": "Potato Wedges",
+      "ru": "Картофельные дольки",
+      "uz": "Kartoshka bo‘laklari"
+    },
+    "name": "Kartoshka bo‘laklari",
+    "descriptions": {
+      "en": "Baked potato wedges with spices",
+      "ru": "Запечённые картофельные дольки со специями",
+      "uz": "Ziravorlarda pishirilgan kartoshka bo‘laklari"
+    },
+    "description": "Ziravorlarda pishirilgan kartoshka bo‘laklari",
+    "category": "garnir",
+    "price": 18000,
+    "isThere": true,
+    "imageUrl": "uploads/drevanski_1751952869.jpg",
+    "ingredients": {
+      "en": [
+        "Potato",
+        "Spices",
+        "Oil"
+      ],
+      "ru": [
+        "Картофель",
+        "Специи",
+        "Масло"
+      ],
+      "uz": [
+        "Kartoshka",
+        "Ziravorlar",
+        "Yog‘"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 6,
+    "stock": 25,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "",
+    "created_at": "2025-07-08T10:48:49.931077+05:00",
+    "updated_at": "2025-07-08T10:48:49.931077+05:00"
+  },
+  "168": {
+    "id": "168",
+    "names": {
+      "en": "Mashed Potatoes",
+      "ru": "Картофельное пюре",
+      "uz": "Kartoshka pyuresi"
+    },
+    "name": "Kartoshka pyuresi",
+    "descriptions": {
+      "en": "Creamy mashed potatoes with butter",
+      "ru": "Нежное картофельное пюре с маслом",
+      "uz": "Silliq va yumshoq kartoshka pyuresi, sariyog‘ bilan"
+    },
+    "description": "Silliq va yumshoq kartoshka pyuresi, sariyog‘ bilan",
+    "category": "garnir",
+    "price": 15000,
+    "isThere": true,
+    "imageUrl": "uploads/pure_1751952913.jpg",
+    "ingredients": {
+      "en": [
+        "Potato",
+        "Butter",
+        "Salt"
+      ],
+      "ru": [
+        "Картофель",
+        "Масло",
+        "Соль"
+      ],
+      "uz": [
+        "Kartoshka",
+        "Sariyog‘",
+        "Tuz"
+      ]
+    },
+    "allergens": {
+      "en": [
+        "Dairy"
+      ],
+      "ru": [
+        "Молочные продукты"
+      ],
+      "uz": [
+        "Sut mahsulotlari"
+      ]
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 5,
+    "stock": 30,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "",
+    "created_at": "2025-07-08T10:48:55.268833+05:00",
+    "updated_at": "2025-07-08T10:48:55.268833+05:00"
+  },
+  "169": {
+    "id": "169",
+    "names": {
+      "en": "Rice with Sesame Oil",
+      "ru": "Рис с кунжутным маслом",
+      "uz": "Guruch (kunjut yog‘i bilan)"
+    },
+    "name": "Guruch (kunjut yog‘i bilan)",
+    "descriptions": {
+      "en": "Fragrant rice with sesame oil",
+      "ru": "Рис с ароматным кунжутным маслом",
+      "uz": "Kunjut yog‘i solingan guruch — xushbo‘y va mazali garnir"
+    },
+    "description": "Kunjut yog‘i solingan guruch — xushbo‘y va mazali garnir",
+    "category": "garnir",
+    "price": 25000,
+    "isThere": true,
+    "imageUrl": "uploads/risot_1751952949.jpg",
+    "ingredients": {
+      "en": [
+        "Rice",
+        "Sesame oil",
+        "Salt"
+      ],
+      "ru": [
+        "Рис",
+        "Кунжутное масло",
+        "Соль"
+      ],
+      "uz": [
+        "Guruch",
+        "Kunjut yog‘i",
+        "Tuz"
+      ]
+    },
+    "allergens": {
+      "en": [
+        "Sesame"
+      ],
+      "ru": [
+        "Кунжут"
+      ],
+      "uz": [
+        "Kunjut"
+      ]
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 5,
+    "stock": 20,
+    "is_popular": true,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "",
+    "created_at": "2025-07-08T10:48:59.872698+05:00",
+    "updated_at": "2025-07-08T10:48:59.872698+05:00"
+  },
   "17": {
     "id": "17",
     "names": {

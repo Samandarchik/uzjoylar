@@ -1555,7 +1555,6 @@ func getCategories(c *gin.Context) {
 		{"key": "gazak", "name": getFoodTranslation("gazak", lang)},
 		{"key": "salat", "name": getFoodTranslation("salat", lang)},
 		{"key": "zakuska", "name": getFoodTranslation("zakuska", lang)},
-
 		{"key": "birinchi_taom", "name": getFoodTranslation("birinchi_taom", lang)},
 		{"key": "issiq_taom", "name": getFoodTranslation("issiq_taom", lang)},
 		{"key": "baliq", "name": getFoodTranslation("baliq", lang)},
