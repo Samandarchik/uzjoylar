@@ -26,7 +26,7 @@ import (
 // Constants
 const (
 	SECRET_KEY                = "restaurant_secret_key_2024"
-	ACCESS_TOKEN_EXPIRE_HOURS = 24
+	ACCESS_TOKEN_EXPIRE_HOURS = 999999
 	da                        = "7609705273:AAFoIawJBTGTFxECwhSjc7vpbgMBcveT_ko"
 	TELEGRAM_GROUP_ID         = "-1002783983140"
 	UPLOAD_DIR                = "uploads"

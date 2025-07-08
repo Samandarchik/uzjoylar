@@ -140,5 +140,45 @@
     ],
     "created_at": "2025-07-02T16:26:03.988858+05:00",
     "updated_at": "2025-07-02T16:26:03.988858+05:00"
+  },
+  "2025-07-08-3": {
+    "order_id": "2025-07-08-3",
+    "user_number": "998901234567",
+    "user_name": "Test User",
+    "foods": [
+      {
+        "id": "1",
+        "name": "Ассорти из свежих овощей и зелени",
+        "category": "Холодные закуски",
+        "price": 40000,
+        "description": "Сладкий перец, огурцы, помидоры, дайкон, свежая зелень — полезное овощное ассорти",
+        "imageUrl": "uploads/ovishi_1750917436.jpg",
+        "count": 4,
+        "total_price": 160000
+      }
+    ],
+    "total_price": 160000,
+    "order_time": "2025-07-08T12:22:46.899224+05:00",
+    "delivery_type": "own_withdrawal",
+    "delivery_info": {
+      "pickup_code": "pickup_69fac674",
+      "type": "own_withdrawal"
+    },
+    "status": "pending",
+    "payment_info": {
+      "method": "cash",
+      "status": "pending",
+      "amount": 160000
+    },
+    "estimated_time": 5,
+    "status_history": [
+      {
+        "status": "pending",
+        "timestamp": "2025-07-08T12:22:46.899224+05:00",
+        "note": "Order created"
+      }
+    ],
+    "created_at": "2025-07-08T12:22:46.899224+05:00",
+    "updated_at": "2025-07-08T12:22:46.899224+05:00"
   }
 }
