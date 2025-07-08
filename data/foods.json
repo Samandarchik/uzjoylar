@@ -110,9 +110,9 @@
   "105": {
     "id": "105",
     "names": {
-      "en": "Umakay Jiz with Beef",
-      "ru": "Умакай джиз из говядины",
-      "uz": "Umakay jiz mol go‘shti bilan"
+      "en": "Umakay Jiz with Beef (500g)",
+      "ru": "Умакай джиз из говядины (500 грамм)",
+      "uz": "Umakay jiz mol go‘shti bilan (500g)"
     },
     "name": "Umakay jiz mol go‘shti bilan",
     "descriptions": {
@@ -122,9 +122,9 @@
     },
     "description": "Kartoshka bilan tortiladi",
     "category": "issiq_taom",
-    "price": 90000,
+    "price": 100000,
     "isThere": true,
-    "imageUrl": "uploads/umakaygovya_1751154903.jpg",
+    "imageUrl": "http://localhost:8080/uploads/umakaygovya_1751154903.jpg",
     "ingredients": {
       "en": [
         "Beef",
@@ -156,14 +156,14 @@
     "original_price": 0,
     "comment": "500 gr porsiyada xizmat qilinadi",
     "created_at": "2025-06-29T04:59:47.896263+05:00",
-    "updated_at": "2025-06-29T04:59:47.896263+05:00"
+    "updated_at": "2025-07-08T22:39:37.722536+05:00"
   },
   "106": {
     "id": "106",
     "names": {
-      "en": "Umakay Jiz with Lamb",
-      "ru": "Умакай джиз из баранины",
-      "uz": "Umakay jiz qo‘y go‘shti bilan"
+      "en": "Umakay Jiz with Lamb (500g)",
+      "ru": "Умакай джиз из баранины (500 грамм)",
+      "uz": "Umakay jiz qo‘y go‘shti bilan (500g)"
     },
     "name": "Umakay jiz qo‘y go‘shti bilan",
     "descriptions": {
@@ -173,9 +173,9 @@
     },
     "description": "Kartoshka bilan tortiladi",
     "category": "issiq_taom",
-    "price": 90000,
+    "price": 100000,
     "isThere": true,
-    "imageUrl": "uploads/umakaybaraniniy_1751154941.jpg",
+    "imageUrl": "http://localhost:8080/uploads/umakaybaraniniy_1751154941.jpg",
     "ingredients": {
       "en": [
         "Lamb",
@@ -207,14 +207,14 @@
     "original_price": 0,
     "comment": "500 gr porsiyada xizmat qilinadi",
     "created_at": "2025-06-29T04:59:53.152713+05:00",
-    "updated_at": "2025-06-29T04:59:53.152713+05:00"
+    "updated_at": "2025-07-08T22:39:47.927298+05:00"
   },
   "107": {
     "id": "107",
     "names": {
-      "en": "Braised Beef Ribs (Parra)",
-      "ru": "Томленые говяжьи ребра (Парра)",
-      "uz": "Mol go‘shti qovurg‘asi (Parra)"
+      "en": "Braised Beef Ribs (Parra) 1 kg",
+      "ru": "Томленые говяжьи ребра (Парра) 1 кг",
+      "uz": "Mol go‘shti qovurg‘asi (Parra) 1 kg"
     },
     "name": "Mol go‘shti qovurg‘asi (Parra)",
     "descriptions": {
@@ -224,9 +224,9 @@
     },
     "description": "Mol go‘shti qovurg‘asi 4 kishilik taom",
     "category": "issiq_taom",
-    "price": 220000,
+    "price": 230000,
     "isThere": true,
-    "imageUrl": "uploads/parra_1751154988.jpg",
+    "imageUrl": "http://localhost:8080/uploads/parra_1751154988.jpg",
     "ingredients": {
       "en": [
         "Beef ribs",
@@ -249,20 +249,20 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 25,
-    "stock": 10,
+    "stock": 59,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "4 kishilik porsiya",
     "created_at": "2025-06-29T04:59:57.568373+05:00",
-    "updated_at": "2025-06-29T04:59:57.568373+05:00"
+    "updated_at": "2025-07-08T22:58:56.152955+05:00"
   },
   "108": {
     "id": "108",
     "names": {
-      "en": "Braised Lamb Shoulder",
-      "ru": "Лопатка баранья",
-      "uz": "Qo‘y yelka (Lopatka)"
+      "en": "Braised Lamb Shoulder (1 kg)",
+      "ru": "Лопатка баранья (1 кг)",
+      "uz": "Qo‘y yelka (Lopatka) (1 kg)"
     },
     "name": "Qo‘y yelka (Lopatka)",
     "descriptions": {
@@ -272,9 +272,9 @@
     },
     "description": "O‘z sharbatida dimlangan qo‘y yelka, miks salat va demi-glass sous bilan",
     "category": "issiq_taom",
-    "price": 260000,
+    "price": 320000,
     "isThere": true,
-    "imageUrl": "uploads/lapatka_1751155059.jpg",
+    "imageUrl": "http://localhost:8080/uploads/lapatka_1751155059.jpg",
     "ingredients": {
       "en": [
         "Lamb shoulder",
@@ -306,14 +306,14 @@
     "original_price": 0,
     "comment": "4 kishilik porsiya",
     "created_at": "2025-06-29T05:00:03.587425+05:00",
-    "updated_at": "2025-07-02T16:26:03.983427+05:00"
+    "updated_at": "2025-07-08T22:59:02.649421+05:00"
   },
   "109": {
     "id": "109",
     "names": {
-      "en": "Lamb Neck",
-      "ru": "Шея баранья",
-      "uz": "Qo‘y bo‘yni"
+      "en": "Lamb Neck (1 kg)",
+      "ru": "Шея баранья (1 кг)",
+      "uz": "Qo‘y bo‘yni (1 kg)"
     },
     "name": "Qo‘y bo‘yni",
     "descriptions": {
@@ -323,9 +323,9 @@
     },
     "description": "O‘z sharbatida dimlangan qo‘y bo‘yni, miks salat va demi-glass sous bilan tortiladi",
     "category": "issiq_taom",
-    "price": 200000,
+    "price": 240000,
     "isThere": true,
-    "imageUrl": "uploads/sheya_1751155107.jpg",
+    "imageUrl": "http://localhost:8080/uploads/sheya_1751155107.jpg",
     "ingredients": {
       "en": [
         "Lamb neck",
@@ -357,7 +357,7 @@
     "original_price": 0,
     "comment": "4 kishilik porsiya",
     "created_at": "2025-06-29T05:00:07.968048+05:00",
-    "updated_at": "2025-07-02T16:26:03.984458+05:00"
+    "updated_at": "2025-07-08T22:40:16.309471+05:00"
   },
   "11": {
     "id": "11",
@@ -428,9 +428,9 @@
     },
     "description": "O‘z sharbatida dimlangan qo‘y oyog‘i, kartoshka pyuresi va grilda pishgan sabzavotlar bilan",
     "category": "issiq_taom",
-    "price": 80000,
+    "price": 100000,
     "isThere": true,
-    "imageUrl": "uploads/noshka_1751155160.jpg",
+    "imageUrl": "http://localhost:8080/uploads/noshka_1751155160.jpg",
     "ingredients": {
       "en": [
         "Lamb leg",
@@ -462,7 +462,7 @@
     "original_price": 0,
     "comment": "To‘yimli maxsus taom",
     "created_at": "2025-06-29T05:00:13.169986+05:00",
-    "updated_at": "2025-07-02T16:26:03.985591+05:00"
+    "updated_at": "2025-07-08T22:40:24.197181+05:00"
   },
   "12": {
     "id": "12",
@@ -530,9 +530,9 @@
     },
     "description": "Baliq taomlarini sevuvchilar uchun maxsus ta’m – xorazmcha uslubda qovurilgan sazan",
     "category": "baliq",
-    "price": 150000,
+    "price": 170000,
     "isThere": true,
-    "imageUrl": "uploads/buxariskiy_1751929484.jpg",
+    "imageUrl": "http://localhost:8080/uploads/buxariskiy_1751929484.jpg",
     "ingredients": {
       "en": [
         "Sazan fish",
@@ -570,14 +570,14 @@
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T04:03:32.776979+05:00",
-    "updated_at": "2025-07-08T04:03:32.776979+05:00"
+    "updated_at": "2025-07-08T22:40:35.854194+05:00"
   },
   "121": {
     "id": "121",
     "names": {
-      "en": "Fried Carp",
-      "ru": "Сазан жареный",
-      "uz": "Qovurilgan sazan"
+      "en": "Fried Carp (1 kg)",
+      "ru": "Сазан жареный (1 кг)",
+      "uz": "Qovurilgan sazan (1 kg)"
     },
     "name": "Qovurilgan sazan",
     "descriptions": {
@@ -587,9 +587,9 @@
     },
     "description": "Qovurilgan sazan baliği sarimsoq, limon va ko‘katlar bilan",
     "category": "baliq",
-    "price": 140000,
+    "price": 160000,
     "isThere": true,
-    "imageUrl": "uploads/sazansharenniy_1751155483.jpg",
+    "imageUrl": "http://localhost:8080/uploads/sazansharenniy_1751155483.jpg",
     "ingredients": {
       "en": [
         "Carp",
@@ -630,14 +630,14 @@
     "original_price": 0,
     "comment": "1 kg porsiya",
     "created_at": "2025-06-29T05:07:07.076516+05:00",
-    "updated_at": "2025-06-29T05:07:07.076516+05:00"
+    "updated_at": "2025-07-08T22:40:43.73097+05:00"
   },
   "122": {
     "id": "122",
     "names": {
-      "en": "Live Carp (by selection)",
-      "ru": "Сазан (живая рыба на выбор)",
-      "uz": "Jonli sazan (tanlov asosida)"
+      "en": "Live Carp (by selection) (1 kg)",
+      "ru": "Сазан (живая рыба на выбор) (1 кг)",
+      "uz": "Jonli sazan (tanlov asosida) (1 kg)"
     },
     "name": "Jonli sazan (tanlov asosida)",
     "descriptions": {
@@ -647,9 +647,9 @@
     },
     "description": "Jonli sazan baliği, tanlovga ko‘ra tayyorlanadi",
     "category": "baliq",
-    "price": 100000,
+    "price": 120000,
     "isThere": true,
-    "imageUrl": "uploads/sazanjevaya_1751155527.jpg",
+    "imageUrl": "http://localhost:8080/uploads/sazanjevaya_1751155527.jpg",
     "ingredients": {
       "en": [
         "Live carp"
@@ -681,14 +681,14 @@
     "original_price": 0,
     "comment": "1 kg jonli baliqdan tanlab tayyorlanadi",
     "created_at": "2025-06-29T05:07:11.524246+05:00",
-    "updated_at": "2025-06-29T05:07:11.524246+05:00"
+    "updated_at": "2025-07-08T22:40:51.084246+05:00"
   },
   "123": {
     "id": "123",
     "names": {
-      "en": "Grilled Carp on Mangal",
-      "ru": "Сазан на Мангале",
-      "uz": "Mangalda pishirilgan sazan"
+      "en": "Grilled Carp on Mangal (1 kg)",
+      "ru": "Сазан на Мангале (1 кг)",
+      "uz": "Mangalda pishirilgan sazan (1 kg)"
     },
     "name": "Mangalda pishirilgan sazan",
     "descriptions": {
@@ -698,9 +698,9 @@
     },
     "description": "Mangalda ko‘mirda pishirilgan sazan baliği",
     "category": "baliq",
-    "price": 140000,
+    "price": 150000,
     "isThere": true,
-    "imageUrl": "uploads/sazanmangale_1751155591.jpg",
+    "imageUrl": "http://localhost:8080/uploads/sazanmangale_1751155591.jpg",
     "ingredients": {
       "en": [
         "Carp",
@@ -738,14 +738,14 @@
     "original_price": 0,
     "comment": "1 kg porsiya",
     "created_at": "2025-06-29T05:07:18.210602+05:00",
-    "updated_at": "2025-06-29T05:07:18.210602+05:00"
+    "updated_at": "2025-07-08T22:41:04.069752+05:00"
   },
   "124": {
     "id": "124",
     "names": {
-      "en": "Amur – Chef's Signature Dish",
-      "ru": "Амур – фирменное блюдо от шефа",
-      "uz": "Amur – Shefdan maxsus taom"
+      "en": "Amur – Chef's Signature Dish (1 kg)  ",
+      "ru": "Амур – фирменное блюдо от шефа (1 кг)",
+      "uz": "Amur – Shefdan maxsus taom (1 kg)"
     },
     "name": "Amur – Shefdan maxsus taom",
     "descriptions": {
@@ -755,9 +755,9 @@
     },
     "description": "Baliqni sevuvchilar uchun mo‘ljallangan haqiqiy lazzat",
     "category": "baliq",
-    "price": 140000,
+    "price": 180000,
     "isThere": true,
-    "imageUrl": "uploads/amurmayi_1751181563.png",
+    "imageUrl": "http://localhost:8080/uploads/amurmayi_1751181563.png",
     "ingredients": {
       "en": [
         "Amur fish",
@@ -795,7 +795,7 @@
     "original_price": 0,
     "comment": "1 kg porsiya",
     "created_at": "2025-06-29T12:23:29.64473+05:00",
-    "updated_at": "2025-06-29T12:23:29.64473+05:00"
+    "updated_at": "2025-07-08T22:41:11.026372+05:00"
   },
   "125": {
     "id": "125",
@@ -863,9 +863,9 @@
   "126": {
     "id": "126",
     "names": {
-      "en": "Smoked Trout",
-      "ru": "Форель (копчения с дымком)",
-      "uz": "Tutatib pishirilgan forel"
+      "en": "Smoked Trout (1 kg)",
+      "ru": "Форель (копчения с дымком) (1 кг)",
+      "uz": "Tutatib pishirilgan forel (1 kg)"
     },
     "name": "Tutatib pishirilgan forel",
     "descriptions": {
@@ -875,9 +875,9 @@
     },
     "description": "Tutatib pishirilgan forel baliği",
     "category": "baliq",
-    "price": 175000,
+    "price": 200000,
     "isThere": true,
-    "imageUrl": "uploads/forel_1751181714.jpg",
+    "imageUrl": "http://localhost:8080/uploads/forel_1751181714.jpg",
     "ingredients": {
       "en": [
         "Trout",
@@ -915,7 +915,7 @@
     "original_price": 0,
     "comment": "1 kg porsiya",
     "created_at": "2025-06-29T12:23:45.69905+05:00",
-    "updated_at": "2025-06-29T12:23:45.69905+05:00"
+    "updated_at": "2025-07-08T22:41:32.559547+05:00"
   },
   "127": {
     "id": "127",
@@ -1046,9 +1046,9 @@
     },
     "description": "Ajoyib va nafis pishloq kombinatsiyasi",
     "category": "gazak",
-    "price": 100000,
+    "price": 110000,
     "isThere": true,
-    "imageUrl": "uploads/sirniy_1751889964.jpg",
+    "imageUrl": "http://localhost:8080/uploads/sirniy_1751889964.jpg",
     "ingredients": {
       "en": [
         "Various cheeses"
@@ -1080,7 +1080,7 @@
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-07T17:11:13.31162+05:00",
-    "updated_at": "2025-07-07T17:11:13.31162+05:00"
+    "updated_at": "2025-07-08T22:33:47.682604+05:00"
   },
   "15": {
     "id": "15",
@@ -1202,9 +1202,9 @@
     },
     "description": "Kesma usulda tayyorlangan qo‘y go‘shtli shashlik",
     "category": "shashlik",
-    "price": 22000,
+    "price": 26000,
     "isThere": true,
-    "imageUrl": "uploads/kuskavoy_1750918852.jpg",
+    "imageUrl": "http://localhost:8080/uploads/kuskavoy_1750918852.jpg",
     "ingredients": {
       "en": [
         "Lamb",
@@ -1236,7 +1236,7 @@
     "original_price": 0,
     "comment": "",
     "created_at": "2025-06-30T14:33:37.945334+05:00",
-    "updated_at": "2025-06-30T14:33:37.945334+05:00"
+    "updated_at": "2025-07-08T22:41:48.596728+05:00"
   },
   "152": {
     "id": "152",
@@ -1253,9 +1253,9 @@
     },
     "description": "Yumshoq va shirali mol go‘shti filesi",
     "category": "shashlik",
-    "price": 28000,
+    "price": 30000,
     "isThere": true,
-    "imageUrl": "uploads/viriska_1750919002.png",
+    "imageUrl": "http://localhost:8080/uploads/viriska_1750919002.png",
     "ingredients": {
       "en": [
         "Beef tenderloin",
@@ -1290,7 +1290,7 @@
     "original_price": 0,
     "comment": "",
     "created_at": "2025-06-30T14:33:45.384639+05:00",
-    "updated_at": "2025-06-30T14:33:45.384639+05:00"
+    "updated_at": "2025-07-08T22:41:55.537043+05:00"
   },
   "153": {
     "id": "153",
@@ -1307,9 +1307,9 @@
     },
     "description": "Mol go‘shti va dumba yog‘i aralashmasidan tayyorlangan shashlik",
     "category": "shashlik",
-    "price": 22000,
+    "price": 26000,
     "isThere": true,
-    "imageUrl": "uploads/napaliyon_1750919070.png",
+    "imageUrl": "http://localhost:8080/uploads/napaliyon_1750919070.png",
     "ingredients": {
       "en": [
         "Beef",
@@ -1344,7 +1344,7 @@
     "original_price": 0,
     "comment": "",
     "created_at": "2025-06-30T14:33:51.281325+05:00",
-    "updated_at": "2025-06-30T14:33:51.281325+05:00"
+    "updated_at": "2025-07-08T22:42:11.640276+05:00"
   },
   "154": {
     "id": "154",
@@ -1361,9 +1361,9 @@
     },
     "description": "Yupqa kesilgan go‘shtdan tayyorlangan o‘ralgan shashlik",
     "category": "shashlik",
-    "price": 22000,
+    "price": 26000,
     "isThere": true,
-    "imageUrl": "uploads/rulet1751275798.png",
+    "imageUrl": "http://localhost:8080/uploads/rulet1751275798.png",
     "ingredients": {
       "en": [
         "Meat",
@@ -1395,7 +1395,7 @@
     "original_price": 0,
     "comment": "",
     "created_at": "2025-06-30T14:33:56.270705+05:00",
-    "updated_at": "2025-07-02T16:26:03.986672+05:00"
+    "updated_at": "2025-07-08T22:42:22.225815+05:00"
   },
   "156": {
     "id": "156",
@@ -1460,7 +1460,7 @@
     },
     "description": "An’anaviy go‘shtli chiburek – tashqi tomoni tiniq, ichi shirali",
     "category": "shashlik",
-    "price": 25000,
+    "price": 30000,
     "isThere": true,
     "imageUrl": "",
     "ingredients": {
@@ -1503,7 +1503,7 @@
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T04:13:08.785663+05:00",
-    "updated_at": "2025-07-08T04:13:08.785663+05:00"
+    "updated_at": "2025-07-08T22:42:49.896835+05:00"
   },
   "158": {
     "id": "158",
@@ -1520,9 +1520,9 @@
     },
     "description": "Qovurilgan tovuq qanoti filesi, tashqi tomoni tiniq",
     "category": "shashlik",
-    "price": 18000,
+    "price": 22000,
     "isThere": true,
-    "imageUrl": "uploads/kirilichka_1751929785.jpg",
+    "imageUrl": "http://localhost:8080/uploads/kirilichka_1751929785.jpg",
     "ingredients": {
       "en": [
         "Chicken",
@@ -1554,7 +1554,7 @@
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T04:13:20.354008+05:00",
-    "updated_at": "2025-07-08T04:13:20.354008+05:00"
+    "updated_at": "2025-07-08T22:42:58.956645+05:00"
   },
   "159": {
     "id": "159",
@@ -1571,7 +1571,7 @@
     },
     "description": "Go‘shtli shashlik – yumshoq va shirali koreyka",
     "category": "shashlik",
-    "price": 26000,
+    "price": 30000,
     "isThere": true,
     "imageUrl": "",
     "ingredients": {
@@ -1602,7 +1602,7 @@
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T04:13:24.866332+05:00",
-    "updated_at": "2025-07-08T04:13:24.866333+05:00"
+    "updated_at": "2025-07-08T22:43:08.504761+05:00"
   },
   "16": {
     "id": "16",
@@ -1676,9 +1676,9 @@
     },
     "description": "Qo‘y jigari — shashlik shaklida pishirilgan, shirali va to‘yimli",
     "category": "shashlik",
-    "price": 18000,
+    "price": 20000,
     "isThere": true,
-    "imageUrl": "uploads/jigar_1751929879.jpg",
+    "imageUrl": "http://localhost:8080/uploads/jigar_1751929879.jpg",
     "ingredients": {
       "en": [
         "Liver",
@@ -1710,7 +1710,7 @@
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T04:13:31.699346+05:00",
-    "updated_at": "2025-07-08T04:13:31.699346+05:00"
+    "updated_at": "2025-07-08T22:43:18.008034+05:00"
   },
   "161": {
     "id": "161",
@@ -1784,9 +1784,9 @@
     },
     "description": "Mangalda pishirilgan kartoshka",
     "category": "mangal",
-    "price": 6000,
+    "price": 10000,
     "isThere": true,
-    "imageUrl": "uploads/kartofel_1751277204.jpg",
+    "imageUrl": "http://localhost:8080/uploads/kartofel_1751277204.jpg",
     "ingredients": {
       "en": [
         "Potato",
@@ -1818,7 +1818,7 @@
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T10:41:11.579079+05:00",
-    "updated_at": "2025-07-08T10:41:11.579079+05:00"
+    "updated_at": "2025-07-08T22:43:36.350602+05:00"
   },
   "163": {
     "id": "163",
@@ -1883,9 +1883,9 @@
     },
     "description": "Shampinyon qo‘ziqorinlari mangalda pishirilgan",
     "category": "mangal",
-    "price": 16000,
+    "price": 23000,
     "isThere": true,
-    "imageUrl": "uploads/shampanyon_1751952700.jpg",
+    "imageUrl": "http://localhost:8080/uploads/shampanyon_1751952700.jpg",
     "ingredients": {
       "en": [
         "Champignons",
@@ -1914,7 +1914,7 @@
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T10:41:21.439474+05:00",
-    "updated_at": "2025-07-08T10:41:21.439474+05:00"
+    "updated_at": "2025-07-08T22:43:49.476881+05:00"
   },
   "165": {
     "id": "165",
@@ -2573,9 +2573,9 @@
     },
     "description": "Indeyka go‘shti, dudlangan go‘sht, til, mayonez, no‘xat, tuzlangan bodring va tuxumdan tayyorlangan salat",
     "category": "salat",
-    "price": 42000,
+    "price": 45000,
     "isThere": true,
-    "imageUrl": "uploads/muskoy_1751029969.jpg",
+    "imageUrl": "http://localhost:8080/uploads/muskoy_1751029969.jpg",
     "ingredients": {
       "en": [
         "Indeyka",
@@ -2628,7 +2628,7 @@
     "original_price": 0,
     "comment": "Go‘shtli va to‘yimli erkaklarga xos salat",
     "created_at": "2025-06-27T18:17:16.828128+05:00",
-    "updated_at": "2025-06-27T18:17:16.828129+05:00"
+    "updated_at": "2025-07-08T22:36:22.487823+05:00"
   },
   "26": {
     "id": "26",
@@ -2840,9 +2840,9 @@
     },
     "description": "Aysberg va romano barglari, Sezar sousi, qovurilgan tovuq go‘shti, cherri pomidorlari, parmezan pishloq va suxarilar bilan salat",
     "category": "salat",
-    "price": 38000,
+    "price": 30000,
     "isThere": true,
-    "imageUrl": "uploads/sezar_1751031307.jpg",
+    "imageUrl": "http://localhost:8080/uploads/sezar_1751031307.jpg",
     "ingredients": {
       "en": [
         "Iceberg",
@@ -2898,7 +2898,7 @@
     "original_price": 0,
     "comment": "Klassik Sezar salati tovuq bilan",
     "created_at": "2025-06-27T18:35:46.573156+05:00",
-    "updated_at": "2025-06-27T18:35:46.573157+05:00"
+    "updated_at": "2025-07-08T22:36:11.383676+05:00"
   },
   "3": {
     "id": "3",
@@ -4001,9 +4001,9 @@
     },
     "description": "Qora non, sarimsoq, ukrop va parmezan pishlog‘i bilan",
     "category": "zakuska",
-    "price": 24000,
+    "price": 28000,
     "isThere": true,
-    "imageUrl": "uploads/mulatka_1751927438.jpg",
+    "imageUrl": "http://localhost:8080/uploads/mulatka_1751927438.jpg",
     "ingredients": {
       "en": [
         "Black bread",
@@ -4047,7 +4047,7 @@
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T03:35:10.869392+05:00",
-    "updated_at": "2025-07-08T03:35:10.869392+05:00"
+    "updated_at": "2025-07-08T22:36:53.106732+05:00"
   },
   "52": {
     "id": "52",
@@ -4355,9 +4355,9 @@
     },
     "description": "Mol tili, qazi, tovuq ruleti — xantal bilan birga tortiladi",
     "category": "gazak",
-    "price": 160000,
+    "price": 180000,
     "isThere": true,
-    "imageUrl": "uploads/misnoy_1750917597.jpg",
+    "imageUrl": "http://localhost:8080/uploads/misnoy_1750917597.jpg",
     "ingredients": {
       "en": [
         "Beef tongue",
@@ -4392,7 +4392,7 @@
     "original_price": 0,
     "comment": "Bir nechta go‘sht turlaridan tashkil topgan boy va mazali taom",
     "created_at": "2025-06-26T11:02:52.426308+05:00",
-    "updated_at": "2025-07-02T16:26:03.981371+05:00"
+    "updated_at": "2025-07-08T22:33:24.243147+05:00"
   },
   "8": {
     "id": "8",
@@ -4409,9 +4409,9 @@
     },
     "description": "Bayram dasturxoniga juda mos keladigan nafis taom",
     "category": "gazak",
-    "price": 180000,
+    "price": 200000,
     "isThere": true,
-    "imageUrl": "uploads/riba_1751889288.jpg",
+    "imageUrl": "http://localhost:8080/uploads/riba_1751889288.jpg",
     "ingredients": {
       "en": [
         "Assorted fish",
@@ -4446,7 +4446,7 @@
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-07T17:02:08.663307+05:00",
-    "updated_at": "2025-07-07T17:02:08.663307+05:00"
+    "updated_at": "2025-07-08T22:33:32.218284+05:00"
   },
   "80": {
     "id": "80",
@@ -4529,9 +4529,9 @@
     },
     "description": "Tovuq bulyoni, qo‘l bilan tayyorlangan lapsha, sabzavotlar va ko‘katlar bilan",
     "category": "birinchi_taom",
-    "price": 20000,
+    "price": 22000,
     "isThere": true,
-    "imageUrl": "uploads/kuriniy_sup_1751126769.jpg",
+    "imageUrl": "http://localhost:8080/uploads/kuriniy_sup_1751126769.jpg",
     "ingredients": {
       "en": [
         "Chicken broth",
@@ -4575,7 +4575,7 @@
     "original_price": 0,
     "comment": "Yengil va foydali tovuqli sho‘rva",
     "created_at": "2025-06-28T21:19:39.50409+05:00",
-    "updated_at": "2025-06-28T21:19:39.50409+05:00"
+    "updated_at": "2025-07-08T22:37:13.152211+05:00"
   },
   "82": {
     "id": "82",
@@ -4694,9 +4694,9 @@
     },
     "description": "Boy mol go‘shti bulyoni, mayin mol go‘shti bo‘laklari bilan",
     "category": "birinchi_taom",
-    "price": 27000,
+    "price": 30000,
     "isThere": true,
-    "imageUrl": "uploads/tushonka_1751126857.jpg",
+    "imageUrl": "http://localhost:8080/uploads/tushonka_1751126857.jpg",
     "ingredients": {
       "en": [
         "Beef",
@@ -4728,7 +4728,7 @@
     "original_price": 0,
     "comment": "Mazali va kuchli bulyonli sho‘rva",
     "created_at": "2025-06-28T21:19:58.18239+05:00",
-    "updated_at": "2025-06-28T21:19:58.18239+05:00"
+    "updated_at": "2025-07-08T22:37:21.9707+05:00"
   },
   "85": {
     "id": "85",
@@ -4916,9 +4916,9 @@
     },
     "description": "Mol go‘shti bo‘lagi va qo‘ziqorinlardan tayyorlangan issiq taom, 500 gramm",
     "category": "issiq_taom",
-    "price": 130000,
+    "price": 140000,
     "isThere": true,
-    "imageUrl": "uploads/vaguri_giribi_1751928197.jpg",
+    "imageUrl": "http://localhost:8080/uploads/vaguri_giribi_1751928197.jpg",
     "ingredients": {
       "en": [
         "Beef tenderloin",
@@ -4953,7 +4953,7 @@
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T03:46:08.618305+05:00",
-    "updated_at": "2025-07-08T03:46:08.618305+05:00"
+    "updated_at": "2025-07-08T22:37:35.395332+05:00"
   },
   "91": {
     "id": "91",
@@ -4970,9 +4970,9 @@
     },
     "description": "1 kilogramm tandirda pishirilgan yumshoq va mazali go‘sht",
     "category": "issiq_taom",
-    "price": 190000,
+    "price": 210000,
     "isThere": true,
-    "imageUrl": "uploads/tandir_1751153799.jpg",
+    "imageUrl": "http://localhost:8080/uploads/tandir_1751153799.jpg",
     "ingredients": {
       "en": [
         "Meat",
@@ -5004,7 +5004,7 @@
     "original_price": 0,
     "comment": "An’anaviy tandirda pishirilgan go‘sht",
     "created_at": "2025-06-29T04:38:39.406465+05:00",
-    "updated_at": "2025-06-29T04:38:39.406465+05:00"
+    "updated_at": "2025-07-08T22:37:43.780115+05:00"
   },
   "92": {
     "id": "92",
@@ -5021,9 +5021,9 @@
     },
     "description": "1 kilogramm ziravorlar bilan pishirilgan tovuq go‘shti",
     "category": "issiq_taom",
-    "price": 75000,
+    "price": 85000,
     "isThere": true,
-    "imageUrl": "uploads/tabaka_1751153746.jpg",
+    "imageUrl": "http://localhost:8080/uploads/tabaka_1751153746.jpg",
     "ingredients": {
       "en": [
         "Chicken",
@@ -5064,7 +5064,7 @@
     "original_price": 0,
     "comment": "Qovurilgan tovuq go‘shti tabaka uslubida",
     "created_at": "2025-06-29T04:38:44.087161+05:00",
-    "updated_at": "2025-06-29T04:38:44.087161+05:00"
+    "updated_at": "2025-07-08T22:37:51.715487+05:00"
   },
   "93": {
     "id": "93",
@@ -5081,9 +5081,9 @@
     },
     "description": "Mazali va xushta’m qovurilgan tovuq qanotchalari",
     "category": "issiq_taom",
-    "price": 75000,
+    "price": 85000,
     "isThere": true,
-    "imageUrl": "uploads/kirilichka_1751153677.jpg",
+    "imageUrl": "http://localhost:8080/uploads/kirilichka_1751153677.jpg",
     "ingredients": {
       "en": [
         "Chicken wings",
@@ -5118,14 +5118,14 @@
     "original_price": 0,
     "comment": "Qarsildoq va mazali tovuq qanotchalari",
     "created_at": "2025-06-29T04:38:48.92843+05:00",
-    "updated_at": "2025-06-29T04:38:48.92843+05:00"
+    "updated_at": "2025-07-08T22:38:02.843538+05:00"
   },
   "95": {
     "id": "95",
     "names": {
-      "en": "Oxtail Stew",
-      "ru": "Думгаза",
-      "uz": "Dumg‘aza"
+      "en": "Oxtail Stew (1 kg)",
+      "ru": "Думгаза (1кг)",
+      "uz": "Dumg‘aza (1 kg)"
     },
     "name": "Dumg‘aza",
     "descriptions": {
@@ -5135,9 +5135,9 @@
     },
     "description": "Firmen sousda dimlangan buqa dumlari, ko‘kat va qatiq bilan tortiladi",
     "category": "issiq_taom",
-    "price": 90000,
+    "price": 120000,
     "isThere": true,
-    "imageUrl": "uploads/dumgoza_1751154155.jpg",
+    "imageUrl": "http://localhost:8080/uploads/dumgoza_1751154155.jpg",
     "ingredients": {
       "en": [
         "Oxtail",
@@ -5178,14 +5178,14 @@
     "original_price": 0,
     "comment": "500 gr porsiyada xizmat qilinadi",
     "created_at": "2025-06-29T04:47:46.951259+05:00",
-    "updated_at": "2025-06-29T04:47:46.951259+05:00"
+    "updated_at": "2025-07-08T22:45:34.164802+05:00"
   },
   "96": {
     "id": "96",
     "names": {
-      "en": "Jiz from Lamb Ribs",
-      "ru": "Джиз-быз из бараньей корейки",
-      "uz": "Qo‘y qovurg‘asidan jiz"
+      "en": "Jiz from Lamb Ribs (500g)",
+      "ru": "Джиз-быз из бараньей корейки (500грамм)",
+      "uz": "Qo‘y qovurg‘asidan jiz (500g)"
     },
     "name": "Qo‘y qovurg‘asidan jiz",
     "descriptions": {
@@ -5195,9 +5195,9 @@
     },
     "description": "Kartoshka chip, salat va tuzlangan piyoz bilan tortiladi",
     "category": "issiq_taom",
-    "price": 125000,
+    "price": 140000,
     "isThere": true,
-    "imageUrl": "uploads/jizkareka_1751154217.jpg",
+    "imageUrl": "http://localhost:8080/uploads/jizkareka_1751154217.jpg",
     "ingredients": {
       "en": [
         "Lamb ribs",
@@ -5232,14 +5232,14 @@
     "original_price": 0,
     "comment": "500 gr porsiyada xizmat qilinadi",
     "created_at": "2025-06-29T04:47:53.843004+05:00",
-    "updated_at": "2025-06-29T04:47:53.843004+05:00"
+    "updated_at": "2025-07-08T22:46:51.065201+05:00"
   },
   "97": {
     "id": "97",
     "names": {
-      "en": "Jiz from Lamb Testicles",
-      "ru": "Джиз из бараньих семечек",
-      "uz": "Qo‘y urug‘idan jiz"
+      "en": "Jiz from Lamb Testicles (500g)",
+      "ru": "Джиз из бараньих семечек (500 грамм)",
+      "uz": "Qo‘y urug‘idan jiz (500g)"
     },
     "name": "Qo‘y urug‘idan jiz",
     "descriptions": {
@@ -5249,9 +5249,9 @@
     },
     "description": "Kartoshka chip, salat va tuzlangan piyoz bilan tortiladi",
     "category": "issiq_taom",
-    "price": 90000,
+    "price": 110000,
     "isThere": true,
-    "imageUrl": "uploads/jizsemichka_1751154292.jpg",
+    "imageUrl": "http://localhost:8080/uploads/jizsemichka_1751154292.jpg",
     "ingredients": {
       "en": [
         "Lamb testicles",
@@ -5286,14 +5286,14 @@
     "original_price": 0,
     "comment": "500 gr porsiyada xizmat qilinadi",
     "created_at": "2025-06-29T04:47:58.705737+05:00",
-    "updated_at": "2025-06-29T04:47:58.705737+05:00"
+    "updated_at": "2025-07-08T22:38:45.157543+05:00"
   },
   "98": {
     "id": "98",
     "names": {
-      "en": "Jiz from Beef Tenderloin",
-      "ru": "Джиз-быз из вырезки",
-      "uz": "Mol go‘shti filesidan jiz"
+      "en": "Jiz from Beef Tenderloin (500g)",
+      "ru": "Джиз-быз из вырезки (500 грамм)",
+      "uz": "Mol go‘shti filesidan jiz (500g)"
     },
     "name": "Mol go‘shti filesidan jiz",
     "descriptions": {
@@ -5303,9 +5303,9 @@
     },
     "description": "Kartoshka chip, salat va tuzlangan piyoz bilan tortiladi",
     "category": "issiq_taom",
-    "price": 130000,
+    "price": 140000,
     "isThere": true,
-    "imageUrl": "uploads/jizviriska_1751154332.jpg",
+    "imageUrl": "http://localhost:8080/uploads/jizviriska_1751154332.jpg",
     "ingredients": {
       "en": [
         "Beef tenderloin",
@@ -5340,14 +5340,14 @@
     "original_price": 0,
     "comment": "500 gr porsiyada xizmat qilinadi",
     "created_at": "2025-06-29T04:48:03.655296+05:00",
-    "updated_at": "2025-06-29T04:48:03.655296+05:00"
+    "updated_at": "2025-07-08T22:39:10.249844+05:00"
   },
   "99": {
     "id": "99",
     "names": {
-      "en": "Jiz-biz Vaguri",
-      "ru": "Джиз-быз вагури",
-      "uz": "Jiz-biz vaguri"
+      "en": "Jiz-biz Vaguri (500g)",
+      "ru": "Джиз-быз вагури (500 грамм)",
+      "uz": "Jiz-biz vaguri (500g)"
     },
     "name": "Jiz-biz vaguri",
     "descriptions": {
@@ -5357,9 +5357,9 @@
     },
     "description": "Kartoshka chip, salat va tuzlangan piyoz bilan tortiladi",
     "category": "issiq_taom",
-    "price": 100000,
+    "price": 110000,
     "isThere": true,
-    "imageUrl": "uploads/jizvaguri_1751154396.jpg",
+    "imageUrl": "http://localhost:8080/uploads/jizvaguri_1751154396.jpg",
     "ingredients": {
       "en": [
         "Vaguri",
@@ -5394,6 +5394,6 @@
     "original_price": 0,
     "comment": "500 gr porsiyada xizmat qilinadi",
     "created_at": "2025-06-29T04:48:08.472851+05:00",
-    "updated_at": "2025-06-29T04:48:08.472851+05:00"
+    "updated_at": "2025-07-08T22:39:20.867538+05:00"
   }
 }
