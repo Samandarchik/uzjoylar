@@ -48,13 +48,13 @@
     "rating": 5,
     "review_count": 0,
     "preparation_time": 5,
-    "stock": 20,
+    "stock": 8,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "Yengil va vitaminlarga boy sabzavotli salat",
     "created_at": "2025-06-26T10:59:26.431738+05:00",
-    "updated_at": "2025-07-10T17:47:13.020407+05:00"
+    "updated_at": "2025-07-11T03:23:52.634001+05:00"
   },
   "10": {
     "id": "10",
@@ -99,13 +99,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 6,
-    "stock": 20,
+    "stock": 19,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-07T17:02:13.201352+05:00",
-    "updated_at": "2025-07-07T17:02:13.201352+05:00"
+    "updated_at": "2025-07-11T03:17:48.511205+05:00"
   },
   "105": {
     "id": "105",
@@ -150,13 +150,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 12,
-    "stock": 20,
+    "stock": 13,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "500 gr porsiyada xizmat qilinadi",
     "created_at": "2025-06-29T04:59:47.896263+05:00",
-    "updated_at": "2025-07-08T22:39:37.722536+05:00"
+    "updated_at": "2025-07-11T03:17:48.381691+05:00"
   },
   "106": {
     "id": "106",
@@ -201,13 +201,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 12,
-    "stock": 20,
+    "stock": 13,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "500 gr porsiyada xizmat qilinadi",
     "created_at": "2025-06-29T04:59:53.152713+05:00",
-    "updated_at": "2025-07-08T22:39:47.927298+05:00"
+    "updated_at": "2025-07-11T03:17:48.383293+05:00"
   },
   "107": {
     "id": "107",
@@ -249,13 +249,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 25,
-    "stock": 59,
+    "stock": 53,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "4 kishilik porsiya",
     "created_at": "2025-06-29T04:59:57.568373+05:00",
-    "updated_at": "2025-07-08T22:58:56.152955+05:00"
+    "updated_at": "2025-07-11T03:17:48.384841+05:00"
   },
   "108": {
     "id": "108",
@@ -300,13 +300,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 30,
-    "stock": 499,
+    "stock": 489,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "4 kishilik porsiya",
     "created_at": "2025-06-29T05:00:03.587425+05:00",
-    "updated_at": "2025-07-08T22:59:02.649421+05:00"
+    "updated_at": "2025-07-11T03:17:48.375225+05:00"
   },
   "109": {
     "id": "109",
@@ -351,13 +351,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 30,
-    "stock": 2,
+    "stock": 0,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "4 kishilik porsiya",
     "created_at": "2025-06-29T05:00:07.968048+05:00",
-    "updated_at": "2025-07-08T22:40:16.309471+05:00"
+    "updated_at": "2025-07-11T03:17:48.371711+05:00"
   },
   "11": {
     "id": "11",
@@ -405,13 +405,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 10,
-    "stock": 25,
+    "stock": 24,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-07T17:02:17.460802+05:00",
-    "updated_at": "2025-07-07T17:02:17.460802+05:00"
+    "updated_at": "2025-07-11T03:17:48.51499+05:00"
   },
   "110": {
     "id": "110",
@@ -456,13 +456,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 25,
-    "stock": 4,
+    "stock": 0,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "To‘yimli maxsus taom",
     "created_at": "2025-06-29T05:00:13.169986+05:00",
-    "updated_at": "2025-07-08T22:40:24.197181+05:00"
+    "updated_at": "2025-07-11T03:17:48.314619+05:00"
   },
   "12": {
     "id": "12",
@@ -507,13 +507,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 5,
-    "stock": 30,
+    "stock": 29,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-07T17:02:21.975796+05:00",
-    "updated_at": "2025-07-07T17:02:21.975796+05:00"
+    "updated_at": "2025-07-11T03:17:48.513326+05:00"
   },
   "120": {
     "id": "120",
@@ -564,13 +564,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 15,
-    "stock": 10,
+    "stock": 0,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T04:03:32.776979+05:00",
-    "updated_at": "2025-07-08T22:40:35.854194+05:00"
+    "updated_at": "2025-07-11T03:17:48.369887+05:00"
   },
   "121": {
     "id": "121",
@@ -624,13 +624,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 20,
-    "stock": 10,
+    "stock": 0,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "1 kg porsiya",
     "created_at": "2025-06-29T05:07:07.076516+05:00",
-    "updated_at": "2025-07-08T22:40:43.73097+05:00"
+    "updated_at": "2025-07-11T03:17:48.368114+05:00"
   },
   "122": {
     "id": "122",
@@ -675,13 +675,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 25,
-    "stock": 8,
+    "stock": 0,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "1 kg jonli baliqdan tanlab tayyorlanadi",
     "created_at": "2025-06-29T05:07:11.524246+05:00",
-    "updated_at": "2025-07-08T22:40:51.084246+05:00"
+    "updated_at": "2025-07-11T03:17:48.365881+05:00"
   },
   "123": {
     "id": "123",
@@ -732,13 +732,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 25,
-    "stock": 10,
+    "stock": 9,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "1 kg porsiya",
     "created_at": "2025-06-29T05:07:18.210602+05:00",
-    "updated_at": "2025-07-08T22:41:04.069752+05:00"
+    "updated_at": "2025-07-11T03:17:48.36434+05:00"
   },
   "124": {
     "id": "124",
@@ -789,13 +789,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 20,
-    "stock": 8,
+    "stock": 7,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "1 kg porsiya",
     "created_at": "2025-06-29T12:23:29.64473+05:00",
-    "updated_at": "2025-07-08T22:41:11.026372+05:00"
+    "updated_at": "2025-07-11T03:17:48.354999+05:00"
   },
   "125": {
     "id": "125",
@@ -852,13 +852,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 20,
-    "stock": 6,
+    "stock": 5,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-06-29T12:23:33.915482+05:00",
-    "updated_at": "2025-06-29T12:23:33.915482+05:00"
+    "updated_at": "2025-07-11T03:17:48.356436+05:00"
   },
   "126": {
     "id": "126",
@@ -909,13 +909,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 25,
-    "stock": 5,
+    "stock": 4,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "1 kg porsiya",
     "created_at": "2025-06-29T12:23:45.69905+05:00",
-    "updated_at": "2025-07-08T22:41:32.559547+05:00"
+    "updated_at": "2025-07-11T03:17:48.357849+05:00"
   },
   "127": {
     "id": "127",
@@ -966,13 +966,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 18,
-    "stock": 12,
+    "stock": 11,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-06-29T12:23:49.823859+05:00",
-    "updated_at": "2025-06-29T12:23:49.823859+05:00"
+    "updated_at": "2025-07-11T03:17:48.360848+05:00"
   },
   "13": {
     "id": "13",
@@ -1023,13 +1023,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 8,
-    "stock": 20,
+    "stock": 19,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-07T17:11:04.740585+05:00",
-    "updated_at": "2025-07-07T17:11:04.740585+05:00"
+    "updated_at": "2025-07-11T03:17:48.516861+05:00"
   },
   "14": {
     "id": "14",
@@ -1074,13 +1074,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 5,
-    "stock": 20,
+    "stock": 19,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-07T17:11:13.31162+05:00",
-    "updated_at": "2025-07-08T22:33:47.682604+05:00"
+    "updated_at": "2025-07-11T03:17:48.508956+05:00"
   },
   "15": {
     "id": "15",
@@ -1122,13 +1122,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 5,
-    "stock": 15,
+    "stock": 14,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-07T17:11:55.222291+05:00",
-    "updated_at": "2025-07-07T17:11:55.222292+05:00"
+    "updated_at": "2025-07-11T03:17:48.50298+05:00"
   },
   "150": {
     "id": "150",
@@ -1179,13 +1179,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 10,
-    "stock": 60,
+    "stock": 59,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "Shirador va xushbo‘y molotiy shashlik",
     "created_at": "2025-06-30T14:33:20.46854+05:00",
-    "updated_at": "2025-06-30T14:33:20.46854+05:00"
+    "updated_at": "2025-07-11T03:17:48.35319+05:00"
   },
   "151": {
     "id": "151",
@@ -1223,20 +1223,20 @@
       ]
     },
     "allergens": {
-      "en": [],
-      "ru": [],
-      "uz": []
+      "en": null,
+      "ru": null,
+      "uz": null
     },
     "rating": 0,
     "review_count": 0,
     "preparation_time": 10,
-    "stock": 40,
-    "is_popular": false,
+    "stock": 39,
+    "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-06-30T14:33:37.945334+05:00",
-    "updated_at": "2025-07-08T22:41:48.596728+05:00"
+    "updated_at": "2025-07-11T03:25:36.336244+05:00"
   },
   "152": {
     "id": "152",
@@ -1284,13 +1284,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 12,
-    "stock": 30,
+    "stock": 29,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-06-30T14:33:45.384639+05:00",
-    "updated_at": "2025-07-08T22:41:55.537043+05:00"
+    "updated_at": "2025-07-11T03:17:48.349056+05:00"
   },
   "153": {
     "id": "153",
@@ -1338,13 +1338,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 10,
-    "stock": 35,
+    "stock": 34,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-06-30T14:33:51.281325+05:00",
-    "updated_at": "2025-07-08T22:42:11.640276+05:00"
+    "updated_at": "2025-07-11T03:17:48.347452+05:00"
   },
   "154": {
     "id": "154",
@@ -1389,13 +1389,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 10,
-    "stock": 20,
+    "stock": 19,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-06-30T14:33:56.270705+05:00",
-    "updated_at": "2025-07-08T22:42:22.225815+05:00"
+    "updated_at": "2025-07-11T03:17:48.34114+05:00"
   },
   "156": {
     "id": "156",
@@ -1437,13 +1437,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 6,
-    "stock": 20,
+    "stock": 19,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T04:12:55.174304+05:00",
-    "updated_at": "2025-07-08T04:12:55.174304+05:00"
+    "updated_at": "2025-07-11T03:17:48.342598+05:00"
   },
   "157": {
     "id": "157",
@@ -1497,13 +1497,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 7,
-    "stock": 20,
+    "stock": 19,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T04:13:08.785663+05:00",
-    "updated_at": "2025-07-08T22:42:49.896835+05:00"
+    "updated_at": "2025-07-11T03:17:48.344021+05:00"
   },
   "158": {
     "id": "158",
@@ -1548,13 +1548,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 6,
-    "stock": 20,
+    "stock": 19,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T04:13:20.354008+05:00",
-    "updated_at": "2025-07-08T22:42:58.956645+05:00"
+    "updated_at": "2025-07-11T03:17:48.345488+05:00"
   },
   "159": {
     "id": "159",
@@ -1596,13 +1596,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 8,
-    "stock": 20,
+    "stock": 19,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T04:13:24.866332+05:00",
-    "updated_at": "2025-07-08T22:43:08.504761+05:00"
+    "updated_at": "2025-07-11T03:17:48.338833+05:00"
   },
   "16": {
     "id": "16",
@@ -1653,13 +1653,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 6,
-    "stock": 20,
+    "stock": 19,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-07T17:12:00.515633+05:00",
-    "updated_at": "2025-07-07T17:12:00.515633+05:00"
+    "updated_at": "2025-07-11T03:17:48.504855+05:00"
   },
   "160": {
     "id": "160",
@@ -1704,13 +1704,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 6,
-    "stock": 20,
+    "stock": 19,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T04:13:31.699346+05:00",
-    "updated_at": "2025-07-08T22:43:18.008034+05:00"
+    "updated_at": "2025-07-11T03:17:48.337138+05:00"
   },
   "161": {
     "id": "161",
@@ -1761,13 +1761,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 3,
-    "stock": 50,
+    "stock": 49,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T10:41:05.163468+05:00",
-    "updated_at": "2025-07-08T10:41:05.163469+05:00"
+    "updated_at": "2025-07-11T03:17:48.335362+05:00"
   },
   "162": {
     "id": "162",
@@ -1812,13 +1812,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 5,
-    "stock": 30,
+    "stock": 29,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T10:41:11.579079+05:00",
-    "updated_at": "2025-07-08T22:43:36.350602+05:00"
+    "updated_at": "2025-07-11T03:17:48.333469+05:00"
   },
   "163": {
     "id": "163",
@@ -1860,13 +1860,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 4,
-    "stock": 25,
+    "stock": 24,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T10:41:16.460242+05:00",
-    "updated_at": "2025-07-08T10:41:16.460242+05:00"
+    "updated_at": "2025-07-11T03:17:48.326966+05:00"
   },
   "164": {
     "id": "164",
@@ -1908,13 +1908,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 6,
-    "stock": 20,
+    "stock": 19,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T10:41:21.439474+05:00",
-    "updated_at": "2025-07-08T22:43:49.476881+05:00"
+    "updated_at": "2025-07-11T03:17:48.329823+05:00"
   },
   "165": {
     "id": "165",
@@ -1965,13 +1965,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 6,
-    "stock": 20,
+    "stock": 19,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T10:41:26.532719+05:00",
-    "updated_at": "2025-07-08T10:41:26.532719+05:00"
+    "updated_at": "2025-07-11T03:17:48.331553+05:00"
   },
   "166": {
     "id": "166",
@@ -2016,13 +2016,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 6,
-    "stock": 30,
+    "stock": 29,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T10:48:34.506165+05:00",
-    "updated_at": "2025-07-08T10:48:34.506165+05:00"
+    "updated_at": "2025-07-11T03:17:48.325455+05:00"
   },
   "167": {
     "id": "167",
@@ -2067,13 +2067,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 6,
-    "stock": 25,
+    "stock": 24,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T10:48:49.931077+05:00",
-    "updated_at": "2025-07-08T10:48:49.931077+05:00"
+    "updated_at": "2025-07-11T03:17:48.323833+05:00"
   },
   "168": {
     "id": "168",
@@ -2124,13 +2124,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 5,
-    "stock": 30,
+    "stock": 29,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T10:48:55.268833+05:00",
-    "updated_at": "2025-07-08T10:48:55.268833+05:00"
+    "updated_at": "2025-07-11T03:17:48.321745+05:00"
   },
   "169": {
     "id": "169",
@@ -2181,13 +2181,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 5,
-    "stock": 20,
+    "stock": 19,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T10:48:59.872698+05:00",
-    "updated_at": "2025-07-08T10:48:59.872698+05:00"
+    "updated_at": "2025-07-11T03:17:48.319453+05:00"
   },
   "17": {
     "id": "17",
@@ -2226,13 +2226,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 5,
-    "stock": 20,
+    "stock": 19,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-07T17:12:05.058203+05:00",
-    "updated_at": "2025-07-07T17:12:05.058203+05:00"
+    "updated_at": "2025-07-11T03:17:48.506891+05:00"
   },
   "20": {
     "id": "20",
@@ -2280,13 +2280,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 5,
-    "stock": 100,
+    "stock": 98,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "Mazali va achchiq salat",
     "created_at": "2025-06-24T09:51:22.480781+05:00",
-    "updated_at": "2025-06-24T09:51:22.480782+05:00"
+    "updated_at": "2025-07-11T03:17:48.496911+05:00"
   },
   "21": {
     "id": "21",
@@ -2343,13 +2343,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 5,
-    "stock": 45,
+    "stock": 44,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "Sharqona ta’mga ega vitaminlarga boy salat",
     "created_at": "2025-06-26T11:09:56.680061+05:00",
-    "updated_at": "2025-06-26T11:09:56.680061+05:00"
+    "updated_at": "2025-07-11T03:17:48.499384+05:00"
   },
   "22": {
     "id": "22",
@@ -2412,13 +2412,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 7,
-    "stock": 40,
+    "stock": 39,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "Tovuq va sabzavotlardan tayyorlangan to‘yimli salat",
     "created_at": "2025-06-27T18:04:48.428023+05:00",
-    "updated_at": "2025-06-27T18:04:48.428023+05:00"
+    "updated_at": "2025-07-11T03:17:48.501356+05:00"
   },
   "23": {
     "id": "23",
@@ -2475,13 +2475,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 5,
-    "stock": 50,
+    "stock": 39,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "Yengil va sog‘lom sabzavotli salat",
     "created_at": "2025-06-26T11:18:35.27314+05:00",
-    "updated_at": "2025-06-26T11:18:35.273141+05:00"
+    "updated_at": "2025-07-11T03:17:48.30953+05:00"
   },
   "24": {
     "id": "24",
@@ -2550,13 +2550,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 6,
-    "stock": 35,
+    "stock": 28,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "An’anaviy Olivye salatining tovuqli versiyasi",
     "created_at": "2025-06-27T18:09:09.37876+05:00",
-    "updated_at": "2025-06-27T18:09:09.37876+05:00"
+    "updated_at": "2025-07-11T03:17:48.494554+05:00"
   },
   "25": {
     "id": "25",
@@ -2622,13 +2622,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 7,
-    "stock": 30,
+    "stock": 29,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "Go‘shtli va to‘yimli erkaklarga xos salat",
     "created_at": "2025-06-27T18:17:16.828128+05:00",
-    "updated_at": "2025-07-08T22:36:22.487823+05:00"
+    "updated_at": "2025-07-11T03:17:48.492462+05:00"
   },
   "26": {
     "id": "26",
@@ -2691,13 +2691,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 5,
-    "stock": 40,
+    "stock": 39,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "Yengil, vitaminlarga boy va sog‘lom Grekcha salat",
     "created_at": "2025-06-27T18:24:13.827809+05:00",
-    "updated_at": "2025-06-27T18:24:13.827809+05:00"
+    "updated_at": "2025-07-11T03:17:48.490245+05:00"
   },
   "27": {
     "id": "27",
@@ -2748,13 +2748,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 6,
-    "stock": 40,
+    "stock": 39,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "Vitaminlarga boy, go‘shtli va yengil salat",
     "created_at": "2025-06-27T18:29:13.317028+05:00",
-    "updated_at": "2025-06-27T18:29:13.317028+05:00"
+    "updated_at": "2025-07-11T03:17:48.488502+05:00"
   },
   "28": {
     "id": "28",
@@ -2817,13 +2817,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 5,
-    "stock": 35,
+    "stock": 34,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "Yengil va foydali vitaminlarga boy salat",
     "created_at": "2025-06-27T18:32:37.394852+05:00",
-    "updated_at": "2025-06-27T18:32:37.394852+05:00"
+    "updated_at": "2025-07-11T03:17:48.480381+05:00"
   },
   "29": {
     "id": "29",
@@ -2892,13 +2892,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 6,
-    "stock": 40,
+    "stock": 39,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "Klassik Sezar salati tovuq bilan",
     "created_at": "2025-06-27T18:35:46.573156+05:00",
-    "updated_at": "2025-07-08T22:36:11.383676+05:00"
+    "updated_at": "2025-07-11T03:17:48.482526+05:00"
   },
   "3": {
     "id": "3",
@@ -2917,7 +2917,7 @@
     "category": "gazak",
     "price": 22000,
     "isThere": true,
-    "imageUrl": "uploads/ikra_1751888406.jpg",
+    "imageUrl": "http://192.168.1.9:8080/uploads/ikra_1751888406.jpg",
     "ingredients": {
       "en": [
         "Eggplant",
@@ -2939,20 +2939,20 @@
       ]
     },
     "allergens": {
-      "en": [],
-      "ru": [],
-      "uz": []
+      "en": null,
+      "ru": null,
+      "uz": null
     },
     "rating": 0,
     "review_count": 0,
     "preparation_time": 8,
-    "stock": 18,
+    "stock": 6,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-07T16:44:39.641201+05:00",
-    "updated_at": "2025-07-10T18:13:27.74352+05:00"
+    "updated_at": "2025-07-11T03:23:59.297473+05:00"
   },
   "31": {
     "id": "31",
@@ -3018,13 +3018,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 7,
-    "stock": 20,
+    "stock": 19,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T02:53:56.024474+05:00",
-    "updated_at": "2025-07-08T02:53:56.024474+05:00"
+    "updated_at": "2025-07-11T03:17:48.484263+05:00"
   },
   "33": {
     "id": "33",
@@ -3087,13 +3087,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 5,
-    "stock": 30,
+    "stock": 29,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "Sharqona ta’mli va qarsildoq sabzavotli salat",
     "created_at": "2025-06-27T18:48:21.581752+05:00",
-    "updated_at": "2025-06-27T18:48:21.581752+05:00"
+    "updated_at": "2025-07-11T03:17:48.48602+05:00"
   },
   "34": {
     "id": "34",
@@ -3156,13 +3156,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 7,
-    "stock": 20,
+    "stock": 19,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T03:17:27.68944+05:00",
-    "updated_at": "2025-07-08T03:17:27.689441+05:00"
+    "updated_at": "2025-07-11T03:17:48.475623+05:00"
   },
   "35": {
     "id": "35",
@@ -3237,13 +3237,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 6,
-    "stock": 30,
+    "stock": 29,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "Yengil, foydali va o‘zgacha ta’mli go‘shtli salat",
     "created_at": "2025-06-27T19:12:00.319462+05:00",
-    "updated_at": "2025-06-27T19:12:00.319462+05:00"
+    "updated_at": "2025-07-11T03:17:48.473848+05:00"
   },
   "36": {
     "id": "36",
@@ -3291,13 +3291,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 6,
-    "stock": 20,
+    "stock": 19,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T03:18:44.383144+05:00",
-    "updated_at": "2025-07-08T03:18:44.383144+05:00"
+    "updated_at": "2025-07-11T03:17:48.471676+05:00"
   },
   "37": {
     "id": "37",
@@ -3360,13 +3360,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 6,
-    "stock": 20,
+    "stock": 19,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T03:19:26.709019+05:00",
-    "updated_at": "2025-07-08T03:19:26.709019+05:00"
+    "updated_at": "2025-07-11T03:17:48.468988+05:00"
   },
   "38": {
     "id": "38",
@@ -3429,13 +3429,13 @@
     "rating": 4,
     "review_count": 0,
     "preparation_time": 8,
-    "stock": 20,
+    "stock": 19,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T03:19:32.395023+05:00",
-    "updated_at": "2025-07-10T17:22:47.526643+05:00"
+    "updated_at": "2025-07-11T03:17:48.455846+05:00"
   },
   "39": {
     "id": "39",
@@ -3486,13 +3486,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 6,
-    "stock": 20,
+    "stock": 19,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T03:19:37.762208+05:00",
-    "updated_at": "2025-07-08T03:19:37.762208+05:00"
+    "updated_at": "2025-07-11T03:17:48.458238+05:00"
   },
   "4": {
     "id": "4",
@@ -3543,13 +3543,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 5,
-    "stock": 40,
+    "stock": 39,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-07T16:44:50.788839+05:00",
-    "updated_at": "2025-07-07T16:44:50.788839+05:00"
+    "updated_at": "2025-07-11T03:17:48.527132+05:00"
   },
   "40": {
     "id": "40",
@@ -3603,13 +3603,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 7,
-    "stock": 20,
+    "stock": 19,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T03:19:46.322758+05:00",
-    "updated_at": "2025-07-08T03:19:46.322758+05:00"
+    "updated_at": "2025-07-11T03:17:48.460513+05:00"
   },
   "41": {
     "id": "41",
@@ -3663,13 +3663,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 8,
-    "stock": 20,
+    "stock": 19,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T03:23:51.627607+05:00",
-    "updated_at": "2025-07-08T03:23:51.627607+05:00"
+    "updated_at": "2025-07-11T03:17:48.464209+05:00"
   },
   "42": {
     "id": "42",
@@ -3720,13 +3720,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 7,
-    "stock": 20,
+    "stock": 19,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T03:24:00.088981+05:00",
-    "updated_at": "2025-07-08T03:24:00.088981+05:00"
+    "updated_at": "2025-07-11T03:17:48.453184+05:00"
   },
   "43": {
     "id": "43",
@@ -3780,13 +3780,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 6,
-    "stock": 19,
+    "stock": 18,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T03:24:17.0095+05:00",
-    "updated_at": "2025-07-10T17:44:18.757847+05:00"
+    "updated_at": "2025-07-11T03:17:48.450124+05:00"
   },
   "44": {
     "id": "44",
@@ -3855,13 +3855,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 6,
-    "stock": 20,
+    "stock": 19,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T03:24:28.981105+05:00",
-    "updated_at": "2025-07-08T03:24:28.981105+05:00"
+    "updated_at": "2025-07-11T03:17:48.447499+05:00"
   },
   "5": {
     "id": "5",
@@ -3909,13 +3909,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 10,
-    "stock": 30,
+    "stock": 29,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-07T16:44:56.286437+05:00",
-    "updated_at": "2025-07-07T16:44:56.286437+05:00"
+    "updated_at": "2025-07-11T03:17:48.529492+05:00"
   },
   "50": {
     "id": "50",
@@ -3978,13 +3978,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 5,
-    "stock": 20,
+    "stock": 19,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T03:34:56.923243+05:00",
-    "updated_at": "2025-07-08T03:34:56.923243+05:00"
+    "updated_at": "2025-07-11T03:17:48.431805+05:00"
   },
   "51": {
     "id": "51",
@@ -4041,13 +4041,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 4,
-    "stock": 20,
+    "stock": 19,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T03:35:10.869392+05:00",
-    "updated_at": "2025-07-08T22:36:53.106732+05:00"
+    "updated_at": "2025-07-11T03:17:48.434603+05:00"
   },
   "52": {
     "id": "52",
@@ -4095,13 +4095,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 6,
-    "stock": 20,
+    "stock": 19,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T03:35:23.270238+05:00",
-    "updated_at": "2025-07-08T03:35:23.270238+05:00"
+    "updated_at": "2025-07-11T03:17:48.441146+05:00"
   },
   "53": {
     "id": "53",
@@ -4152,13 +4152,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 8,
-    "stock": 12,
+    "stock": 11,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T03:35:40.37095+05:00",
-    "updated_at": "2025-07-10T17:44:18.762037+05:00"
+    "updated_at": "2025-07-11T03:17:48.444493+05:00"
   },
   "57": {
     "id": "57",
@@ -4215,13 +4215,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 10,
-    "stock": 20,
+    "stock": 19,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T03:42:08.073229+05:00",
-    "updated_at": "2025-07-08T03:42:08.073229+05:00"
+    "updated_at": "2025-07-11T03:17:48.421354+05:00"
   },
   "58": {
     "id": "58",
@@ -4272,13 +4272,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 12,
-    "stock": 20,
+    "stock": 19,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T03:42:13.276874+05:00",
-    "updated_at": "2025-07-08T03:42:13.276874+05:00"
+    "updated_at": "2025-07-11T03:17:48.419609+05:00"
   },
   "6": {
     "id": "6",
@@ -4332,13 +4332,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 12,
-    "stock": 25,
+    "stock": 20,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-07T16:45:01.708023+05:00",
-    "updated_at": "2025-07-07T16:45:01.708023+05:00"
+    "updated_at": "2025-07-11T03:17:48.524741+05:00"
   },
   "7": {
     "id": "7",
@@ -4386,13 +4386,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 7,
-    "stock": 35,
+    "stock": 31,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "Bir nechta go‘sht turlaridan tashkil topgan boy va mazali taom",
     "created_at": "2025-06-26T11:02:52.426308+05:00",
-    "updated_at": "2025-07-08T22:33:24.243147+05:00"
+    "updated_at": "2025-07-11T03:17:48.522639+05:00"
   },
   "8": {
     "id": "8",
@@ -4440,13 +4440,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 10,
-    "stock": 15,
+    "stock": 10,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-07T17:02:08.663307+05:00",
-    "updated_at": "2025-07-08T22:33:32.218284+05:00"
+    "updated_at": "2025-07-11T03:17:48.521017+05:00"
   },
   "80": {
     "id": "80",
@@ -4506,13 +4506,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 10,
-    "stock": 25,
+    "stock": 24,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "Toshkent uslubidagi an’anaviy va to‘yimli mastava sho‘rvasi",
     "created_at": "2025-06-28T21:02:51.726072+05:00",
-    "updated_at": "2025-06-28T21:02:51.726072+05:00"
+    "updated_at": "2025-07-11T03:17:48.408282+05:00"
   },
   "81": {
     "id": "81",
@@ -4569,13 +4569,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 8,
-    "stock": 25,
+    "stock": 24,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "Yengil va foydali tovuqli sho‘rva",
     "created_at": "2025-06-28T21:19:39.50409+05:00",
-    "updated_at": "2025-07-08T22:37:13.152211+05:00"
+    "updated_at": "2025-07-11T03:17:48.410002+05:00"
   },
   "82": {
     "id": "82",
@@ -4620,13 +4620,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 7,
-    "stock": 20,
+    "stock": 19,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "Vitaminlarga boy yengil sho‘rva",
     "created_at": "2025-06-28T21:19:47.341942+05:00",
-    "updated_at": "2025-06-28T21:19:47.341943+05:00"
+    "updated_at": "2025-07-11T03:17:48.413363+05:00"
   },
   "83": {
     "id": "83",
@@ -4671,13 +4671,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 10,
-    "stock": 25,
+    "stock": 24,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "To‘yimli va an’anaviy sho‘rva",
     "created_at": "2025-06-28T21:19:53.248462+05:00",
-    "updated_at": "2025-06-28T21:19:53.248462+05:00"
+    "updated_at": "2025-07-11T03:17:48.417721+05:00"
   },
   "84": {
     "id": "84",
@@ -4722,13 +4722,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 9,
-    "stock": 20,
+    "stock": 19,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "Mazali va kuchli bulyonli sho‘rva",
     "created_at": "2025-06-28T21:19:58.18239+05:00",
-    "updated_at": "2025-07-08T22:37:21.9707+05:00"
+    "updated_at": "2025-07-11T03:17:48.406378+05:00"
   },
   "85": {
     "id": "85",
@@ -4776,13 +4776,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 12,
-    "stock": 18,
+    "stock": 17,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "Qo‘y go‘shti bilan tayyorlangan klassik shurpa",
     "created_at": "2025-06-28T21:20:03.750982+05:00",
-    "updated_at": "2025-06-28T21:20:03.750982+05:00"
+    "updated_at": "2025-07-11T03:17:48.404662+05:00"
   },
   "86": {
     "id": "86",
@@ -4839,13 +4839,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 10,
-    "stock": 22,
+    "stock": 14,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "Sharqona uslubdagi boy ta’mli lag‘mon",
     "created_at": "2025-06-28T21:20:10.573685+05:00",
-    "updated_at": "2025-06-28T21:20:10.573685+05:00"
+    "updated_at": "2025-07-11T03:17:48.311923+05:00"
   },
   "9": {
     "id": "9",
@@ -4893,13 +4893,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 6,
-    "stock": 30,
+    "stock": 24,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "Yengil va foydali go‘shtli gazak",
     "created_at": "2025-06-26T11:05:45.995791+05:00",
-    "updated_at": "2025-07-02T16:26:03.982555+05:00"
+    "updated_at": "2025-07-11T03:17:48.51936+05:00"
   },
   "90": {
     "id": "90",
@@ -4947,13 +4947,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 15,
-    "stock": 20,
+    "stock": 12,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "",
     "created_at": "2025-07-08T03:46:08.618305+05:00",
-    "updated_at": "2025-07-08T22:37:35.395332+05:00"
+    "updated_at": "2025-07-11T03:17:48.396893+05:00"
   },
   "91": {
     "id": "91",
@@ -4998,13 +4998,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 15,
-    "stock": 10,
+    "stock": 4,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "An’anaviy tandirda pishirilgan go‘sht",
     "created_at": "2025-06-29T04:38:39.406465+05:00",
-    "updated_at": "2025-07-08T22:37:43.780115+05:00"
+    "updated_at": "2025-07-11T03:17:48.398788+05:00"
   },
   "92": {
     "id": "92",
@@ -5058,13 +5058,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 12,
-    "stock": 15,
+    "stock": 12,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "Qovurilgan tovuq go‘shti tabaka uslubida",
     "created_at": "2025-06-29T04:38:44.087161+05:00",
-    "updated_at": "2025-07-08T22:37:51.715487+05:00"
+    "updated_at": "2025-07-11T03:17:48.400945+05:00"
   },
   "93": {
     "id": "93",
@@ -5112,13 +5112,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 10,
-    "stock": 20,
+    "stock": 16,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "Qarsildoq va mazali tovuq qanotchalari",
     "created_at": "2025-06-29T04:38:48.92843+05:00",
-    "updated_at": "2025-07-08T22:38:02.843538+05:00"
+    "updated_at": "2025-07-11T03:17:48.402898+05:00"
   },
   "95": {
     "id": "95",
@@ -5172,13 +5172,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 15,
-    "stock": 10,
+    "stock": 0,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "500 gr porsiyada xizmat qilinadi",
     "created_at": "2025-06-29T04:47:46.951259+05:00",
-    "updated_at": "2025-07-08T22:45:34.164802+05:00"
+    "updated_at": "2025-07-11T03:17:48.3931+05:00"
   },
   "96": {
     "id": "96",
@@ -5226,13 +5226,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 12,
-    "stock": 15,
+    "stock": 7,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "500 gr porsiyada xizmat qilinadi",
     "created_at": "2025-06-29T04:47:53.843004+05:00",
-    "updated_at": "2025-07-08T22:46:51.065201+05:00"
+    "updated_at": "2025-07-11T03:17:48.390686+05:00"
   },
   "97": {
     "id": "97",
@@ -5280,13 +5280,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 12,
-    "stock": 12,
+    "stock": 5,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "500 gr porsiyada xizmat qilinadi",
     "created_at": "2025-06-29T04:47:58.705737+05:00",
-    "updated_at": "2025-07-08T22:38:45.157543+05:00"
+    "updated_at": "2025-07-11T03:17:48.389027+05:00"
   },
   "98": {
     "id": "98",
@@ -5334,13 +5334,13 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 12,
-    "stock": 14,
+    "stock": 8,
     "is_popular": true,
     "discount": 0,
     "original_price": 0,
     "comment": "500 gr porsiyada xizmat qilinadi",
     "created_at": "2025-06-29T04:48:03.655296+05:00",
-    "updated_at": "2025-07-08T22:39:10.249844+05:00"
+    "updated_at": "2025-07-11T03:17:48.386371+05:00"
   },
   "99": {
     "id": "99",
@@ -5388,12 +5388,12 @@
     "rating": 0,
     "review_count": 0,
     "preparation_time": 12,
-    "stock": 12,
+    "stock": 6,
     "is_popular": false,
     "discount": 0,
     "original_price": 0,
     "comment": "500 gr porsiyada xizmat qilinadi",
     "created_at": "2025-06-29T04:48:08.472851+05:00",
-    "updated_at": "2025-07-08T22:39:20.867538+05:00"
+    "updated_at": "2025-07-11T03:17:48.378399+05:00"
   }
 }

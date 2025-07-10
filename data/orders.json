@@ -529,18 +529,65 @@
       "table_name": "Zal-1 Stol-6",
       "type": "atTheRestaurant"
     },
-    "status": "pending",
+    "status": "delivered",
     "payment_info": {
       "method": "cash",
-      "status": "pending",
-      "amount": 66000
+      "status": "paid",
+      "amount": 66000,
+      "payment_time": "2025-07-11T03:20:09.307317+05:00"
     },
     "estimated_time": 8,
+    "delivered_at": "2025-07-11T03:20:09.307317+05:00",
     "status_history": [
       {
         "status": "pending",
         "timestamp": "2025-07-10T18:13:27.753773+05:00",
         "note": "Order created"
+      },
+      {
+        "status": "preparing",
+        "timestamp": "2025-07-10T21:48:16.645426+05:00",
+        "note": "Status changed to preparing"
+      },
+      {
+        "status": "delivered",
+        "timestamp": "2025-07-10T21:48:22.860628+05:00",
+        "note": "Status changed to delivered"
+      },
+      {
+        "status": "pending",
+        "timestamp": "2025-07-10T21:48:30.212879+05:00",
+        "note": "Status changed to pending"
+      },
+      {
+        "status": "ready",
+        "timestamp": "2025-07-10T21:48:33.755871+05:00",
+        "note": "Status changed to ready"
+      },
+      {
+        "status": "cancelled",
+        "timestamp": "2025-07-10T21:48:38.176706+05:00",
+        "note": "Status changed to cancelled"
+      },
+      {
+        "status": "preparing",
+        "timestamp": "2025-07-10T21:48:42.01505+05:00",
+        "note": "Status changed to preparing"
+      },
+      {
+        "status": "delivered",
+        "timestamp": "2025-07-10T21:48:52.13064+05:00",
+        "note": "Status changed to delivered"
+      },
+      {
+        "status": "confirmed",
+        "timestamp": "2025-07-11T03:11:32.92734+05:00",
+        "note": "Status changed to confirmed"
+      },
+      {
+        "status": "delivered",
+        "timestamp": "2025-07-11T03:20:09.307313+05:00",
+        "note": "Status changed to delivered"
       }
     ],
     "created_at": "2025-07-10T18:13:27.753773+05:00",
@@ -866,5 +913,983 @@
     ],
     "created_at": "2025-07-10T16:38:31.288564+05:00",
     "updated_at": "2025-07-10T16:38:31.288564+05:00"
+  },
+  "2025-07-11-17": {
+    "order_id": "2025-07-11-17",
+    "user_number": "998770451117",
+    "user_name": "ㅤㅤㅤㅤㅤㅤ",
+    "foods": [
+      {
+        "id": "3",
+        "name": "Домашняя икра из овощей",
+        "category": "Холодные закуски",
+        "price": 22000,
+        "description": "Мировая закуска, которая всегда кстати, к любому столу.",
+        "imageUrl": "uploads/ikra_1751888406.jpg",
+        "count": 18,
+        "total_price": 396000
+      },
+      {
+        "id": "1",
+        "name": "Ассорти из свежих овощей и зелени",
+        "category": "Холодные закуски",
+        "price": 40000,
+        "description": "Сладкий перец, огурцы, помидоры, дайкон, свежая зелень — полезное овощное ассорти",
+        "imageUrl": "http://localhost:8080/uploads/ovishi_1750917436.jpg",
+        "count": 6,
+        "total_price": 240000
+      },
+      {
+        "id": "23",
+        "name": "Салат из свежих овощей и зелени",
+        "category": "Салаты",
+        "price": 25000,
+        "description": "Свежие помидоры, огурцы и красный лук, с ароматной зеленью: кинза, райхон, укроп, заправляется оливковым маслом",
+        "imageUrl": "uploads/siveji_1750918634.jpg",
+        "count": 11,
+        "total_price": 275000
+      },
+      {
+        "id": "86",
+        "name": "Уйгурски Лагман",
+        "category": "Первые блюда",
+        "price": 35000,
+        "description": "Лагман, мясо, дайкон, перец, приправа",
+        "imageUrl": "uploads/lagman_1751127513.png",
+        "count": 8,
+        "total_price": 280000
+      },
+      {
+        "id": "110",
+        "name": "Ножка баранья",
+        "category": "Горячие блюда",
+        "price": 100000,
+        "description": "Баранья ножка томлённая в собственном соку. Подаются с картофельным пюре и овощами на гриле",
+        "imageUrl": "http://localhost:8080/uploads/noshka_1751155160.jpg",
+        "count": 4,
+        "total_price": 400000
+      },
+      {
+        "id": "169",
+        "name": "Рис с кунжутным маслом",
+        "category": "Гарниры",
+        "price": 25000,
+        "description": "Рис с ароматным кунжутным маслом",
+        "imageUrl": "uploads/risot_1751952949.jpg",
+        "count": 1,
+        "total_price": 25000
+      },
+      {
+        "id": "168",
+        "name": "Картофельное пюре",
+        "category": "Гарниры",
+        "price": 15000,
+        "description": "Нежное картофельное пюре с маслом",
+        "imageUrl": "uploads/pure_1751952913.jpg",
+        "count": 1,
+        "total_price": 15000
+      },
+      {
+        "id": "167",
+        "name": "Картофельные дольки",
+        "category": "Гарниры",
+        "price": 18000,
+        "description": "Запечённые картофельные дольки со специями",
+        "imageUrl": "uploads/drevanski_1751952869.jpg",
+        "count": 1,
+        "total_price": 18000
+      },
+      {
+        "id": "166",
+        "name": "Картофель фри",
+        "category": "Гарниры",
+        "price": 18000,
+        "description": "Хрустящий картофель фри",
+        "imageUrl": "uploads/kartofelfir_1751952815.jpg",
+        "count": 1,
+        "total_price": 18000
+      },
+      {
+        "id": "163",
+        "name": "Помидоры",
+        "category": "Шашлык",
+        "price": 15000,
+        "description": "Помидоры, запечённые на мангале",
+        "imageUrl": "uploads/pomidor_1751952653.jpg",
+        "count": 1,
+        "total_price": 15000
+      },
+      {
+        "id": "164",
+        "name": "Шампиньоны на мангале",
+        "category": "Шашлык",
+        "price": 23000,
+        "description": "Шампиньоны, запечённые на мангале",
+        "imageUrl": "http://localhost:8080/uploads/shampanyon_1751952700.jpg",
+        "count": 1,
+        "total_price": 23000
+      },
+      {
+        "id": "165",
+        "name": "Овощи на мангале",
+        "category": "Шашлык",
+        "price": 20000,
+        "description": "Ассорти овощей, запечённых на мангале",
+        "imageUrl": "uploads/ovishinagirele_1751952756.jpg",
+        "count": 1,
+        "total_price": 20000
+      },
+      {
+        "id": "162",
+        "name": "Картофель",
+        "category": "Шашлык",
+        "price": 10000,
+        "description": "Картофель, запечённый на мангале",
+        "imageUrl": "http://localhost:8080/uploads/kartofel_1751277204.jpg",
+        "count": 1,
+        "total_price": 10000
+      },
+      {
+        "id": "161",
+        "name": "Лепешки на мангале",
+        "category": "Шашлык",
+        "price": 6000,
+        "description": "Лепешки, приготовленные на мангале",
+        "imageUrl": "uploads/sixnon_1751952542.jpg",
+        "count": 1,
+        "total_price": 6000
+      },
+      {
+        "id": "160",
+        "name": "Жигар",
+        "category": "Шашлык",
+        "price": 20000,
+        "description": "Шашлык из печени — ароматный и сочный",
+        "imageUrl": "http://localhost:8080/uploads/jigar_1751929879.jpg",
+        "count": 1,
+        "total_price": 20000
+      },
+      {
+        "id": "159",
+        "name": "Корейка",
+        "category": "Шашлык",
+        "price": 30000,
+        "description": "Мясной шашлык — сочная и мягкая корейка",
+        "imageUrl": "",
+        "count": 1,
+        "total_price": 30000
+      },
+      {
+        "id": "154",
+        "name": "Рулет",
+        "category": "Шашлык",
+        "price": 26000,
+        "description": "Рулет из тонко нарезанного мяса",
+        "imageUrl": "http://localhost:8080/uploads/rulet1751275798.png",
+        "count": 1,
+        "total_price": 26000
+      },
+      {
+        "id": "156",
+        "name": "Бикин",
+        "category": "Шашлык",
+        "price": 26000,
+        "description": "Вкусное жареное мясо бикин",
+        "imageUrl": "uploads/biqin_1751929742.png",
+        "count": 1,
+        "total_price": 26000
+      },
+      {
+        "id": "157",
+        "name": "Чебурек",
+        "category": "Шашлык",
+        "price": 30000,
+        "description": "Классический жареный чебурек с мясом",
+        "imageUrl": "",
+        "count": 1,
+        "total_price": 30000
+      },
+      {
+        "id": "158",
+        "name": "Крылышки - Филе",
+        "category": "Шашлык",
+        "price": 22000,
+        "description": "Филе жареных куриных крылышек с хрустящей корочкой",
+        "imageUrl": "http://localhost:8080/uploads/kirilichka_1751929785.jpg",
+        "count": 1,
+        "total_price": 22000
+      },
+      {
+        "id": "153",
+        "name": "Наполеон",
+        "category": "Шашлык",
+        "price": 26000,
+        "description": "Шашлык из говядины и курдючного жира",
+        "imageUrl": "http://localhost:8080/uploads/napaliyon_1750919070.png",
+        "count": 1,
+        "total_price": 26000
+      },
+      {
+        "id": "152",
+        "name": "Говядина вырезка",
+        "category": "Шашлык",
+        "price": 30000,
+        "description": "Нежная и сочная вырезка говядины",
+        "imageUrl": "http://localhost:8080/uploads/viriska_1750919002.png",
+        "count": 1,
+        "total_price": 30000
+      },
+      {
+        "id": "151",
+        "name": "Кусковой (баранина)",
+        "category": "Шашлык",
+        "price": 26000,
+        "description": "Шашлык из кусков баранины",
+        "imageUrl": "http://localhost:8080/uploads/kuskavoy_1750918852.jpg",
+        "count": 1,
+        "total_price": 26000
+      },
+      {
+        "id": "150",
+        "name": "Молотый шашлык",
+        "category": "Шашлык",
+        "price": 25000,
+        "description": "Сочный шашлык из молотой говядины с ароматными специями",
+        "imageUrl": "uploads/moloti_1750852710.jpg",
+        "count": 1,
+        "total_price": 25000
+      },
+      {
+        "id": "124",
+        "name": "Амур – фирменное блюдо от шефа (1 кг)",
+        "category": "Рыба",
+        "price": 180000,
+        "description": "Настоящее лакомство для тех, кто любит рыбные блюда.",
+        "imageUrl": "http://localhost:8080/uploads/amurmayi_1751181563.png",
+        "count": 1,
+        "total_price": 180000
+      },
+      {
+        "id": "125",
+        "name": "Лосось в сливочном соусе",
+        "category": "Рыба",
+        "price": 180000,
+        "description": "Подаётся с картофельным пюре",
+        "imageUrl": "uploads/farel_1751181668.jpg",
+        "count": 1,
+        "total_price": 180000
+      },
+      {
+        "id": "126",
+        "name": "Форель (копчения с дымком) (1 кг)",
+        "category": "Рыба",
+        "price": 200000,
+        "description": "Копчения с дымком",
+        "imageUrl": "http://localhost:8080/uploads/forel_1751181714.jpg",
+        "count": 1,
+        "total_price": 200000
+      },
+      {
+        "id": "127",
+        "name": "Рыба Дорадо",
+        "category": "Рыба",
+        "price": 90000,
+        "description": "Подаётся с овощами и лимоном",
+        "imageUrl": "uploads/riba_1751181781.jpg",
+        "count": 1,
+        "total_price": 90000
+      },
+      {
+        "id": "123",
+        "name": "Сазан на Мангале (1 кг)",
+        "category": "Рыба",
+        "price": 150000,
+        "description": "Сазан, приготовленный на мангале",
+        "imageUrl": "http://localhost:8080/uploads/sazanmangale_1751155591.jpg",
+        "count": 1,
+        "total_price": 150000
+      },
+      {
+        "id": "122",
+        "name": "Сазан (живая рыба на выбор) (1 кг)",
+        "category": "Рыба",
+        "price": 120000,
+        "description": "Живая рыба на выбор, готовится по желанию",
+        "imageUrl": "http://localhost:8080/uploads/sazanjevaya_1751155527.jpg",
+        "count": 8,
+        "total_price": 960000
+      },
+      {
+        "id": "121",
+        "name": "Сазан жареный (1 кг)",
+        "category": "Рыба",
+        "price": 160000,
+        "description": "Сазан, чеснок, зелень, лимон.",
+        "imageUrl": "http://localhost:8080/uploads/sazansharenniy_1751155483.jpg",
+        "count": 10,
+        "total_price": 1600000
+      },
+      {
+        "id": "120",
+        "name": "Сазан жареный по-хорезмски 1 кг",
+        "category": "Рыба",
+        "price": 170000,
+        "description": "Настоящее лакомство для тех, кто любит рыбные блюда",
+        "imageUrl": "http://localhost:8080/uploads/buxariskiy_1751929484.jpg",
+        "count": 10,
+        "total_price": 1700000
+      },
+      {
+        "id": "109",
+        "name": "Шея баранья (1 кг)",
+        "category": "Горячие блюда",
+        "price": 240000,
+        "description": "Баранья шея томленая в собственном соку, подается с микс салатом и соусом демиглас",
+        "imageUrl": "http://localhost:8080/uploads/sheya_1751155107.jpg",
+        "count": 2,
+        "total_price": 480000
+      },
+      {
+        "id": "108",
+        "name": "Лопатка баранья (1 кг)",
+        "category": "Горячие блюда",
+        "price": 320000,
+        "description": "Томленая в собственном соку. Подается с микс салатом и соусом демиглас",
+        "imageUrl": "http://localhost:8080/uploads/lapatka_1751155059.jpg",
+        "count": 10,
+        "total_price": 3200000
+      },
+      {
+        "id": "99",
+        "name": "Джиз-быз вагури (500 грамм)",
+        "category": "Горячие блюда",
+        "price": 110000,
+        "description": "Подается с картофелем чипсы, салатом и маринованным луком",
+        "imageUrl": "http://localhost:8080/uploads/jizvaguri_1751154396.jpg",
+        "count": 6,
+        "total_price": 660000
+      },
+      {
+        "id": "105",
+        "name": "Умакай джиз из говядины (500 грамм)",
+        "category": "Горячие блюда",
+        "price": 100000,
+        "description": "Подается с картофелем",
+        "imageUrl": "http://localhost:8080/uploads/umakaygovya_1751154903.jpg",
+        "count": 7,
+        "total_price": 700000
+      },
+      {
+        "id": "106",
+        "name": "Умакай джиз из баранины (500 грамм)",
+        "category": "Горячие блюда",
+        "price": 100000,
+        "description": "Подаётся с картофелем",
+        "imageUrl": "http://localhost:8080/uploads/umakaybaraniniy_1751154941.jpg",
+        "count": 7,
+        "total_price": 700000
+      },
+      {
+        "id": "107",
+        "name": "Томленые говяжьи ребра (Парра) 1 кг",
+        "category": "Горячие блюда",
+        "price": 230000,
+        "description": "Томлённые говяжьи рёбра на 4 персоны",
+        "imageUrl": "http://localhost:8080/uploads/parra_1751154988.jpg",
+        "count": 6,
+        "total_price": 1380000
+      },
+      {
+        "id": "98",
+        "name": "Джиз-быз из вырезки (500 грамм)",
+        "category": "Горячие блюда",
+        "price": 140000,
+        "description": "Подается с картофелем чипсы, салатом и маринованным луком",
+        "imageUrl": "http://localhost:8080/uploads/jizviriska_1751154332.jpg",
+        "count": 6,
+        "total_price": 840000
+      },
+      {
+        "id": "97",
+        "name": "Джиз из бараньих семечек (500 грамм)",
+        "category": "Горячие блюда",
+        "price": 110000,
+        "description": "Подается с картофелем чипсы, салатом и маринованным луком",
+        "imageUrl": "http://localhost:8080/uploads/jizsemichka_1751154292.jpg",
+        "count": 7,
+        "total_price": 770000
+      },
+      {
+        "id": "96",
+        "name": "Джиз-быз из бараньей корейки (500грамм)",
+        "category": "Горячие блюда",
+        "price": 140000,
+        "description": "Подается с картофелем чипсы, салатом и маринованным луком",
+        "imageUrl": "http://localhost:8080/uploads/jizkareka_1751154217.jpg",
+        "count": 8,
+        "total_price": 1120000
+      },
+      {
+        "id": "95",
+        "name": "Думгаза (1кг)",
+        "category": "Горячие блюда",
+        "price": 120000,
+        "description": "Томленые бычьи хвосты в фирменном соусе, подаются с зеленью и кислым молоком",
+        "imageUrl": "http://localhost:8080/uploads/dumgoza_1751154155.jpg",
+        "count": 10,
+        "total_price": 1200000
+      },
+      {
+        "id": "90",
+        "name": "Вагуры из вырезки с грибами 500 гр",
+        "category": "Горячие блюда",
+        "price": 140000,
+        "description": "Блюдо из говяжьей вырезки с грибами, 500 грамм",
+        "imageUrl": "http://localhost:8080/uploads/vaguri_giribi_1751928197.jpg",
+        "count": 8,
+        "total_price": 1120000
+      },
+      {
+        "id": "91",
+        "name": "Тандир 1 кг",
+        "category": "Горячие блюда",
+        "price": 210000,
+        "description": "1 кг мягкого и ароматного мяса, приготовленного в тандыре",
+        "imageUrl": "http://localhost:8080/uploads/tandir_1751153799.jpg",
+        "count": 6,
+        "total_price": 1260000
+      },
+      {
+        "id": "92",
+        "name": "Табака 1 кг",
+        "category": "Горячие блюда",
+        "price": 85000,
+        "description": "1 кг курицы, приготовленной с ароматными специями",
+        "imageUrl": "http://localhost:8080/uploads/tabaka_1751153746.jpg",
+        "count": 3,
+        "total_price": 255000
+      },
+      {
+        "id": "93",
+        "name": "Жареные Крылышки 1 кг",
+        "category": "Горячие блюда",
+        "price": 85000,
+        "description": "Вкусные жареные куриные крылышки",
+        "imageUrl": "http://localhost:8080/uploads/kirilichka_1751153677.jpg",
+        "count": 4,
+        "total_price": 340000
+      },
+      {
+        "id": "85",
+        "name": "Ташкентская Шурпа из ягненка с нутом и овощами",
+        "category": "Первые блюда",
+        "price": 27000,
+        "description": "Ароматное и сытное блюдо",
+        "imageUrl": "uploads/shurpo_1751126681.jpg",
+        "count": 1,
+        "total_price": 27000
+      },
+      {
+        "id": "84",
+        "name": "Тушенка",
+        "category": "Первые блюда",
+        "price": 30000,
+        "description": "Насыщенный говяжий бульон, с нежными кусочками говядины",
+        "imageUrl": "http://localhost:8080/uploads/tushonka_1751126857.jpg",
+        "count": 1,
+        "total_price": 30000
+      },
+      {
+        "id": "80",
+        "name": "Мастава по ташкентски",
+        "category": "Первые блюда",
+        "price": 22000,
+        "description": "Говядина, рис, морковь, болгарский перец, зелень, чакка",
+        "imageUrl": "uploads/mastava_1751126420.jpg",
+        "count": 1,
+        "total_price": 22000
+      },
+      {
+        "id": "81",
+        "name": "Куриный суп с лапшой",
+        "category": "Первые блюда",
+        "price": 22000,
+        "description": "Куриный бульон с домашней лапшой, овощами и зеленью",
+        "imageUrl": "http://localhost:8080/uploads/kuriniy_sup_1751126769.jpg",
+        "count": 1,
+        "total_price": 22000
+      },
+      {
+        "id": "82",
+        "name": "Щи",
+        "category": "Первые блюда",
+        "price": 22000,
+        "description": "Лёгкий суп из молодого щавеля, фрикаделек и овощей",
+        "imageUrl": "uploads/shi_1751126791.jpg",
+        "count": 1,
+        "total_price": 22000
+      },
+      {
+        "id": "83",
+        "name": "Гужа",
+        "category": "Первые блюда",
+        "price": 22000,
+        "description": "Национальный насыщенный говяжий суп",
+        "imageUrl": "uploads/guja_1751126828.jpg",
+        "count": 1,
+        "total_price": 22000
+      },
+      {
+        "id": "58",
+        "name": "Долма 6 шт",
+        "category": "Горячие Закуски",
+        "price": 45000,
+        "description": "Фарш, завернутый в виноградные листья, 6 штук",
+        "imageUrl": "uploads/dolma_1751927820.jpg",
+        "count": 1,
+        "total_price": 45000
+      },
+      {
+        "id": "57",
+        "name": "Котлеты 6 шт",
+        "category": "Горячие Закуски",
+        "price": 60000,
+        "description": "Вкусные котлеты из говядины, 6 штук",
+        "imageUrl": "uploads/kotlet_1751927976.jpg",
+        "count": 1,
+        "total_price": 60000
+      },
+      {
+        "id": "50",
+        "name": "Лаваш с брынзой",
+        "category": "Горячие Закуски",
+        "price": 30000,
+        "description": "Помидор, огурец, брынза, укроп, лаваш, майонез",
+        "imageUrl": "uploads/lavash_1751927389.jpg",
+        "count": 1,
+        "total_price": 30000
+      },
+      {
+        "id": "51",
+        "name": "Мулатка",
+        "category": "Горячие Закуски",
+        "price": 28000,
+        "description": "Черный хлеб, чеснок, укроп, сыр пармезан",
+        "imageUrl": "http://localhost:8080/uploads/mulatka_1751927438.jpg",
+        "count": 1,
+        "total_price": 28000
+      },
+      {
+        "id": "52",
+        "name": "Креветки",
+        "category": "Горячие Закуски",
+        "price": 75000,
+        "description": "Жареные или варёные креветки (подаются с соусом)",
+        "imageUrl": "uploads/krivetka_1751927544.jpg",
+        "count": 1,
+        "total_price": 75000
+      },
+      {
+        "id": "53",
+        "name": "Язык в сливочном соусе с грибами",
+        "category": "Горячие Закуски",
+        "price": 70000,
+        "description": "Язык говяжий, грибы в сливочном соусе",
+        "imageUrl": "",
+        "count": 1,
+        "total_price": 70000
+      },
+      {
+        "id": "44",
+        "name": "салат мимоза",
+        "category": "Салаты",
+        "price": 36000,
+        "description": "Свекла, морковь, шпрот, яйцо, картофель, майонез, сыр",
+        "imageUrl": "uploads/mimoza_1751925778.jpg",
+        "count": 1,
+        "total_price": 36000
+      },
+      {
+        "id": "43",
+        "name": "Салат Мароканд",
+        "category": "Салаты",
+        "price": 38000,
+        "description": "Огурец свежий, помидор, лук зеленый, перец светофор, мясо говяжье, оливковое масло",
+        "imageUrl": "uploads/maroqand_1751925734.jpg",
+        "count": 1,
+        "total_price": 38000
+      },
+      {
+        "id": "42",
+        "name": "Грибной",
+        "category": "Салаты",
+        "price": 36000,
+        "description": "Шампиньоны, вешенки, маринованные огурцы, лук красный, мясо говядина",
+        "imageUrl": "uploads/gripnoy_1751925678.jpg",
+        "count": 1,
+        "total_price": 36000
+      },
+      {
+        "id": "38",
+        "name": "салат жарени лосось и авокадо",
+        "category": "Салаты",
+        "price": 45000,
+        "description": "Микс, черри, лосось , авокадо, сыр пармезан, соус от шефа",
+        "imageUrl": "http://localhost:8080/uploads/avokado_1751925495.png",
+        "count": 1,
+        "total_price": 45000
+      },
+      {
+        "id": "39",
+        "name": "Салат Амур",
+        "category": "Салаты",
+        "price": 38000,
+        "description": "руккола, помидоры, мясо вырезка, огурцы, сладкий соус",
+        "imageUrl": "uploads/amur_1751925543.jpg",
+        "count": 1,
+        "total_price": 38000
+      },
+      {
+        "id": "40",
+        "name": "От шефа",
+        "category": "Салаты",
+        "price": 40000,
+        "description": "руккола, вырезка, помидоры черри, сыр мацарела",
+        "imageUrl": "uploads/otsheva_1751925585.jpg",
+        "count": 1,
+        "total_price": 40000
+      },
+      {
+        "id": "41",
+        "name": "Теплый салат Амур",
+        "category": "Салаты",
+        "price": 42000,
+        "description": "Свежие огурцы, маринованные огурцы, красная морковь, лук репчатый, красный перец, говяжья вырезка",
+        "imageUrl": "uploads/topliyamur_1751925625.jpg",
+        "count": 1,
+        "total_price": 42000
+      },
+      {
+        "id": "37",
+        "name": "Азия",
+        "category": "Салаты",
+        "price": 38000,
+        "description": "Свежи огурец, Свежи помидор, марков, светофор перец, горох, мясо, соя",
+        "imageUrl": "uploads/aziya_1751925435.jpg",
+        "count": 1,
+        "total_price": 38000
+      },
+      {
+        "id": "36",
+        "name": "Нежный",
+        "category": "Салаты",
+        "price": 36000,
+        "description": "Капуста пекинская, красная капуста, болгарский перец, мясо говядина",
+        "imageUrl": "uploads/nejniy_1751925384.jpg",
+        "count": 1,
+        "total_price": 36000
+      },
+      {
+        "id": "35",
+        "name": "Салат Мажнунтол",
+        "category": "Салаты",
+        "price": 38000,
+        "description": "Щавель, мясо говяжий, помидор, огурцы, кинза, укроп, брынза, картошка пай, оливковое масло, соль, лимонный сок",
+        "imageUrl": "uploads/majnuntol_1751033338.jpg",
+        "count": 1,
+        "total_price": 38000
+      },
+      {
+        "id": "34",
+        "name": "Экзотика",
+        "category": "Салаты",
+        "price": 36000,
+        "description": "Руккола, свёкла, фитакса, апельсин, кедровые орешки, соус дресин",
+        "imageUrl": "uploads/egzotika_1751925320.jpg",
+        "count": 1,
+        "total_price": 36000
+      },
+      {
+        "id": "28",
+        "name": "Микс салат",
+        "category": "Салаты",
+        "price": 32000,
+        "description": "Микс салат, огурцы, лук красный, томаты черри, фета, кешью соус дрессинг",
+        "imageUrl": "uploads/mikis_1751031111.png",
+        "count": 1,
+        "total_price": 32000
+      },
+      {
+        "id": "29",
+        "name": "Цезарь с курицей",
+        "category": "Салаты",
+        "price": 30000,
+        "description": "Айсберг, романо, заправляется фирменным соусом 'Цезарь', обжаренной куриной грудкой, черри, пармезаном и сухарями",
+        "imageUrl": "http://localhost:8080/uploads/sezar_1751031307.jpg",
+        "count": 1,
+        "total_price": 30000
+      },
+      {
+        "id": "31",
+        "name": "Салат Французский",
+        "category": "Салаты",
+        "price": 38000,
+        "description": "Красный капуста, Пекинская капуста, морковь, мясо, свекла, картофель пай, майонез",
+        "imageUrl": "uploads/fransuski_1751925120.jpg",
+        "count": 1,
+        "total_price": 38000
+      },
+      {
+        "id": "33",
+        "name": "Хрустящий Баклажаны",
+        "category": "Салаты",
+        "price": 38000,
+        "description": "Баклажан, помидор, кинза, кунжут, унаги, арой сладкий",
+        "imageUrl": "uploads/xurustashi_1751031998.jpg",
+        "count": 1,
+        "total_price": 38000
+      },
+      {
+        "id": "27",
+        "name": "Русалка",
+        "category": "Салаты",
+        "price": 32000,
+        "description": "Лёгкий салат из капусты, щавеля и говядины. Заправляется лимоном и оливковым маслом",
+        "imageUrl": "uploads/rusalka_1751030804.jpg",
+        "count": 1,
+        "total_price": 32000
+      },
+      {
+        "id": "26",
+        "name": "Греческий",
+        "category": "Салаты",
+        "price": 38000,
+        "description": "Помидоры, огурцы, оливки, маслины, красный лук, балкарский перец, сыр фетакса",
+        "imageUrl": "uploads/2025-06-27_6.21.05_PM_1751030478.jpg",
+        "count": 1,
+        "total_price": 38000
+      },
+      {
+        "id": "25",
+        "name": "Мужской каприз",
+        "category": "Салаты",
+        "price": 45000,
+        "description": "Индейка, копчение мяса, язык, майонез, горох, маринованный огурец, яйцо",
+        "imageUrl": "http://localhost:8080/uploads/muskoy_1751029969.jpg",
+        "count": 1,
+        "total_price": 45000
+      },
+      {
+        "id": "24",
+        "name": "Столичный с куриным филе",
+        "category": "Салаты",
+        "price": 28000,
+        "description": "Оливье подается с курицей, заправляется майонезом, украшается перепелиным яйцом и салатом",
+        "imageUrl": "uploads/olivye_1751029680.png",
+        "count": 7,
+        "total_price": 196000
+      },
+      {
+        "id": "20",
+        "name": "Ачик чучук",
+        "category": "Салаты",
+        "price": 22000,
+        "description": "Салат из томатов, белого лука, базилика и перца чили",
+        "imageUrl": "uploads/achuchu_1750740652.jpg",
+        "count": 2,
+        "total_price": 44000
+      },
+      {
+        "id": "21",
+        "name": "Чабан",
+        "category": "Салаты",
+        "price": 26000,
+        "description": "Томаты, огурцы, петрушка, красный лук, наршараб, лимонный сок, гранат",
+        "imageUrl": "uploads/chaban_1750918010.jpg",
+        "count": 1,
+        "total_price": 26000
+      },
+      {
+        "id": "22",
+        "name": "Мажнун",
+        "category": "Салаты",
+        "price": 34000,
+        "description": "Куриное филе, огурцы, айсберг, кукуруза, сладкий перец, соленые огурцы, майонез",
+        "imageUrl": "uploads/majnun_1751006041.jpg",
+        "count": 1,
+        "total_price": 34000
+      },
+      {
+        "id": "15",
+        "name": "Фирменный Курдюк от «Амур»",
+        "category": "Холодные закуски",
+        "price": 30000,
+        "description": "Фирменный курдюк от шеф повара «Амур»",
+        "imageUrl": "",
+        "count": 1,
+        "total_price": 30000
+      },
+      {
+        "id": "16",
+        "name": "Капризе",
+        "category": "Холодные закуски",
+        "price": 32000,
+        "description": "Помидор, брынза, руккола",
+        "imageUrl": "uploads/kaprize_1751890015.jpg",
+        "count": 1,
+        "total_price": 32000
+      },
+      {
+        "id": "17",
+        "name": "Фруктовое ассорти",
+        "category": "Холодные закуски",
+        "price": 155000,
+        "description": "Действительно красивая и полезная закуска ко многим блюдам",
+        "imageUrl": "uploads/furuktoviy_1751890052.jpg",
+        "count": 1,
+        "total_price": 155000
+      },
+      {
+        "id": "14",
+        "name": "Сырная тарелка",
+        "category": "Холодные закуски",
+        "price": 110000,
+        "description": "Потрясающие и невероятно изысканное сочетание сыров",
+        "imageUrl": "http://localhost:8080/uploads/sirniy_1751889964.jpg",
+        "count": 1,
+        "total_price": 110000
+      },
+      {
+        "id": "10",
+        "name": "Яхна",
+        "category": "Холодные закуски",
+        "price": 70000,
+        "description": "Отварная говядина с прослойками жира",
+        "imageUrl": "",
+        "count": 1,
+        "total_price": 70000
+      },
+      {
+        "id": "12",
+        "name": "Ассорти из домашней брынзы",
+        "category": "Холодные закуски",
+        "price": 28000,
+        "description": "Ассорти из домашней брынзы",
+        "imageUrl": "uploads/brinza_1751889544.jpg",
+        "count": 1,
+        "total_price": 28000
+      },
+      {
+        "id": "11",
+        "name": "Домашний холодец с горчицей и зеленым луком",
+        "category": "Холодные закуски",
+        "price": 35000,
+        "description": "Традиционная аппетитное русское блюдо с кулинарным секретом от шеф повара",
+        "imageUrl": "uploads/xalades_1751889172.jpg",
+        "count": 1,
+        "total_price": 35000
+      },
+      {
+        "id": "13",
+        "name": "Сельдь по-московки",
+        "category": "Холодные закуски",
+        "price": 40000,
+        "description": "Закуска из слабосоленой сельди с жареным картофелем, подается с красным луком",
+        "imageUrl": "uploads/ribaasorti_1751889923.jpg",
+        "count": 1,
+        "total_price": 40000
+      },
+      {
+        "id": "9",
+        "name": "Язык говяжий",
+        "category": "Холодные закуски",
+        "price": 55000,
+        "description": "Отварной говяжий язык, подается с горчицей, помидорами черри и салатом",
+        "imageUrl": "uploads/yazikmol_1750917916.jpg",
+        "count": 6,
+        "total_price": 330000
+      },
+      {
+        "id": "8",
+        "name": "Рыбное ассорти",
+        "category": "Холодные закуски",
+        "price": 200000,
+        "description": "Изысканное блюдо, которое отлично вписывается в меню праздничных застолий",
+        "imageUrl": "http://localhost:8080/uploads/riba_1751889288.jpg",
+        "count": 5,
+        "total_price": 1000000
+      },
+      {
+        "id": "7",
+        "name": "Мясное ассорти",
+        "category": "Холодные закуски",
+        "price": 180000,
+        "description": "Язык говяжий, казы, куриный рулет — подается с горчицей",
+        "imageUrl": "http://localhost:8080/uploads/misnoy_1750917597.jpg",
+        "count": 4,
+        "total_price": 720000
+      },
+      {
+        "id": "6",
+        "name": "Баклажаны с ореховой начинкой",
+        "category": "Холодные закуски",
+        "price": 35000,
+        "description": "Рулетики из баклажан с ореховой начинкой",
+        "imageUrl": "uploads/ruletbaklajan_1751888589.jpg",
+        "count": 5,
+        "total_price": 175000
+      },
+      {
+        "id": "4",
+        "name": "Маринованные соленья",
+        "category": "Холодные закуски",
+        "price": 28000,
+        "description": "Капуста квашенная, капуста маринованная красная, помидоры соленые, огурцы маринованные, перец острый маринованный",
+        "imageUrl": "uploads/manirovini_1751888490.jpg",
+        "count": 1,
+        "total_price": 28000
+      },
+      {
+        "id": "5",
+        "name": "Жареные овощи",
+        "category": "Холодные закуски",
+        "price": 38000,
+        "description": "Цветная капуста, баклажан, кабачки, перец",
+        "imageUrl": "uploads/ovishijarini_1751888545.jpg",
+        "count": 1,
+        "total_price": 38000
+      }
+    ],
+    "total_price": 25307000,
+    "order_time": "2025-07-11T03:17:48.532307+05:00",
+    "delivery_type": "delivery",
+    "delivery_info": {
+      "address": "giyafizika 40-maktab  peshashba",
+      "phone": "998770451117",
+      "type": "delivery"
+    },
+    "status": "delivered",
+    "payment_info": {
+      "method": "cash",
+      "status": "paid",
+      "amount": 25307000,
+      "payment_time": "2025-07-11T03:19:24.885332+05:00"
+    },
+    "estimated_time": 50,
+    "delivered_at": "2025-07-11T03:19:24.885332+05:00",
+    "status_history": [
+      {
+        "status": "pending",
+        "timestamp": "2025-07-11T03:17:48.532307+05:00",
+        "note": "Order created"
+      },
+      {
+        "status": "delivered",
+        "timestamp": "2025-07-11T03:19:24.88533+05:00",
+        "note": "Status changed to delivered"
+      }
+    ],
+    "created_at": "2025-07-11T03:17:48.532307+05:00",
+    "updated_at": "2025-07-11T03:17:48.532307+05:00"
   }
 }

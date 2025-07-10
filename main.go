@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -77,9 +78,12 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-// WebSocket clients
-var clients = make(map[*websocket.Conn]bool)
-var broadcast = make(chan []byte)
+// WebSocket clients with mutex for thread safety
+var (
+	clients      = make(map[*websocket.Conn]bool)
+	clientsMutex sync.RWMutex
+	broadcast    = make(chan []byte)
+)
 
 // Enums
 type OrderStatus string
@@ -1028,15 +1032,15 @@ func formatOrderForTelegram(order *Order) string {
 	switch order.DeliveryType {
 	case "delivery":
 		if address, ok := order.DeliveryInfo["address"].(string); ok {
-			message += fmt.Sprintf("🚚 Delivery Address: %s\n", address)
+			message += fmt.Sprintf("🚚 Адрес доставки: %s\n", address)
 		}
 		if lat, ok := order.DeliveryInfo["latitude"].(float64); ok {
 			if lng, ok := order.DeliveryInfo["longitude"].(float64); ok {
-				message += fmt.Sprintf("📍 Coordinates: %.6f, %.6f\n", lat, lng)
+				message += fmt.Sprintf("📍 вызвать яндекс такси: https://taxi.yandex.uz/order?gfrom=39.7013104,67.0142258&gto=%.6f,%.6f&tariff=start&lang=uz&utm_source=yamaps&utm_medium=2334692&ref=233469\n", lat, lng)
 			}
-		}
+		} //https://taxi.yandex.uz/order?gfrom=39.7013104,67.0142258&gto=%.6f,%.6f&tariff=business&lang=uz&utm_source=yamaps&utm_medium=2334692&ref=233469
 	case "own_withdrawal":
-		message += fmt.Sprintf("🏪 Pickup\n")
+		message += fmt.Sprintf("🏪 Подобрать\n")
 	case "atTheRestaurant":
 		if tableName, ok := order.DeliveryInfo["table_name"].(string); ok {
 			message += fmt.Sprintf("\n🍽️ Стол: %s\n", tableName)
@@ -1056,7 +1060,7 @@ func formatOrderForTelegram(order *Order) string {
 	return message
 }
 
-// ========== WEBSOCKET FUNCTIONS ==========
+// ========== WEBSOCKET FUNCTIONS (THREAD-SAFE VERSION) ==========
 
 func handleWebSocket(c *gin.Context) {
 	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
@@ -1066,31 +1070,65 @@ func handleWebSocket(c *gin.Context) {
 	}
 	defer conn.Close()
 
+	// Thread-safe client addition
+	clientsMutex.Lock()
 	clients[conn] = true
-	log.Printf("WebSocket client connected. Total clients: %d", len(clients))
+	totalClients := len(clients)
+	clientsMutex.Unlock()
 
+	log.Printf("WebSocket client connected. Total clients: %d", totalClients)
+
+	// Read messages from client
 	for {
 		_, _, err := conn.ReadMessage()
 		if err != nil {
 			log.Printf("WebSocket read error: %v", err)
-			delete(clients, conn)
-			log.Printf("WebSocket client disconnected. Remaining clients: %d", len(clients))
 			break
 		}
+		// Handle incoming messages if needed
 	}
+
+	// Thread-safe client removal
+	clientsMutex.Lock()
+	delete(clients, conn)
+	remainingClients := len(clients)
+	clientsMutex.Unlock()
+
+	log.Printf("WebSocket client disconnected. Remaining clients: %d", remainingClients)
 }
 
 func broadcastToClients(message WSMessage) {
 	jsonData, _ := json.Marshal(message)
+
+	clientsMutex.RLock()
+	// Create a copy of clients to avoid holding the lock while writing
+	clientsCopy := make([]*websocket.Conn, 0, len(clients))
 	for client := range clients {
+		clientsCopy = append(clientsCopy, client)
+	}
+	clientsMutex.RUnlock()
+
+	// Send messages to clients without holding the lock
+	var failedClients []*websocket.Conn
+	for _, client := range clientsCopy {
 		err := client.WriteJSON(message)
 		if err != nil {
 			log.Printf("WebSocket write error: %v", err)
 			client.Close()
-			delete(clients, client)
+			failedClients = append(failedClients, client)
 		}
 	}
-	log.Printf("WebSocket message sent: %s", string(jsonData))
+
+	// Remove failed clients
+	if len(failedClients) > 0 {
+		clientsMutex.Lock()
+		for _, client := range failedClients {
+			delete(clients, client)
+		}
+		clientsMutex.Unlock()
+	}
+
+	log.Printf("WebSocket message sent to %d clients: %s", len(clientsCopy)-len(failedClients), string(jsonData))
 }
 
 func sendOrderUpdate(orderID string, status OrderStatus, message string) {
@@ -1824,6 +1862,7 @@ func createFoodHandler(c *gin.Context) {
 		"id_type": map[bool]string{true: "custom", false: "auto"}[req.CustomID != nil],
 	})
 }
+
 func updateFoodHandler(c *gin.Context) {
 	foodID := c.Param("food_id") // String ID
 
@@ -2061,6 +2100,7 @@ func updateFoodHandler(c *gin.Context) {
 		"food":    food,
 	})
 }
+
 func deleteFoodHandler(c *gin.Context) {
 	foodID := c.Param("food_id") // String ID
 
@@ -2735,12 +2775,13 @@ func initializeTestData() error {
 
 func rootHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
-		"message":             "Restaurant API - JSON Database Version",
-		"version":             "8.0.0",
+		"message":             "Restaurant API - JSON Database Version (Thread-Safe)",
+		"version":             "8.1.0",
 		"supported_languages": []string{"uz", "ru", "en"},
 		"features": []string{
 			"JSON File Database System",
 			"Thread-Safe Operations with Mutexes",
+			"Thread-Safe WebSocket Connections",
 			"String ID Support",
 			"Auto-incrementing IDs converted to string",
 			"Manual String ID Insertion Support",
@@ -2749,7 +2790,7 @@ func rootHandler(c *gin.Context) {
 			"GPS Coordinates for Delivery",
 			"Stock Management",
 			"Real-time Order Tracking",
-			"WebSocket Support",
+			"WebSocket Support (Fixed Concurrent Map Writes)",
 			"Advanced Search",
 			"Multi-language Food Support",
 			"English Error Messages",
@@ -2779,13 +2820,20 @@ func rootHandler(c *gin.Context) {
 			},
 		},
 		"integrations": gin.H{
-			"telegram_bot":       "enabled",
-			"user_notifications": "enabled",
-			"file_upload":        "enabled",
-			"gps_tracking":       "enabled",
-			"string_id_support":  "enabled",
-			"custom_string_id":   "enabled",
-			"json_persistence":   "enabled",
+			"telegram_bot":            "enabled",
+			"user_notifications":      "enabled",
+			"file_upload":             "enabled",
+			"gps_tracking":            "enabled",
+			"string_id_support":       "enabled",
+			"custom_string_id":        "enabled",
+			"json_persistence":        "enabled",
+			"websocket_thread_safety": "enabled",
+			"concurrent_map_fix":      "applied",
+		},
+		"fixes": gin.H{
+			"concurrent_map_writes": "FIXED - Added mutex protection for WebSocket clients map",
+			"thread_safety":         "ENHANCED - All map operations now thread-safe",
+			"websocket_stability":   "IMPROVED - Proper connection lifecycle management",
 		},
 	})
 }
@@ -2878,17 +2926,36 @@ func main() {
 		log.Printf("⚠️ Test data creation error: %v", err)
 	}
 
-	// WebSocket handler
+	// WebSocket broadcast handler (thread-safe)
 	go func() {
 		for {
 			select {
 			case msg := <-broadcast:
+				// Thread-safe broadcast
+				clientsMutex.RLock()
+				clientsCopy := make([]*websocket.Conn, 0, len(clients))
 				for client := range clients {
-					if err := client.WriteMessage(1, msg); err != nil {
-						log.Printf("WebSocket error: %v", err)
+					clientsCopy = append(clientsCopy, client)
+				}
+				clientsMutex.RUnlock()
+
+				// Send to clients without holding the lock
+				var failedClients []*websocket.Conn
+				for _, client := range clientsCopy {
+					if err := client.WriteMessage(websocket.TextMessage, msg); err != nil {
+						log.Printf("WebSocket broadcast error: %v", err)
 						client.Close()
+						failedClients = append(failedClients, client)
+					}
+				}
+
+				// Remove failed clients
+				if len(failedClients) > 0 {
+					clientsMutex.Lock()
+					for _, client := range failedClients {
 						delete(clients, client)
 					}
+					clientsMutex.Unlock()
 				}
 			}
 		}
@@ -2903,15 +2970,20 @@ func main() {
 		port = "8080"
 	}
 
-	log.Printf("🚀 Restaurant API - JSON Database Version with String IDs:")
-	log.Printf("📍 Server: http://localhost:%s", port)
-	log.Printf("🔗 WebSocket: ws://localhost:%s/ws", port)
-	log.Printf("📚 API Docs: http://localhost:%s/", port)
-	log.Printf("🍽️ Public Foods: http://localhost:%s/api/foods", port)
-	log.Printf("🔍 Search: http://localhost:%s/api/search", port)
-	log.Printf("📤 File Upload: http://localhost:%s/api/upload", port)
-	log.Printf("📊 Admin Stats: http://localhost:%s/api/admin/statistics", port)
-	log.Printf("🖼️ Static Files: http://localhost:%s/uploads/", port)
+	// Get local IP address
+	localIP := getLocalIP()
+
+	log.Printf("🚀 Restaurant API - JSON Database Version (Thread-Safe WebSocket):")
+	log.Printf("📍 Local Server: http://localhost:%s", port)
+	log.Printf("🌐 WiFi Access: http://%s:%s", localIP, port)
+	log.Printf("🔗 WebSocket Local: ws://localhost:%s/ws", port)
+	log.Printf("🔗 WebSocket WiFi: ws://%s:%s/ws", localIP, port)
+	log.Printf("📚 API Docs: http://%s:%s/", localIP, port)
+	log.Printf("🍽️ Public Foods: http://%s:%s/api/foods", localIP, port)
+	log.Printf("🔍 Search: http://%s:%s/api/search", localIP, port)
+	log.Printf("📤 File Upload: http://%s:%s/api/upload", localIP, port)
+	log.Printf("📊 Admin Stats: http://%s:%s/api/admin/statistics", localIP, port)
+	log.Printf("🖼️ Static Files: http://%s:%s/uploads/", localIP, port)
 	log.Printf("🔢 ID System: String IDs (auto: '1', '2', '3'... or custom: 'FOOD_001')")
 	log.Printf("🎯 Manual ID: POST /api/admin/foods with string custom_id")
 	log.Printf("🗄️ Database: JSON Files (%s)", DATA_DIR)
@@ -2919,10 +2991,52 @@ func main() {
 	log.Printf("📍 GPS: Delivery Coordinates Support")
 	log.Printf("👁️ Visibility: Only available foods (isThere=true, stock>0)")
 	log.Printf("🌐 Languages: Foods support UZ/RU/EN, Errors in English")
-	log.Printf("🔒 Thread Safety: Mutex locks for all operations")
+	log.Printf("🔒 Thread Safety: Mutex locks for all operations including WebSocket")
 	log.Printf("📝 String IDs: Full support for custom string identifiers")
+	log.Printf("📱 Mobile Access: Use WiFi IP address to access from other devices")
+	log.Printf("⚠️ Firewall: Make sure port %s is open for incoming connections", port)
+	log.Printf("🔧 FIXED: Concurrent map writes error in WebSocket handling")
+	log.Printf("✅ WebSocket: Thread-safe connection management implemented")
 
-	log.Fatal(r.Run(":" + port))
+	// Start server on all interfaces (0.0.0.0)
+	log.Fatal(r.Run("0.0.0.0:" + port))
 }
 
-//asdasds
+// getLocalIP returns the local IP address
+func getLocalIP() string {
+	conn, err := net.Dial("udp", "8.8.8.8:80")
+	if err != nil {
+		log.Printf("⚠️ Cannot get local IP: %v", err)
+		return "IP_NOT_FOUND"
+	}
+	defer conn.Close()
+
+	localAddr := conn.LocalAddr().(*net.UDPAddr)
+	return localAddr.IP.String()
+}
+
+// Alternative method to get all network interfaces
+func getAllNetworkInterfaces() {
+	interfaces, err := net.Interfaces()
+	if err != nil {
+		log.Printf("Error getting network interfaces: %v", err)
+		return
+	}
+
+	log.Printf("📡 Available Network Interfaces:")
+	for _, iface := range interfaces {
+		if iface.Flags&net.FlagUp != 0 && iface.Flags&net.FlagLoopback == 0 {
+			addrs, err := iface.Addrs()
+			if err != nil {
+				continue
+			}
+			for _, addr := range addrs {
+				if ipnet, ok := addr.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
+					if ipnet.IP.To4() != nil {
+						log.Printf("   • %s: %s", iface.Name, ipnet.IP.String())
+					}
+				}
+			}
+		}
+	}
+}
