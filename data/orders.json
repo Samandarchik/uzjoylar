@@ -164,21 +164,707 @@
       "pickup_code": "pickup_69fac674",
       "type": "own_withdrawal"
     },
-    "status": "pending",
+    "status": "delivered",
     "payment_info": {
       "method": "cash",
-      "status": "pending",
-      "amount": 160000
+      "status": "paid",
+      "amount": 160000,
+      "payment_time": "2025-07-10T15:59:36.89728+05:00"
     },
     "estimated_time": 5,
+    "delivered_at": "2025-07-10T15:59:36.89728+05:00",
     "status_history": [
       {
         "status": "pending",
         "timestamp": "2025-07-08T12:22:46.899224+05:00",
         "note": "Order created"
+      },
+      {
+        "status": "delivered",
+        "timestamp": "2025-07-10T15:59:36.897271+05:00"
       }
     ],
     "created_at": "2025-07-08T12:22:46.899224+05:00",
     "updated_at": "2025-07-08T12:22:46.899224+05:00"
+  },
+  "2025-07-10-10": {
+    "order_id": "2025-07-10-10",
+    "user_number": "998770451117",
+    "user_name": "samandar",
+    "foods": [
+      {
+        "id": "4",
+        "name": "Маринованные соленья",
+        "category": "Холодные закуски",
+        "price": 28000,
+        "description": "Капуста квашенная, капуста маринованная красная, помидоры соленые, огурцы маринованные, перец острый маринованный",
+        "imageUrl": "uploads/manirovini_1751888490.jpg",
+        "count": 2,
+        "total_price": 56000
+      }
+    ],
+    "total_price": 56000,
+    "order_time": "2025-07-10T16:41:58.129898+05:00",
+    "delivery_type": "own_withdrawal",
+    "delivery_info": {
+      "pickup_code": "pickup_b524e112",
+      "type": "own_withdrawal"
+    },
+    "status": "delivered",
+    "payment_info": {
+      "method": "cash",
+      "status": "paid",
+      "amount": 56000,
+      "payment_time": "2025-07-10T16:48:06.332366+05:00"
+    },
+    "estimated_time": 5,
+    "delivered_at": "2025-07-10T16:48:06.332366+05:00",
+    "status_history": [
+      {
+        "status": "pending",
+        "timestamp": "2025-07-10T16:41:58.129898+05:00",
+        "note": "Order created"
+      },
+      {
+        "status": "delivered",
+        "timestamp": "2025-07-10T16:48:06.332346+05:00",
+        "note": "Status changed to delivered"
+      }
+    ],
+    "created_at": "2025-07-10T16:41:58.129898+05:00",
+    "updated_at": "2025-07-10T16:41:58.129898+05:00"
+  },
+  "2025-07-10-11": {
+    "order_id": "2025-07-10-11",
+    "user_number": "998770451117",
+    "user_name": "samandar",
+    "foods": [
+      {
+        "id": "4",
+        "name": "Маринованные соленья",
+        "category": "Холодные закуски",
+        "price": 28000,
+        "description": "Капуста квашенная, капуста маринованная красная, помидоры соленые, огурцы маринованные, перец острый маринованный",
+        "imageUrl": "uploads/manirovini_1751888490.jpg",
+        "count": 2,
+        "total_price": 56000
+      }
+    ],
+    "total_price": 56000,
+    "order_time": "2025-07-10T16:43:56.476156+05:00",
+    "delivery_type": "atTheRestaurant",
+    "delivery_info": {
+      "table_id": "4f0e0220e40b43b5a28747984474d6f7",
+      "table_name": "Zal-1 Stol-6",
+      "type": "atTheRestaurant"
+    },
+    "status": "delivered",
+    "payment_info": {
+      "method": "cash",
+      "status": "paid",
+      "amount": 56000,
+      "payment_time": "2025-07-10T16:47:53.35547+05:00"
+    },
+    "estimated_time": 5,
+    "delivered_at": "2025-07-10T16:47:53.35547+05:00",
+    "status_history": [
+      {
+        "status": "pending",
+        "timestamp": "2025-07-10T16:43:56.476156+05:00",
+        "note": "Order created"
+      },
+      {
+        "status": "preparing",
+        "timestamp": "2025-07-10T16:47:41.908602+05:00",
+        "note": "Status changed to preparing"
+      },
+      {
+        "status": "delivered",
+        "timestamp": "2025-07-10T16:47:53.355408+05:00",
+        "note": "Status changed to delivered"
+      }
+    ],
+    "created_at": "2025-07-10T16:43:56.476156+05:00",
+    "updated_at": "2025-07-10T16:43:56.476156+05:00"
+  },
+  "2025-07-10-12": {
+    "order_id": "2025-07-10-12",
+    "user_number": "998770451117",
+    "user_name": "samandar",
+    "foods": [
+      {
+        "id": "4",
+        "name": "Маринованные соленья",
+        "category": "Холодные закуски",
+        "price": 28000,
+        "description": "Капуста квашенная, капуста маринованная красная, помидоры соленые, огурцы маринованные, перец острый маринованный",
+        "imageUrl": "uploads/manirovini_1751888490.jpg",
+        "count": 2,
+        "total_price": 56000
+      }
+    ],
+    "total_price": 56000,
+    "order_time": "2025-07-10T16:52:33.288374+05:00",
+    "delivery_type": "own_withdrawal",
+    "delivery_info": {
+      "pickup_code": "pickup_7a7a0f78",
+      "type": "own_withdrawal"
+    },
+    "status": "delivered",
+    "payment_info": {
+      "method": "cash",
+      "status": "paid",
+      "amount": 56000,
+      "payment_time": "2025-07-10T16:54:18.340525+05:00"
+    },
+    "estimated_time": 5,
+    "delivered_at": "2025-07-10T16:54:18.340525+05:00",
+    "status_history": [
+      {
+        "status": "pending",
+        "timestamp": "2025-07-10T16:52:33.288374+05:00",
+        "note": "Order created"
+      },
+      {
+        "status": "delivered",
+        "timestamp": "2025-07-10T16:54:18.340521+05:00",
+        "note": "Status changed to delivered"
+      }
+    ],
+    "created_at": "2025-07-10T16:52:33.288374+05:00",
+    "updated_at": "2025-07-10T16:52:33.288374+05:00"
+  },
+  "2025-07-10-13": {
+    "order_id": "2025-07-10-13",
+    "user_number": "998770451117",
+    "user_name": "samandar",
+    "foods": [
+      {
+        "id": "1",
+        "name": "Ассорти из свежих овощей и зелени",
+        "category": "Холодные закуски",
+        "price": 40000,
+        "description": "Сладкий перец, огурцы, помидоры, дайкон, свежая зелень — полезное овощное ассорти",
+        "imageUrl": "uploads/ovishi_1750917436.jpg",
+        "count": 4,
+        "total_price": 160000
+      }
+    ],
+    "total_price": 160000,
+    "order_time": "2025-07-10T16:53:47.16749+05:00",
+    "delivery_type": "own_withdrawal",
+    "delivery_info": {
+      "pickup_code": "pickup_c902a4e0",
+      "type": "own_withdrawal"
+    },
+    "status": "delivered",
+    "payment_info": {
+      "method": "cash",
+      "status": "paid",
+      "amount": 160000,
+      "payment_time": "2025-07-10T16:54:11.976625+05:00"
+    },
+    "estimated_time": 5,
+    "delivered_at": "2025-07-10T16:54:11.976625+05:00",
+    "status_history": [
+      {
+        "status": "pending",
+        "timestamp": "2025-07-10T16:53:47.16749+05:00",
+        "note": "Order created"
+      },
+      {
+        "status": "delivered",
+        "timestamp": "2025-07-10T16:54:11.976344+05:00",
+        "note": "Status changed to delivered"
+      }
+    ],
+    "created_at": "2025-07-10T16:53:47.16749+05:00",
+    "updated_at": "2025-07-10T16:53:47.16749+05:00"
+  },
+  "2025-07-10-14": {
+    "order_id": "2025-07-10-14",
+    "user_number": "998770451117",
+    "user_name": "samandar",
+    "foods": [
+      {
+        "id": "1",
+        "name": "Ассорти из свежих овощей и зелени",
+        "category": "Холодные закуски",
+        "price": 40000,
+        "description": "Сладкий перец, огурцы, помидоры, дайкон, свежая зелень — полезное овощное ассорти",
+        "imageUrl": "http://localhost:8080/uploads/ovishi_1750917436.jpg",
+        "count": 1,
+        "total_price": 40000
+      },
+      {
+        "id": "3",
+        "name": "Домашняя икра из овощей",
+        "category": "Холодные закуски",
+        "price": 22000,
+        "description": "Мировая закуска, которая всегда кстати, к любому столу.",
+        "imageUrl": "uploads/ikra_1751888406.jpg",
+        "count": 25,
+        "total_price": 550000
+      },
+      {
+        "id": "43",
+        "name": "Салат Мароканд",
+        "category": "Салаты",
+        "price": 38000,
+        "description": "Огурец свежий, помидор, лук зеленый, перец светофор, мясо говяжье, оливковое масло",
+        "imageUrl": "uploads/maroqand_1751925734.jpg",
+        "count": 1,
+        "total_price": 38000
+      },
+      {
+        "id": "53",
+        "name": "Язык в сливочном соусе с грибами",
+        "category": "Горячие Закуски",
+        "price": 70000,
+        "description": "Язык говяжий, грибы в сливочном соусе",
+        "imageUrl": "",
+        "count": 8,
+        "total_price": 560000
+      }
+    ],
+    "total_price": 1188000,
+    "order_time": "2025-07-10T17:44:18.767738+05:00",
+    "delivery_type": "own_withdrawal",
+    "delivery_info": {
+      "pickup_code": "pickup_a54e7162",
+      "type": "own_withdrawal"
+    },
+    "status": "delivered",
+    "payment_info": {
+      "method": "cash",
+      "status": "paid",
+      "amount": 1188000,
+      "payment_time": "2025-07-10T17:49:02.507263+05:00"
+    },
+    "estimated_time": 8,
+    "delivered_at": "2025-07-10T17:49:02.507263+05:00",
+    "status_history": [
+      {
+        "status": "pending",
+        "timestamp": "2025-07-10T17:44:18.767738+05:00",
+        "note": "Order created"
+      },
+      {
+        "status": "delivered",
+        "timestamp": "2025-07-10T17:49:02.507235+05:00",
+        "note": "Status changed to delivered"
+      }
+    ],
+    "created_at": "2025-07-10T17:44:18.767738+05:00",
+    "updated_at": "2025-07-10T17:44:18.767738+05:00"
+  },
+  "2025-07-10-15": {
+    "order_id": "2025-07-10-15",
+    "user_number": "998770451117",
+    "user_name": "ㅤㅤㅤㅤㅤㅤ",
+    "foods": [
+      {
+        "id": "3",
+        "name": "Домашняя икра из овощей",
+        "category": "Холодные закуски",
+        "price": 22000,
+        "description": "Мировая закуска, которая всегда кстати, к любому столу.",
+        "imageUrl": "uploads/ikra_1751888406.jpg",
+        "count": 4,
+        "total_price": 88000
+      }
+    ],
+    "total_price": 88000,
+    "order_time": "2025-07-10T18:04:19.178642+05:00",
+    "delivery_type": "own_withdrawal",
+    "delivery_info": {
+      "pickup_code": "pickup_7149dce0",
+      "type": "own_withdrawal"
+    },
+    "status": "delivered",
+    "payment_info": {
+      "method": "cash",
+      "status": "paid",
+      "amount": 88000,
+      "payment_time": "2025-07-10T18:05:00.544811+05:00"
+    },
+    "estimated_time": 8,
+    "delivered_at": "2025-07-10T18:05:00.544811+05:00",
+    "status_history": [
+      {
+        "status": "pending",
+        "timestamp": "2025-07-10T18:04:19.178642+05:00",
+        "note": "Order created"
+      },
+      {
+        "status": "delivered",
+        "timestamp": "2025-07-10T18:05:00.544806+05:00",
+        "note": "Status changed to delivered"
+      }
+    ],
+    "created_at": "2025-07-10T18:04:19.178642+05:00",
+    "updated_at": "2025-07-10T18:04:19.178642+05:00"
+  },
+  "2025-07-10-16": {
+    "order_id": "2025-07-10-16",
+    "user_number": "998770451117",
+    "user_name": "samandar",
+    "foods": [
+      {
+        "id": "3",
+        "name": "Домашняя икра из овощей",
+        "category": "Холодные закуски",
+        "price": 22000,
+        "description": "Мировая закуска, которая всегда кстати, к любому столу.",
+        "imageUrl": "uploads/ikra_1751888406.jpg",
+        "count": 3,
+        "total_price": 66000
+      }
+    ],
+    "total_price": 66000,
+    "order_time": "2025-07-10T18:13:27.753773+05:00",
+    "delivery_type": "atTheRestaurant",
+    "delivery_info": {
+      "table_id": "4f0e0220e40b43b5a28747984474d6f7",
+      "table_name": "Zal-1 Stol-6",
+      "type": "atTheRestaurant"
+    },
+    "status": "pending",
+    "payment_info": {
+      "method": "cash",
+      "status": "pending",
+      "amount": 66000
+    },
+    "estimated_time": 8,
+    "status_history": [
+      {
+        "status": "pending",
+        "timestamp": "2025-07-10T18:13:27.753773+05:00",
+        "note": "Order created"
+      }
+    ],
+    "created_at": "2025-07-10T18:13:27.753773+05:00",
+    "updated_at": "2025-07-10T18:13:27.753773+05:00"
+  },
+  "2025-07-10-4": {
+    "order_id": "2025-07-10-4",
+    "user_number": "998770451117",
+    "user_name": "samandar",
+    "foods": [
+      {
+        "id": "3",
+        "name": "Домашняя икра из овощей",
+        "category": "Холодные закуски",
+        "price": 22000,
+        "description": "Мировая закуска, которая всегда кстати, к любому столу.",
+        "imageUrl": "uploads/ikra_1751888406.jpg",
+        "count": 5,
+        "total_price": 110000
+      }
+    ],
+    "total_price": 110000,
+    "order_time": "2025-07-10T16:10:53.584879+05:00",
+    "delivery_type": "atTheRestaurant",
+    "delivery_info": {
+      "table_id": "4f0e0220e40b43b5a28747984474d6f7",
+      "table_name": "Zal-1 Stol-6",
+      "type": "atTheRestaurant"
+    },
+    "status": "delivered",
+    "payment_info": {
+      "method": "cash",
+      "status": "paid",
+      "amount": 110000,
+      "payment_time": "2025-07-10T16:55:25.029738+05:00"
+    },
+    "estimated_time": 8,
+    "delivered_at": "2025-07-10T16:55:25.029738+05:00",
+    "status_history": [
+      {
+        "status": "pending",
+        "timestamp": "2025-07-10T16:10:53.584879+05:00",
+        "note": "Order created"
+      },
+      {
+        "status": "delivered",
+        "timestamp": "2025-07-10T16:55:25.029737+05:00",
+        "note": "Status changed to delivered"
+      }
+    ],
+    "created_at": "2025-07-10T16:10:53.584879+05:00",
+    "updated_at": "2025-07-10T16:10:53.584879+05:00"
+  },
+  "2025-07-10-5": {
+    "order_id": "2025-07-10-5",
+    "user_number": "998770451117",
+    "user_name": "samandar",
+    "foods": [
+      {
+        "id": "1",
+        "name": "Ассорти из свежих овощей и зелени",
+        "category": "Холодные закуски",
+        "price": 40000,
+        "description": "Сладкий перец, огурцы, помидоры, дайкон, свежая зелень — полезное овощное ассорти",
+        "imageUrl": "uploads/ovishi_1750917436.jpg",
+        "count": 4,
+        "total_price": 160000
+      },
+      {
+        "id": "3",
+        "name": "Домашняя икра из овощей",
+        "category": "Холодные закуски",
+        "price": 22000,
+        "description": "Мировая закуска, которая всегда кстати, к любому столу.",
+        "imageUrl": "uploads/ikra_1751888406.jpg",
+        "count": 5,
+        "total_price": 110000
+      },
+      {
+        "id": "4",
+        "name": "Маринованные соленья",
+        "category": "Холодные закуски",
+        "price": 28000,
+        "description": "Капуста квашенная, капуста маринованная красная, помидоры соленые, огурцы маринованные, перец острый маринованный",
+        "imageUrl": "uploads/manirovini_1751888490.jpg",
+        "count": 5,
+        "total_price": 140000
+      }
+    ],
+    "total_price": 410000,
+    "order_time": "2025-07-10T16:11:27.500893+05:00",
+    "delivery_type": "delivery",
+    "delivery_info": {
+      "address": "zarnetan 1",
+      "latitude": 39.687618248871615,
+      "longitude": 66.9823913508446,
+      "phone": "998770451117",
+      "type": "delivery"
+    },
+    "status": "delivered",
+    "payment_info": {
+      "method": "cash",
+      "status": "paid",
+      "amount": 410000,
+      "payment_time": "2025-07-10T16:55:03.25834+05:00"
+    },
+    "estimated_time": 28,
+    "delivered_at": "2025-07-10T16:55:03.25834+05:00",
+    "status_history": [
+      {
+        "status": "pending",
+        "timestamp": "2025-07-10T16:11:27.500893+05:00",
+        "note": "Order created"
+      },
+      {
+        "status": "delivered",
+        "timestamp": "2025-07-10T16:55:03.258339+05:00",
+        "note": "Status changed to delivered"
+      }
+    ],
+    "created_at": "2025-07-10T16:11:27.500893+05:00",
+    "updated_at": "2025-07-10T16:11:27.500893+05:00"
+  },
+  "2025-07-10-6": {
+    "order_id": "2025-07-10-6",
+    "user_number": "998770451117",
+    "user_name": "samandar",
+    "foods": [
+      {
+        "id": "4",
+        "name": "Маринованные соленья",
+        "category": "Холодные закуски",
+        "price": 28000,
+        "description": "Капуста квашенная, капуста маринованная красная, помидоры соленые, огурцы маринованные, перец острый маринованный",
+        "imageUrl": "uploads/manirovini_1751888490.jpg",
+        "count": 6,
+        "total_price": 168000
+      },
+      {
+        "id": "5",
+        "name": "Жареные овощи",
+        "category": "Холодные закуски",
+        "price": 38000,
+        "description": "Цветная капуста, баклажан, кабачки, перец",
+        "imageUrl": "uploads/ovishijarini_1751888545.jpg",
+        "count": 4,
+        "total_price": 152000
+      }
+    ],
+    "total_price": 320000,
+    "order_time": "2025-07-10T16:12:10.89483+05:00",
+    "delivery_type": "own_withdrawal",
+    "delivery_info": {
+      "pickup_code": "pickup_0f294f11",
+      "type": "own_withdrawal"
+    },
+    "status": "delivered",
+    "payment_info": {
+      "method": "cash",
+      "status": "paid",
+      "amount": 320000,
+      "payment_time": "2025-07-10T16:54:58.879005+05:00"
+    },
+    "estimated_time": 10,
+    "delivered_at": "2025-07-10T16:54:58.879005+05:00",
+    "status_history": [
+      {
+        "status": "pending",
+        "timestamp": "2025-07-10T16:12:10.89483+05:00",
+        "note": "Order created"
+      },
+      {
+        "status": "delivered",
+        "timestamp": "2025-07-10T16:54:58.879001+05:00",
+        "note": "Status changed to delivered"
+      }
+    ],
+    "created_at": "2025-07-10T16:12:10.89483+05:00",
+    "updated_at": "2025-07-10T16:12:10.89483+05:00"
+  },
+  "2025-07-10-7": {
+    "order_id": "2025-07-10-7",
+    "user_number": "998770451117",
+    "user_name": "samandar",
+    "foods": [
+      {
+        "id": "3",
+        "name": "Домашняя икра из овощей",
+        "category": "Холодные закуски",
+        "price": 22000,
+        "description": "Мировая закуска, которая всегда кстати, к любому столу.",
+        "imageUrl": "uploads/ikra_1751888406.jpg",
+        "count": 4,
+        "total_price": 88000
+      }
+    ],
+    "total_price": 88000,
+    "order_time": "2025-07-10T16:36:01.471387+05:00",
+    "delivery_type": "own_withdrawal",
+    "delivery_info": {
+      "pickup_code": "pickup_972221d9",
+      "type": "own_withdrawal"
+    },
+    "status": "delivered",
+    "payment_info": {
+      "method": "cash",
+      "status": "paid",
+      "amount": 88000,
+      "payment_time": "2025-07-10T16:54:54.631928+05:00"
+    },
+    "estimated_time": 8,
+    "delivered_at": "2025-07-10T16:54:54.631928+05:00",
+    "status_history": [
+      {
+        "status": "pending",
+        "timestamp": "2025-07-10T16:36:01.471387+05:00",
+        "note": "Order created"
+      },
+      {
+        "status": "delivered",
+        "timestamp": "2025-07-10T16:54:54.631928+05:00",
+        "note": "Status changed to delivered"
+      }
+    ],
+    "created_at": "2025-07-10T16:36:01.471387+05:00",
+    "updated_at": "2025-07-10T16:36:01.471387+05:00"
+  },
+  "2025-07-10-8": {
+    "order_id": "2025-07-10-8",
+    "user_number": "998770451117",
+    "user_name": "samandar",
+    "foods": [
+      {
+        "id": "4",
+        "name": "Маринованные соленья",
+        "category": "Холодные закуски",
+        "price": 28000,
+        "description": "Капуста квашенная, капуста маринованная красная, помидоры соленые, огурцы маринованные, перец острый маринованный",
+        "imageUrl": "uploads/manirovini_1751888490.jpg",
+        "count": 2,
+        "total_price": 56000
+      }
+    ],
+    "total_price": 56000,
+    "order_time": "2025-07-10T16:38:01.422963+05:00",
+    "delivery_type": "own_withdrawal",
+    "delivery_info": {
+      "pickup_code": "pickup_eb67d6cf",
+      "type": "own_withdrawal"
+    },
+    "status": "delivered",
+    "payment_info": {
+      "method": "cash",
+      "status": "paid",
+      "amount": 56000,
+      "payment_time": "2025-07-10T16:48:13.954747+05:00"
+    },
+    "estimated_time": 5,
+    "delivered_at": "2025-07-10T16:48:13.954747+05:00",
+    "status_history": [
+      {
+        "status": "pending",
+        "timestamp": "2025-07-10T16:38:01.422963+05:00",
+        "note": "Order created"
+      },
+      {
+        "status": "delivered",
+        "timestamp": "2025-07-10T16:48:13.954747+05:00",
+        "note": "Status changed to delivered"
+      }
+    ],
+    "created_at": "2025-07-10T16:38:01.422963+05:00",
+    "updated_at": "2025-07-10T16:38:01.422963+05:00"
+  },
+  "2025-07-10-9": {
+    "order_id": "2025-07-10-9",
+    "user_number": "998770451117",
+    "user_name": "samandar",
+    "foods": [
+      {
+        "id": "4",
+        "name": "Маринованные соленья",
+        "category": "Холодные закуски",
+        "price": 28000,
+        "description": "Капуста квашенная, капуста маринованная красная, помидоры соленые, огурцы маринованные, перец острый маринованный",
+        "imageUrl": "uploads/manirovini_1751888490.jpg",
+        "count": 4,
+        "total_price": 112000
+      }
+    ],
+    "total_price": 112000,
+    "order_time": "2025-07-10T16:38:31.288564+05:00",
+    "delivery_type": "own_withdrawal",
+    "delivery_info": {
+      "pickup_code": "pickup_89be3f9d",
+      "type": "own_withdrawal"
+    },
+    "status": "delivered",
+    "payment_info": {
+      "method": "cash",
+      "status": "paid",
+      "amount": 112000,
+      "payment_time": "2025-07-10T16:54:48.508915+05:00"
+    },
+    "estimated_time": 5,
+    "delivered_at": "2025-07-10T16:54:48.508915+05:00",
+    "status_history": [
+      {
+        "status": "pending",
+        "timestamp": "2025-07-10T16:38:31.288564+05:00",
+        "note": "Order created"
+      },
+      {
+        "status": "preparing",
+        "timestamp": "2025-07-10T16:54:24.444171+05:00",
+        "note": "Status changed to preparing"
+      },
+      {
+        "status": "delivered",
+        "timestamp": "2025-07-10T16:54:48.508915+05:00",
+        "note": "Status changed to delivered"
+      }
+    ],
+    "created_at": "2025-07-10T16:38:31.288564+05:00",
+    "updated_at": "2025-07-10T16:38:31.288564+05:00"
   }
 }

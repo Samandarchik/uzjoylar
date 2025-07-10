@@ -1007,20 +1007,22 @@ func sendTelegramMessageToUser(userTgID int64, message string) error {
 
 	return nil
 }
-
 func formatOrderForTelegram(order *Order) string {
-	message := fmt.Sprintf("🍽️ New Order!\n\n")
-	message += fmt.Sprintf("📋 Order ID: %s\n", order.OrderID)
-	message += fmt.Sprintf("👤 Customer: %s\n", order.UserName)
-	message += fmt.Sprintf("📞 Phone: %s\n", order.UserNumber)
-	message += fmt.Sprintf("🕐 Time: %s\n\n", order.OrderTime.Format("15:04"))
+	message := fmt.Sprintf("🍽️ Новый порядок!\n\n")
+	message += fmt.Sprintf("📋 Идентификатор заказа: %s\n", order.OrderID)
+	message += fmt.Sprintf("👤 Клиент: %s\n", order.UserName)
+	message += fmt.Sprintf("📞 Телефон: +%s\n", order.UserNumber)
+	message += fmt.Sprintf("🕐 Время: %s\n\n", order.OrderTime.Format("15:04"))
 
-	message += fmt.Sprintf("🍕 Order Items:\n")
+	message += fmt.Sprintf("🍕 Товары заказа:\n")
 	for _, food := range order.Foods {
-		message += fmt.Sprintf("• %s x%d = %d UZS\n", food.Name, food.Count, food.TotalPrice)
+		message += fmt.Sprintf("• %s x%d\n", food.Name, food.Count)
 	}
 
-	message += fmt.Sprintf("\n💰 Total Amount: %d UZS\n", order.TotalPrice)
+	// 💰 Narxni faqat "atTheRestaurant" bo'lmaganda qo'shamiz
+	if order.DeliveryType != "atTheRestaurant" {
+		message += fmt.Sprintf("\n💰 Total Amount: %d UZS\n", order.TotalPrice)
+	}
 
 	// Delivery information
 	switch order.DeliveryType {
@@ -1037,18 +1039,18 @@ func formatOrderForTelegram(order *Order) string {
 		message += fmt.Sprintf("🏪 Pickup\n")
 	case "atTheRestaurant":
 		if tableName, ok := order.DeliveryInfo["table_name"].(string); ok {
-			message += fmt.Sprintf("🍽️ Table: %s\n", tableName)
+			message += fmt.Sprintf("\n🍽️ Стол: %s\n", tableName)
 		}
 	}
 
-	message += fmt.Sprintf("💳 Payment Method: %s\n", string(order.PaymentInfo.Method))
+	message += fmt.Sprintf("💳 Способ оплаты: %s\n", string(order.PaymentInfo.Method))
 
 	if order.EstimatedTime != nil {
-		message += fmt.Sprintf("⏱️ Preparation Time: %d minutes\n", *order.EstimatedTime)
+		message += fmt.Sprintf("⏱️ Время подготовки: %d минут\n", *order.EstimatedTime)
 	}
 
 	if order.SpecialInstructions != nil && *order.SpecialInstructions != "" {
-		message += fmt.Sprintf("📝 Special Instructions: %s\n", *order.SpecialInstructions)
+		message += fmt.Sprintf("📝 Специальные инструкции: %s\n", *order.SpecialInstructions)
 	}
 
 	return message
@@ -1822,67 +1824,243 @@ func createFoodHandler(c *gin.Context) {
 		"id_type": map[bool]string{true: "custom", false: "auto"}[req.CustomID != nil],
 	})
 }
-
 func updateFoodHandler(c *gin.Context) {
 	foodID := c.Param("food_id") // String ID
 
+	log.Printf("🔍 UPDATE REQUEST: Food ID = %s", foodID)
+
 	food, err := getFoodByID(foodID)
 	if err != nil {
+		log.Printf("❌ Food not found: %s", foodID)
 		c.JSON(http.StatusNotFound, gin.H{"error": "Food not found"})
 		return
 	}
 
+	log.Printf("📖 Current food before update: %+v", food)
+
 	var updates map[string]interface{}
 	if err := c.ShouldBindJSON(&updates); err != nil {
+		log.Printf("❌ JSON bind error: %v", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	// Update fields
+	log.Printf("📝 Received updates: %+v", updates)
+
+	// Update fields with detailed logging
 	if name, ok := updates["name"].(string); ok {
+		log.Printf("🔄 Updating name: %s -> %s", food.Name, name)
 		food.Name = name
 	}
+
+	if nameUz, ok := updates["nameUz"].(string); ok {
+		log.Printf("🔄 Updating nameUz: %s", nameUz)
+		if food.Names == nil {
+			food.Names = make(map[string]string)
+		}
+		food.Names["uz"] = nameUz
+	}
+
+	if nameRu, ok := updates["nameRu"].(string); ok {
+		log.Printf("🔄 Updating nameRu: %s", nameRu)
+		if food.Names == nil {
+			food.Names = make(map[string]string)
+		}
+		food.Names["ru"] = nameRu
+	}
+
+	if nameEn, ok := updates["nameEn"].(string); ok {
+		log.Printf("🔄 Updating nameEn: %s", nameEn)
+		if food.Names == nil {
+			food.Names = make(map[string]string)
+		}
+		food.Names["en"] = nameEn
+	}
+
 	if category, ok := updates["category"].(string); ok {
+		log.Printf("🔄 Updating category: %s -> %s", food.Category, category)
 		food.Category = category
 	}
+
 	if price, ok := updates["price"].(float64); ok {
+		log.Printf("🔄 Updating price: %d -> %d", food.Price, int(price))
 		food.Price = int(price)
 	}
+
 	if description, ok := updates["description"].(string); ok {
+		log.Printf("🔄 Updating description: %s -> %s", food.Description, description)
 		food.Description = description
 	}
+
+	if descriptionUz, ok := updates["descriptionUz"].(string); ok {
+		log.Printf("🔄 Updating descriptionUz: %s", descriptionUz)
+		if food.Descriptions == nil {
+			food.Descriptions = make(map[string]string)
+		}
+		food.Descriptions["uz"] = descriptionUz
+	}
+
+	if descriptionRu, ok := updates["descriptionRu"].(string); ok {
+		log.Printf("🔄 Updating descriptionRu: %s", descriptionRu)
+		if food.Descriptions == nil {
+			food.Descriptions = make(map[string]string)
+		}
+		food.Descriptions["ru"] = descriptionRu
+	}
+
+	if descriptionEn, ok := updates["descriptionEn"].(string); ok {
+		log.Printf("🔄 Updating descriptionEn: %s", descriptionEn)
+		if food.Descriptions == nil {
+			food.Descriptions = make(map[string]string)
+		}
+		food.Descriptions["en"] = descriptionEn
+	}
+
 	if isThere, ok := updates["isThere"].(bool); ok {
+		log.Printf("🔄 Updating isThere: %v -> %v", food.IsThere, isThere)
 		food.IsThere = isThere
 	}
+
 	if imageURL, ok := updates["imageUrl"].(string); ok {
+		log.Printf("🔄 Updating imageUrl: %s -> %s", food.ImageURL, imageURL)
 		food.ImageURL = imageURL
 	}
+
 	if prepTime, ok := updates["preparation_time"].(float64); ok {
+		log.Printf("🔄 Updating preparation_time: %d -> %d", food.PreparationTime, int(prepTime))
 		food.PreparationTime = int(prepTime)
 	}
+
 	if stock, ok := updates["stock"].(float64); ok {
+		log.Printf("🔄 Updating stock: %d -> %d", food.Stock, int(stock))
 		food.Stock = int(stock)
 	}
+
 	if isPopular, ok := updates["is_popular"].(bool); ok {
+		log.Printf("🔄 Updating is_popular: %v -> %v", food.IsPopular, isPopular)
 		food.IsPopular = isPopular
 	}
+
 	if discount, ok := updates["discount"].(float64); ok {
+		log.Printf("🔄 Updating discount: %d -> %d", food.Discount, int(discount))
 		food.Discount = int(discount)
+	}
+
+	if comment, ok := updates["comment"].(string); ok {
+		log.Printf("🔄 Updating comment: %s -> %s", food.Comment, comment)
+		food.Comment = comment
+	}
+
+	if rating, ok := updates["star_rating"].(float64); ok {
+		log.Printf("🔄 Updating rating: %f -> %f", food.Rating, rating)
+		food.Rating = rating
+	}
+
+	// Handle ingredients
+	if ingredientsUz, ok := updates["ingredientsUz"].([]interface{}); ok {
+		log.Printf("🔄 Updating ingredientsUz")
+		if food.Ingredients == nil {
+			food.Ingredients = make(map[string][]string)
+		}
+		var strSlice []string
+		for _, v := range ingredientsUz {
+			if str, ok := v.(string); ok {
+				strSlice = append(strSlice, str)
+			}
+		}
+		food.Ingredients["uz"] = strSlice
+	}
+
+	if ingredientsRu, ok := updates["ingredientsRu"].([]interface{}); ok {
+		log.Printf("🔄 Updating ingredientsRu")
+		if food.Ingredients == nil {
+			food.Ingredients = make(map[string][]string)
+		}
+		var strSlice []string
+		for _, v := range ingredientsRu {
+			if str, ok := v.(string); ok {
+				strSlice = append(strSlice, str)
+			}
+		}
+		food.Ingredients["ru"] = strSlice
+	}
+
+	if ingredientsEn, ok := updates["ingredientsEn"].([]interface{}); ok {
+		log.Printf("🔄 Updating ingredientsEn")
+		if food.Ingredients == nil {
+			food.Ingredients = make(map[string][]string)
+		}
+		var strSlice []string
+		for _, v := range ingredientsEn {
+			if str, ok := v.(string); ok {
+				strSlice = append(strSlice, str)
+			}
+		}
+		food.Ingredients["en"] = strSlice
+	}
+
+	// Handle allergens
+	if allergensUz, ok := updates["allergensUz"].([]interface{}); ok {
+		log.Printf("🔄 Updating allergensUz")
+		if food.Allergens == nil {
+			food.Allergens = make(map[string][]string)
+		}
+		var strSlice []string
+		for _, v := range allergensUz {
+			if str, ok := v.(string); ok {
+				strSlice = append(strSlice, str)
+			}
+		}
+		food.Allergens["uz"] = strSlice
+	}
+
+	if allergensRu, ok := updates["allergensRu"].([]interface{}); ok {
+		log.Printf("🔄 Updating allergensRu")
+		if food.Allergens == nil {
+			food.Allergens = make(map[string][]string)
+		}
+		var strSlice []string
+		for _, v := range allergensRu {
+			if str, ok := v.(string); ok {
+				strSlice = append(strSlice, str)
+			}
+		}
+		food.Allergens["ru"] = strSlice
+	}
+
+	if allergensEn, ok := updates["allergensEn"].([]interface{}); ok {
+		log.Printf("🔄 Updating allergensEn")
+		if food.Allergens == nil {
+			food.Allergens = make(map[string][]string)
+		}
+		var strSlice []string
+		for _, v := range allergensEn {
+			if str, ok := v.(string); ok {
+				strSlice = append(strSlice, str)
+			}
+		}
+		food.Allergens["en"] = strSlice
 	}
 
 	food.UpdatedAt = time.Now()
 
+	log.Printf("📖 Food after updates: %+v", food)
+
+	// Save to database
+	log.Printf("💾 Saving food to database...")
 	if err := updateFood(food); err != nil {
+		log.Printf("❌ Food update error: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Food update error"})
 		return
 	}
+
+	log.Printf("✅ Food updated successfully: ID=%s", food.ID)
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Food updated successfully",
 		"food":    food,
 	})
 }
-
 func deleteFoodHandler(c *gin.Context) {
 	foodID := c.Param("food_id") // String ID
 
