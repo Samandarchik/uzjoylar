@@ -16,7 +16,7 @@
     "category": "gazak",
     "price": 40000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/ovishi_1750917436.jpg",
+    "imageUrl": "uploads/ovishi_1750917436.jpg",
     "ingredients": {
       "en": [
         "Sweet bell pepper",
@@ -124,7 +124,7 @@
     "category": "issiq_taom",
     "price": 100000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/umakaygovya_1751154903.jpg",
+    "imageUrl": "uploads/umakaygovya_1751154903.jpg",
     "ingredients": {
       "en": [
         "Beef",
@@ -175,7 +175,7 @@
     "category": "issiq_taom",
     "price": 100000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/umakaybaraniniy_1751154941.jpg",
+    "imageUrl": "uploads/umakaybaraniniy_1751154941.jpg",
     "ingredients": {
       "en": [
         "Lamb",
@@ -226,7 +226,7 @@
     "category": "issiq_taom",
     "price": 230000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/parra_1751154988.jpg",
+    "imageUrl": "uploads/parra_1751154988.jpg",
     "ingredients": {
       "en": [
         "Beef ribs",
@@ -274,7 +274,7 @@
     "category": "issiq_taom",
     "price": 320000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/lapatka_1751155059.jpg",
+    "imageUrl": "uploads/lapatka_1751155059.jpg",
     "ingredients": {
       "en": [
         "Lamb shoulder",
@@ -325,7 +325,7 @@
     "category": "issiq_taom",
     "price": 240000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/sheya_1751155107.jpg",
+    "imageUrl": "uploads/sheya_1751155107.jpg",
     "ingredients": {
       "en": [
         "Lamb neck",
@@ -430,7 +430,7 @@
     "category": "issiq_taom",
     "price": 100000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/noshka_1751155160.jpg",
+    "imageUrl": "uploads/noshka_1751155160.jpg",
     "ingredients": {
       "en": [
         "Lamb leg",
@@ -532,7 +532,7 @@
     "category": "baliq",
     "price": 170000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/buxariskiy_1751929484.jpg",
+    "imageUrl": "uploads/buxariskiy_1751929484.jpg",
     "ingredients": {
       "en": [
         "Sazan fish",
@@ -589,7 +589,7 @@
     "category": "baliq",
     "price": 160000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/sazansharenniy_1751155483.jpg",
+    "imageUrl": "uploads/sazansharenniy_1751155483.jpg",
     "ingredients": {
       "en": [
         "Carp",
@@ -649,7 +649,7 @@
     "category": "baliq",
     "price": 120000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/sazanjevaya_1751155527.jpg",
+    "imageUrl": "uploads/sazanjevaya_1751155527.jpg",
     "ingredients": {
       "en": [
         "Live carp"
@@ -700,7 +700,7 @@
     "category": "baliq",
     "price": 150000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/sazanmangale_1751155591.jpg",
+    "imageUrl": "uploads/sazanmangale_1751155591.jpg",
     "ingredients": {
       "en": [
         "Carp",
@@ -757,7 +757,7 @@
     "category": "baliq",
     "price": 180000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/amurmayi_1751181563.png",
+    "imageUrl": "uploads/amurmayi_1751181563.png",
     "ingredients": {
       "en": [
         "Amur fish",
@@ -877,7 +877,7 @@
     "category": "baliq",
     "price": 200000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/forel_1751181714.jpg",
+    "imageUrl": "uploads/forel_1751181714.jpg",
     "ingredients": {
       "en": [
         "Trout",
@@ -1048,7 +1048,7 @@
     "category": "gazak",
     "price": 110000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/sirniy_1751889964.jpg",
+    "imageUrl": "uploads/sirniy_1751889964.jpg",
     "ingredients": {
       "en": [
         "Various cheeses"
@@ -1204,7 +1204,7 @@
     "category": "shashlik",
     "price": 26000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/kuskavoy_1750918852.jpg",
+    "imageUrl": "uploads/kuskavoy_1750918852.jpg",
     "ingredients": {
       "en": [
         "Lamb",
@@ -1255,7 +1255,7 @@
     "category": "shashlik",
     "price": 30000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/viriska_1750919002.png",
+    "imageUrl": "uploads/viriska_1750919002.png",
     "ingredients": {
       "en": [
         "Beef tenderloin",
@@ -1309,7 +1309,7 @@
     "category": "shashlik",
     "price": 26000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/napaliyon_1750919070.png",
+    "imageUrl": "uploads/napaliyon_1750919070.png",
     "ingredients": {
       "en": [
         "Beef",
@@ -1363,7 +1363,7 @@
     "category": "shashlik",
     "price": 26000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/rulet1751275798.png",
+    "imageUrl": "uploads/rulet1751275798.png",
     "ingredients": {
       "en": [
         "Meat",
@@ -1522,7 +1522,7 @@
     "category": "shashlik",
     "price": 22000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/kirilichka_1751929785.jpg",
+    "imageUrl": "uploads/kirilichka_1751929785.jpg",
     "ingredients": {
       "en": [
         "Chicken",
@@ -1678,7 +1678,7 @@
     "category": "shashlik",
     "price": 20000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/jigar_1751929879.jpg",
+    "imageUrl": "uploads/jigar_1751929879.jpg",
     "ingredients": {
       "en": [
         "Liver",
@@ -1786,7 +1786,7 @@
     "category": "shashlik",
     "price": 10000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/kartofel_1751277204.jpg",
+    "imageUrl": "uploads/kartofel_1751277204.jpg",
     "ingredients": {
       "en": [
         "Potato",
@@ -1885,7 +1885,7 @@
     "category": "shashlik",
     "price": 23000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/shampanyon_1751952700.jpg",
+    "imageUrl": "uploads/shampanyon_1751952700.jpg",
     "ingredients": {
       "en": [
         "Champignons",
@@ -2575,7 +2575,7 @@
     "category": "salat",
     "price": 45000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/muskoy_1751029969.jpg",
+    "imageUrl": "uploads/muskoy_1751029969.jpg",
     "ingredients": {
       "en": [
         "Indeyka",
@@ -2842,7 +2842,7 @@
     "category": "salat",
     "price": 30000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/sezar_1751031307.jpg",
+    "imageUrl": "uploads/sezar_1751031307.jpg",
     "ingredients": {
       "en": [
         "Iceberg",
@@ -3385,7 +3385,7 @@
     "category": "salat",
     "price": 45000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/avokado_1751925495.png",
+    "imageUrl": "uploads/avokado_1751925495.png",
     "ingredients": {
       "en": [
         "Salad mix",
@@ -4003,7 +4003,7 @@
     "category": "zakuska",
     "price": 28000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/mulatka_1751927438.jpg",
+    "imageUrl": "uploads/mulatka_1751927438.jpg",
     "ingredients": {
       "en": [
         "Black bread",
@@ -4357,7 +4357,7 @@
     "category": "gazak",
     "price": 180000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/misnoy_1750917597.jpg",
+    "imageUrl": "uploads/misnoy_1750917597.jpg",
     "ingredients": {
       "en": [
         "Beef tongue",
@@ -4411,7 +4411,7 @@
     "category": "gazak",
     "price": 200000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/riba_1751889288.jpg",
+    "imageUrl": "uploads/riba_1751889288.jpg",
     "ingredients": {
       "en": [
         "Assorted fish",
@@ -4531,7 +4531,7 @@
     "category": "birinchi_taom",
     "price": 22000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/kuriniy_sup_1751126769.jpg",
+    "imageUrl": "uploads/kuriniy_sup_1751126769.jpg",
     "ingredients": {
       "en": [
         "Chicken broth",
@@ -4696,7 +4696,7 @@
     "category": "birinchi_taom",
     "price": 30000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/tushonka_1751126857.jpg",
+    "imageUrl": "uploads/tushonka_1751126857.jpg",
     "ingredients": {
       "en": [
         "Beef",
@@ -4918,7 +4918,7 @@
     "category": "issiq_taom",
     "price": 140000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/vaguri_giribi_1751928197.jpg",
+    "imageUrl": "uploads/vaguri_giribi_1751928197.jpg",
     "ingredients": {
       "en": [
         "Beef tenderloin",
@@ -4972,7 +4972,7 @@
     "category": "issiq_taom",
     "price": 210000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/tandir_1751153799.jpg",
+    "imageUrl": "uploads/tandir_1751153799.jpg",
     "ingredients": {
       "en": [
         "Meat",
@@ -5023,7 +5023,7 @@
     "category": "issiq_taom",
     "price": 85000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/tabaka_1751153746.jpg",
+    "imageUrl": "uploads/tabaka_1751153746.jpg",
     "ingredients": {
       "en": [
         "Chicken",
@@ -5083,7 +5083,7 @@
     "category": "issiq_taom",
     "price": 85000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/kirilichka_1751153677.jpg",
+    "imageUrl": "uploads/kirilichka_1751153677.jpg",
     "ingredients": {
       "en": [
         "Chicken wings",
@@ -5137,7 +5137,7 @@
     "category": "issiq_taom",
     "price": 120000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/dumgoza_1751154155.jpg",
+    "imageUrl": "uploads/dumgoza_1751154155.jpg",
     "ingredients": {
       "en": [
         "Oxtail",
@@ -5197,7 +5197,7 @@
     "category": "issiq_taom",
     "price": 140000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/jizkareka_1751154217.jpg",
+    "imageUrl": "uploads/jizkareka_1751154217.jpg",
     "ingredients": {
       "en": [
         "Lamb ribs",
@@ -5251,7 +5251,7 @@
     "category": "issiq_taom",
     "price": 110000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/jizsemichka_1751154292.jpg",
+    "imageUrl": "uploads/jizsemichka_1751154292.jpg",
     "ingredients": {
       "en": [
         "Lamb testicles",
@@ -5305,7 +5305,7 @@
     "category": "issiq_taom",
     "price": 140000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/jizviriska_1751154332.jpg",
+    "imageUrl": "uploads/jizviriska_1751154332.jpg",
     "ingredients": {
       "en": [
         "Beef tenderloin",
@@ -5359,7 +5359,7 @@
     "category": "issiq_taom",
     "price": 110000,
     "isThere": true,
-    "imageUrl": "http://localhost:8080/uploads/jizvaguri_1751154396.jpg",
+    "imageUrl": "uploads/jizvaguri_1751154396.jpg",
     "ingredients": {
       "en": [
         "Vaguri",

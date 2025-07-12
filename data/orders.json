@@ -1873,10 +1873,10 @@
       "method": "cash",
       "status": "paid",
       "amount": 25307000,
-      "payment_time": "2025-07-11T03:19:24.885332+05:00"
+      "payment_time": "2025-07-11T03:55:51.568755+05:00"
     },
     "estimated_time": 50,
-    "delivered_at": "2025-07-11T03:19:24.885332+05:00",
+    "delivered_at": "2025-07-11T03:55:51.568755+05:00",
     "status_history": [
       {
         "status": "pending",
@@ -1886,6 +1886,16 @@
       {
         "status": "delivered",
         "timestamp": "2025-07-11T03:19:24.88533+05:00",
+        "note": "Status changed to delivered"
+      },
+      {
+        "status": "ready",
+        "timestamp": "2025-07-11T03:55:35.644086+05:00",
+        "note": "Status changed to ready"
+      },
+      {
+        "status": "delivered",
+        "timestamp": "2025-07-11T03:55:51.568753+05:00",
         "note": "Status changed to delivered"
       }
     ],
