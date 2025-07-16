@@ -1,0 +1,110 @@
+{
+  "1": {
+    "id": "1",
+    "names": {
+      "en": "Fire Pilaf",
+      "ru": "Огненный плов",
+      "uz": "Olov palov"
+    },
+    "descriptions": {
+      "en": "Traditional Uzbek pilaf with meat and vegetables",
+      "ru": "Традиционный узбекский плов с мясом и овощами",
+      "uz": "An'anaviy o'zbek palovi, go'sht va sabzavotlar bilan"
+    },
+    "category": "main_dishes",
+    "price": 45000,
+    "discount_percent": 0,
+    "original_price": 0,
+    "image_url": "/uploads/palov.jpg",
+    "is_available": true,
+    "stock": 50,
+    "rating": 4.8,
+    "review_count": 25,
+    "preparation_time": 30,
+    "is_popular": true,
+    "ingredients": {
+      "en": "Rice, meat, carrot, onion, oil",
+      "ru": "Рис, мясо, морковь, лук, масло",
+      "uz": "Guruch, go'sht, sabzi, piyoz, yog'"
+    },
+    "allergens": {
+      "en": "None",
+      "ru": "Нет",
+      "uz": "Yo'q"
+    },
+    "created_at": "2025-07-13T14:32:50.838547+05:00",
+    "updated_at": "2025-07-13T14:32:50.838548+05:00"
+  },
+  "2": {
+    "id": "2",
+    "names": {
+      "en": "Lagman",
+      "ru": "Лагман",
+      "uz": "Lag'mon"
+    },
+    "descriptions": {
+      "en": "Hand-pulled noodles with meat and vegetables",
+      "ru": "Ручная лапша с мясом и овощами",
+      "uz": "Qo'lda tortilgan makaron go'sht va sabzavotlar bilan"
+    },
+    "category": "main_dishes",
+    "price": 31500,
+    "discount_percent": 10,
+    "original_price": 35000,
+    "image_url": "/uploads/lagman.jpg",
+    "is_available": true,
+    "stock": 30,
+    "rating": 4.5,
+    "review_count": 18,
+    "preparation_time": 25,
+    "is_popular": false,
+    "ingredients": {
+      "en": "Noodles, meat, vegetables, spices",
+      "ru": "Лапша, мясо, овощи, специи",
+      "uz": "Makaron, go'sht, sabzavotlar, ziravorlar"
+    },
+    "allergens": {
+      "en": "Gluten",
+      "ru": "Глютен",
+      "uz": "Gluten"
+    },
+    "created_at": "2025-07-13T14:32:50.838548+05:00",
+    "updated_at": "2025-07-13T14:32:50.838548+05:00"
+  },
+  "3": {
+    "id": "3",
+    "names": {
+      "en": "Steamed Dumplings",
+      "ru": "Манты",
+      "uz": "Manti"
+    },
+    "descriptions": {
+      "en": "Steamed dumplings with meat filling",
+      "ru": "Паровые пельмени с мясом",
+      "uz": "Bug'da pishirilgan go'shtli xamir idish"
+    },
+    "category": "main_dishes",
+    "price": 40000,
+    "discount_percent": 0,
+    "original_price": 0,
+    "image_url": "/uploads/manti.jpg",
+    "is_available": true,
+    "stock": 25,
+    "rating": 4.7,
+    "review_count": 22,
+    "preparation_time": 35,
+    "is_popular": true,
+    "ingredients": {
+      "en": "Dough, meat, onion, spices",
+      "ru": "Тесто, мясо, лук, специи",
+      "uz": "Xamir, go'sht, piyoz, ziravorlar"
+    },
+    "allergens": {
+      "en": "Gluten",
+      "ru": "Глютен",
+      "uz": "Gluten"
+    },
+    "created_at": "2025-07-13T14:32:50.838548+05:00",
+    "updated_at": "2025-07-13T14:32:50.838548+05:00"
+  }
+}

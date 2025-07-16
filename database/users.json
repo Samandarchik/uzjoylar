@@ -1,0 +1,28 @@
+{
+  "1": {
+    "id": "1",
+    "phone": "998770451119",
+    "password": "6637e8eaf7621f4164dbaf5a1da35332",
+    "role": "admin",
+    "full_name": "Samandar Admin",
+    "email": "admin@restaurant.uz",
+    "tg_id": 1066137436,
+    "language": "ru",
+    "is_active": true,
+    "created_at": "2025-07-13T14:32:50.838143+05:00",
+    "updated_at": "2025-07-13T14:32:50.838144+05:00"
+  },
+  "2": {
+    "id": "2",
+    "phone": "998901234567",
+    "password": "cc03e747a6afbbcbf8be7668acfebee5",
+    "role": "user",
+    "full_name": "Test User",
+    "email": "test@user.uz",
+    "tg_id": 1066137436,
+    "language": "uz",
+    "is_active": true,
+    "created_at": "2025-07-13T14:32:50.83839+05:00",
+    "updated_at": "2025-07-13T14:32:50.83839+05:00"
+  }
+}

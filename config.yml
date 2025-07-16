@@ -1,0 +1,7 @@
+tunnel: amur-tunnel
+credentials-file: /Users/samandar/.cloudflared/17ac7b58-ac63-4acc-ba18-f3ace1dc7231.json
+
+ingress:
+  - hostname: backendaip.amur1.uz
+    service: http://localhost:8081
+  - service: http_status:404

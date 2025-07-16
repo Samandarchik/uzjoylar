@@ -1301,16 +1301,8 @@ func getAllFoods() ([]*Food, error) {
 		}
 	}
 
-	// Sort by ID ascending (convert string to int for proper sorting)
+	// Sort by ID ascending (now ID is int)
 	sort.Slice(result, func(i, j int) bool {
-		idI, errI := strconv.ParseInt(result[i].ID, 10, 64)
-		idJ, errJ := strconv.ParseInt(result[j].ID, 10, 64)
-
-		// If both are numeric, sort numerically
-		if errI == nil && errJ == nil {
-			return idI < idJ
-		}
-		// Otherwise, sort lexically
 		return result[i].ID < result[j].ID
 	})
 

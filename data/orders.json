@@ -1901,5 +1901,85 @@
     ],
     "created_at": "2025-07-11T03:17:48.532307+05:00",
     "updated_at": "2025-07-11T03:17:48.532307+05:00"
+  },
+  "2025-07-14-18": {
+    "order_id": "2025-07-14-18",
+    "user_number": "998901234567",
+    "user_name": "Test User",
+    "foods": [
+      {
+        "id": "152",
+        "name": "Говядина вырезка",
+        "category": "Шашлык",
+        "price": 30000,
+        "description": "Нежная и сочная вырезка говядины",
+        "imageUrl": "uploads/viriska_1750919002.png",
+        "count": 4,
+        "total_price": 120000
+      },
+      {
+        "id": "151",
+        "name": "Кусковой (баранина)",
+        "category": "Шашлык",
+        "price": 26000,
+        "description": "Шашлык из кусков баранины",
+        "imageUrl": "uploads/kuskavoy_1750918852.jpg",
+        "count": 5,
+        "total_price": 130000
+      },
+      {
+        "id": "150",
+        "name": "Молотый шашлык",
+        "category": "Шашлык",
+        "price": 25000,
+        "description": "Сочный шашлык из молотой говядины с ароматными специями",
+        "imageUrl": "uploads/moloti_1750852710.jpg",
+        "count": 4,
+        "total_price": 100000
+      },
+      {
+        "id": "153",
+        "name": "Наполеон",
+        "category": "Шашлык",
+        "price": 26000,
+        "description": "Шашлык из говядины и курдючного жира",
+        "imageUrl": "uploads/napaliyon_1750919070.png",
+        "count": 5,
+        "total_price": 130000
+      },
+      {
+        "id": "158",
+        "name": "Крылышки - Филе",
+        "category": "Шашлык",
+        "price": 22000,
+        "description": "Филе жареных куриных крылышек с хрустящей корочкой",
+        "imageUrl": "uploads/kirilichka_1751929785.jpg",
+        "count": 4,
+        "total_price": 88000
+      }
+    ],
+    "total_price": 568000,
+    "order_time": "2025-07-14T21:09:57.728883+05:00",
+    "delivery_type": "own_withdrawal",
+    "delivery_info": {
+      "pickup_code": "pickup_a8bfc04d",
+      "type": "own_withdrawal"
+    },
+    "status": "pending",
+    "payment_info": {
+      "method": "cash",
+      "status": "pending",
+      "amount": 568000
+    },
+    "estimated_time": 12,
+    "status_history": [
+      {
+        "status": "pending",
+        "timestamp": "2025-07-14T21:09:57.728883+05:00",
+        "note": "Order created"
+      }
+    ],
+    "created_at": "2025-07-14T21:09:57.728883+05:00",
+    "updated_at": "2025-07-14T21:09:57.728883+05:00"
   }
 }
