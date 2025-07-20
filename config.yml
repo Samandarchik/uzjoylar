@@ -3,5 +3,5 @@ credentials-file: /Users/samandar/.cloudflared/17ac7b58-ac63-4acc-ba18-f3ace1dc7
 
 ingress:
   - hostname: backendaip.amur1.uz
-    service: http://localhost:8081
+    service: http://localhost:8080
   - service: http_status:404

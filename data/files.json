@@ -153,6 +153,17 @@
     "uploaded_by": "",
     "created_at": "2025-06-29T12:23:01.680693+05:00"
   },
+  "file_1c3309cd": {
+    "id": "file_1c3309cd",
+    "original_name": "cola.jpg",
+    "file_name": "cola_1752670516.jpg",
+    "file_path": "uploads/cola_1752670516.jpg",
+    "file_size": 21265,
+    "mime_type": "image/jpeg",
+    "url": "/uploads/cola_1752670516.jpg",
+    "uploaded_by": "",
+    "created_at": "2025-07-16T17:55:16.72322+05:00"
+  },
   "file_1e82ce21": {
     "id": "file_1e82ce21",
     "original_name": "egzotika.jpg",
@@ -537,6 +548,17 @@
     "url": "/uploads/tandir_1751153799.jpg",
     "uploaded_by": "",
     "created_at": "2025-06-29T04:36:40.029426+05:00"
+  },
+  "file_654aeb52": {
+    "id": "file_654aeb52",
+    "original_name": "chiken.png",
+    "file_name": "chiken_1752675331.png",
+    "file_path": "uploads/chiken_1752675331.png",
+    "file_size": 4205891,
+    "mime_type": "image/png",
+    "url": "/uploads/chiken_1752675331.png",
+    "uploaded_by": "",
+    "created_at": "2025-07-16T19:15:31.267582+05:00"
   },
   "file_67a65ee3": {
     "id": "file_67a65ee3",
@@ -1197,6 +1219,17 @@
     "url": "/uploads/kirilichka_1751929785.jpg",
     "uploaded_by": "",
     "created_at": "2025-07-08T04:09:45.663524+05:00"
+  },
+  "file_ef50a28c": {
+    "id": "file_ef50a28c",
+    "original_name": "pelemn.jpg",
+    "file_name": "pelemn_1752674263.jpg",
+    "file_path": "uploads/pelemn_1752674263.jpg",
+    "file_size": 149467,
+    "mime_type": "image/jpeg",
+    "url": "/uploads/pelemn_1752674263.jpg",
+    "uploaded_by": "",
+    "created_at": "2025-07-16T18:57:43.22191+05:00"
   },
   "file_f31a9e56": {
     "id": "file_f31a9e56",

@@ -2288,6 +2288,123 @@
     "created_at": "2025-06-24T09:51:22.480781+05:00",
     "updated_at": "2025-07-11T03:17:48.496911+05:00"
   },
+  "200": {
+    "id": "200",
+    "names": {
+      "en": "Coca Cola 1.5L",
+      "ru": "Coca Cola 1.5L",
+      "uz": "Coca Cola 1.5L"
+    },
+    "name": "Coca Cola 1.5L",
+    "descriptions": {
+      "en": " ",
+      "ru": " ",
+      "uz": " "
+    },
+    "description": " ",
+    "category": "ichimlik",
+    "price": 19000,
+    "isThere": true,
+    "imageUrl": "uploads/cola_1752670516.jpg",
+    "ingredients": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 15,
+    "stock": 100,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "",
+    "created_at": "2025-07-17T21:32:12.927467+05:00",
+    "updated_at": "2025-07-17T21:32:12.927467+05:00"
+  },
+  "201": {
+    "id": "201",
+    "names": {
+      "en": "Coca Cola 1L",
+      "ru": "Coca Cola 1L",
+      "uz": "Coca Cola 1L"
+    },
+    "name": "Coca Cola 1L",
+    "descriptions": {
+      "en": " ",
+      "ru": " ",
+      "uz": " "
+    },
+    "description": " ",
+    "category": "ichimlik",
+    "price": 15000,
+    "isThere": true,
+    "imageUrl": "http://backendaip.amur1.uz/uploads/cola_1752670516.jpg",
+    "ingredients": {
+      "en": null,
+      "ru": null,
+      "uz": null
+    },
+    "allergens": {
+      "en": null,
+      "ru": null,
+      "uz": null
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 6,
+    "stock": 100,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "",
+    "created_at": "2025-07-17T21:33:00.488538+05:00",
+    "updated_at": "2025-07-18T19:20:04.723547+05:00"
+  },
+  "202": {
+    "id": "202",
+    "names": {
+      "en": "Coca Cola 0,5L",
+      "ru": "Coca Cola 0,5L",
+      "uz": "Coca Cola 0,5L"
+    },
+    "name": "Coca Cola 0,5L",
+    "descriptions": {
+      "en": " ",
+      "ru": " ",
+      "uz": " "
+    },
+    "description": " ",
+    "category": "ichimlik",
+    "price": 10000,
+    "isThere": true,
+    "imageUrl": "uploads/cola_1752670516.jpg",
+    "ingredients": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 15,
+    "stock": 100,
+    "is_popular": false,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "",
+    "created_at": "2025-07-17T21:33:29.724382+05:00",
+    "updated_at": "2025-07-17T21:33:29.724382+05:00"
+  },
   "21": {
     "id": "21",
     "names": {
@@ -4174,7 +4291,7 @@
       "uz": "Xamirda pishirilgan, mol go‘shti va piyozdan tayyorlangan an’anaviy somsа"
     },
     "description": "Xamirda pishirilgan, mol go‘shti va piyozdan tayyorlangan an’anaviy somsа",
-    "category": "non-taomlar",
+    "category": "zakuska",
     "price": 10000,
     "isThere": true,
     "imageUrl": "uploads/samsa_1752669664.png",
@@ -4339,6 +4456,60 @@
     "comment": "",
     "created_at": "2025-07-08T03:42:13.276874+05:00",
     "updated_at": "2025-07-11T03:17:48.419609+05:00"
+  },
+  "59": {
+    "id": "59",
+    "names": {
+      "en": "Chicken Meat",
+      "ru": "Куриное мясо",
+      "uz": "Tovuq go‘shti"
+    },
+    "name": "Tovuq go‘shti",
+    "descriptions": {
+      "en": "Juicy chicken meat cooked with special spices",
+      "ru": "Сочное куриное мясо, приготовленное со специальными специями",
+      "uz": "Mazali va sersuv tovuq go‘shti, maxsus ziravorlar bilan pishirilgan"
+    },
+    "description": "Mazali va sersuv tovuq go‘shti, maxsus ziravorlar bilan pishirilgan",
+    "category": "taomlar",
+    "price": 40000,
+    "isThere": true,
+    "imageUrl": "uploads/chiken_1752675331.png",
+    "ingredients": {
+      "en": [
+        "Chicken meat",
+        "Spices",
+        "Salt",
+        "Oil"
+      ],
+      "ru": [
+        "Куриное мясо",
+        "Специи",
+        "Соль",
+        "Масло"
+      ],
+      "uz": [
+        "Tovuq go‘shti",
+        "Ziravorlar",
+        "Tuz",
+        "Yog‘"
+      ]
+    },
+    "allergens": {
+      "en": [],
+      "ru": [],
+      "uz": []
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 15,
+    "stock": 25,
+    "is_popular": true,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "",
+    "created_at": "2025-07-16T19:15:47.310471+05:00",
+    "updated_at": "2025-07-16T19:15:47.310471+05:00"
   },
   "6": {
     "id": "6",
@@ -4807,7 +4978,7 @@
     "category": "birinchi_taom",
     "price": 30000,
     "isThere": true,
-    "imageUrl": "http://192.168.110.224:8080/uploads/shurpo_1751126681.jpg",
+    "imageUrl": "uploads/shurpo_1751126681.jpg",
     "ingredients": {
       "en": [
         "Lamb",
@@ -4906,6 +5077,72 @@
     "comment": "Sharqona uslubdagi boy ta’mli lag‘mon",
     "created_at": "2025-06-28T21:20:10.573685+05:00",
     "updated_at": "2025-07-11T03:17:48.311923+05:00"
+  },
+  "87": {
+    "id": "87",
+    "names": {
+      "en": "Beef Pelmeni",
+      "ru": "Пельмени с говядиной",
+      "uz": "Mol go‘shtli chuchvara"
+    },
+    "name": "Mol go‘shtli chuchvara",
+    "descriptions": {
+      "en": "Traditional dumplings filled with beef",
+      "ru": "Традиционные пельмени с начинкой из говядины",
+      "uz": "Mol go‘shti bilan to‘ldirilgan, qaynatilgan an’anaviy chuchvara"
+    },
+    "description": "Mol go‘shti bilan to‘ldirilgan, qaynatilgan an’anaviy chuchvara",
+    "category": "taomlar",
+    "price": 30000,
+    "isThere": true,
+    "imageUrl": "uploads/pelemn_1752674263.jpg",
+    "ingredients": {
+      "en": [
+        "Beef",
+        "Onion",
+        "Dough",
+        "Salt",
+        "Pepper"
+      ],
+      "ru": [
+        "Говядина",
+        "Лук",
+        "Тесто",
+        "Соль",
+        "Перец"
+      ],
+      "uz": [
+        "Mol go‘shti",
+        "Piyoz",
+        "Xamir",
+        "Tuz",
+        "Murch"
+      ]
+    },
+    "allergens": {
+      "en": [
+        "Wheat flour",
+        "Egg"
+      ],
+      "ru": [
+        "Пшеничная мука",
+        "Яйцо"
+      ],
+      "uz": [
+        "Bug‘doy uni",
+        "Tuxum"
+      ]
+    },
+    "rating": 0,
+    "review_count": 0,
+    "preparation_time": 12,
+    "stock": 40,
+    "is_popular": true,
+    "discount": 0,
+    "original_price": 0,
+    "comment": "",
+    "created_at": "2025-07-16T19:04:17.113112+05:00",
+    "updated_at": "2025-07-16T19:04:17.113112+05:00"
   },
   "9": {
     "id": "9",

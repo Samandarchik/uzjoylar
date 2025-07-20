@@ -1965,18 +1965,25 @@
       "pickup_code": "pickup_a8bfc04d",
       "type": "own_withdrawal"
     },
-    "status": "pending",
+    "status": "delivered",
     "payment_info": {
       "method": "cash",
-      "status": "pending",
-      "amount": 568000
+      "status": "paid",
+      "amount": 568000,
+      "payment_time": "2025-07-18T19:21:39.239478+05:00"
     },
     "estimated_time": 12,
+    "delivered_at": "2025-07-18T19:21:39.239478+05:00",
     "status_history": [
       {
         "status": "pending",
         "timestamp": "2025-07-14T21:09:57.728883+05:00",
         "note": "Order created"
+      },
+      {
+        "status": "delivered",
+        "timestamp": "2025-07-18T19:21:39.239458+05:00",
+        "note": "Status changed to delivered"
       }
     ],
     "created_at": "2025-07-14T21:09:57.728883+05:00",
