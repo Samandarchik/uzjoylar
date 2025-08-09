@@ -1988,5 +1988,221 @@
     ],
     "created_at": "2025-07-14T21:09:57.728883+05:00",
     "updated_at": "2025-07-14T21:09:57.728883+05:00"
+  },
+  "2025-07-21-19": {
+    "order_id": "2025-07-21-19",
+    "user_number": "998901234567",
+    "user_name": "Test User",
+    "foods": [
+      {
+        "id": "202",
+        "name": "Coca Cola 0,5L",
+        "category": "Напитки",
+        "price": 10000,
+        "description": " ",
+        "imageUrl": "uploads/cola_1752670516.jpg",
+        "count": 5,
+        "total_price": 50000
+      },
+      {
+        "id": "168",
+        "name": "Картофельное пюре",
+        "category": "Гарниры",
+        "price": 15000,
+        "description": "Нежное картофельное пюре с маслом",
+        "imageUrl": "uploads/pure_1751952913.jpg",
+        "count": 4,
+        "total_price": 60000
+      }
+    ],
+    "total_price": 110000,
+    "order_time": "2025-07-21T19:12:18.901403+05:00",
+    "delivery_type": "delivery",
+    "delivery_info": {
+      "address": "h",
+      "latitude": 39.68750765511174,
+      "longitude": 66.98228837476495,
+      "phone": "998901234567",
+      "type": "delivery"
+    },
+    "status": "pending",
+    "payment_info": {
+      "method": "cash",
+      "status": "pending",
+      "amount": 110000
+    },
+    "estimated_time": 35,
+    "status_history": [
+      {
+        "status": "pending",
+        "timestamp": "2025-07-21T19:12:18.901403+05:00",
+        "note": "Order created"
+      }
+    ],
+    "created_at": "2025-07-21T19:12:18.901403+05:00",
+    "updated_at": "2025-07-21T19:12:18.901403+05:00"
+  },
+  "2025-07-21-20": {
+    "order_id": "2025-07-21-20",
+    "user_number": "998901234567",
+    "user_name": "Test User",
+    "foods": [
+      {
+        "id": "3",
+        "name": "Домашняя икра из овощей",
+        "category": "Холодные закуски",
+        "price": 22000,
+        "description": "Мировая закуска, которая всегда кстати, к любому столу.",
+        "imageUrl": "uploads/ikra_1751888406.jpg",
+        "count": 6,
+        "total_price": 132000
+      },
+      {
+        "id": "1",
+        "name": "Ассорти из свежих овощей и зелени",
+        "category": "Холодные закуски",
+        "price": 40000,
+        "description": "Сладкий перец, огурцы, помидоры, дайкон, свежая зелень — полезное овощное ассорти",
+        "imageUrl": "uploads/ovishi_1750917436.jpg",
+        "count": 8,
+        "total_price": 320000
+      },
+      {
+        "id": "17",
+        "name": "Фруктовое ассорти",
+        "category": "Холодные закуски",
+        "price": 155000,
+        "description": "Действительно красивая и полезная закуска ко многим блюдам",
+        "imageUrl": "uploads/furuktoviy_1751890052.jpg",
+        "count": 5,
+        "total_price": 775000
+      }
+    ],
+    "total_price": 1227000,
+    "order_time": "2025-07-21T19:14:27.835904+05:00",
+    "delivery_type": "own_withdrawal",
+    "delivery_info": {
+      "pickup_code": "pickup_57c5fa51",
+      "type": "own_withdrawal"
+    },
+    "status": "pending",
+    "payment_info": {
+      "method": "click",
+      "status": "pending",
+      "amount": 1227000,
+      "transaction_id": "txn_c87e025e"
+    },
+    "estimated_time": 8,
+    "status_history": [
+      {
+        "status": "pending",
+        "timestamp": "2025-07-21T19:14:27.835904+05:00",
+        "note": "Order created"
+      }
+    ],
+    "created_at": "2025-07-21T19:14:27.835904+05:00",
+    "updated_at": "2025-07-21T19:14:27.835904+05:00"
+  },
+  "2025-08-04-21": {
+    "order_id": "2025-08-04-21",
+    "user_number": "998901234567",
+    "user_name": "Test User",
+    "foods": [
+      {
+        "id": "4",
+        "name": "Маринованные соленья",
+        "category": "Холодные закуски",
+        "price": 28000,
+        "description": "Капуста квашенная, капуста маринованная красная, помидоры соленые, огурцы маринованные, перец острый маринованный",
+        "imageUrl": "uploads/manirovini_1751888490.jpg",
+        "count": 13,
+        "total_price": 364000
+      }
+    ],
+    "total_price": 364000,
+    "order_time": "2025-08-04T17:25:21.526053+05:00",
+    "delivery_type": "own_withdrawal",
+    "delivery_info": {
+      "pickup_code": "pickup_a2fe477f",
+      "type": "own_withdrawal"
+    },
+    "status": "delivered",
+    "payment_info": {
+      "method": "cash",
+      "status": "paid",
+      "amount": 364000,
+      "payment_time": "2025-08-04T17:36:26.604253+05:00"
+    },
+    "estimated_time": 5,
+    "delivered_at": "2025-08-04T17:36:26.604253+05:00",
+    "status_history": [
+      {
+        "status": "pending",
+        "timestamp": "2025-08-04T17:25:21.526053+05:00",
+        "note": "Order created"
+      },
+      {
+        "status": "cancelled",
+        "timestamp": "2025-08-04T17:36:08.024071+05:00",
+        "note": "Status changed to cancelled"
+      },
+      {
+        "status": "delivered",
+        "timestamp": "2025-08-04T17:36:26.604243+05:00",
+        "note": "Status changed to delivered"
+      }
+    ],
+    "created_at": "2025-08-04T17:25:21.526053+05:00",
+    "updated_at": "2025-08-04T17:25:21.526053+05:00"
+  },
+  "2025-08-04-22": {
+    "order_id": "2025-08-04-22",
+    "user_number": "998901234567",
+    "user_name": "Test User",
+    "foods": [
+      {
+        "id": "5",
+        "name": "Жареные овощи",
+        "category": "Холодные закуски",
+        "price": 38000,
+        "description": "Цветная капуста, баклажан, кабачки, перец",
+        "imageUrl": "uploads/ovishijarini_1751888545.jpg",
+        "count": 3,
+        "total_price": 114000
+      },
+      {
+        "id": "4",
+        "name": "Маринованные соленья",
+        "category": "Холодные закуски",
+        "price": 28000,
+        "description": "Капуста квашенная, капуста маринованная красная, помидоры соленые, огурцы маринованные, перец острый маринованный",
+        "imageUrl": "uploads/manirovini_1751888490.jpg",
+        "count": 4,
+        "total_price": 112000
+      }
+    ],
+    "total_price": 226000,
+    "order_time": "2025-08-04T17:37:10.474392+05:00",
+    "delivery_type": "own_withdrawal",
+    "delivery_info": {
+      "pickup_code": "pickup_0283af8a",
+      "type": "own_withdrawal"
+    },
+    "status": "pending",
+    "payment_info": {
+      "method": "cash",
+      "status": "pending",
+      "amount": 226000
+    },
+    "estimated_time": 10,
+    "status_history": [
+      {
+        "status": "pending",
+        "timestamp": "2025-08-04T17:37:10.474392+05:00",
+        "note": "Order created"
+      }
+    ],
+    "created_at": "2025-08-04T17:37:10.474392+05:00",
+    "updated_at": "2025-08-04T17:37:10.474392+05:00"
   }
 }
