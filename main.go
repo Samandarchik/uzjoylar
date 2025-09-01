@@ -2959,7 +2959,7 @@ func main() {
 	// Server port
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "2020"
+		port = "3030"
 	}
 
 	// Get local IP address
