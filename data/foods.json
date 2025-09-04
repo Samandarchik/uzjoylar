@@ -325,7 +325,7 @@
     "category": "issiq_taom",
     "price": 240000,
     "isThere": true,
-    "imageUrl": "http://192.168.110.224:8080/uploads/sheya_1751155107.jpg",
+    "imageUrl": "uploads/sheya_1751155107.jpg",
     "ingredients": {
       "en": [
         "Lamb neck",
@@ -430,7 +430,7 @@
     "category": "issiq_taom",
     "price": 100000,
     "isThere": true,
-    "imageUrl": "http://192.168.110.224:8080/uploads/noshka_1751155160.jpg",
+    "imageUrl": "uploads/noshka_1751155160.jpg",
     "ingredients": {
       "en": [
         "Lamb leg",
@@ -532,7 +532,7 @@
     "category": "baliq",
     "price": 170000,
     "isThere": true,
-    "imageUrl": "http://192.168.110.224:8080/uploads/buxariskiy_1751929484.jpg",
+    "imageUrl": "uploads/buxariskiy_1751929484.jpg",
     "ingredients": {
       "en": [
         "Sazan fish",
@@ -589,7 +589,7 @@
     "category": "baliq",
     "price": 160000,
     "isThere": true,
-    "imageUrl": "http://192.168.110.224:8080/uploads/sazansharenniy_1751155483.jpg",
+    "imageUrl": "uploads/sazansharenniy_1751155483.jpg",
     "ingredients": {
       "en": [
         "Carp",
@@ -649,7 +649,7 @@
     "category": "baliq",
     "price": 120000,
     "isThere": true,
-    "imageUrl": "http://192.168.110.224:8080/uploads/sazanjevaya_1751155527.jpg",
+    "imageUrl": "uploads/sazanjevaya_1751155527.jpg",
     "ingredients": {
       "en": [
         "Live carp"
@@ -5434,7 +5434,7 @@
     "category": "issiq_taom",
     "price": 120000,
     "isThere": true,
-    "imageUrl": "http://192.168.110.224:8080/uploads/dumgoza_1751154155.jpg",
+    "imageUrl": "uploads/dumgoza_1751154155.jpg",
     "ingredients": {
       "en": [
         "Oxtail",

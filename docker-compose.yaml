@@ -5,7 +5,7 @@ services:
     env_file:
       - .env
     ports:
-      - 3030:3030
+      - 2020:2020
     networks:
       - amur_ntwrk  
     environment:
