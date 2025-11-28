@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  amur-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: amur-backend
+    ports:
+      - "2020:2020"
+    volumes:
+      - ./data:/app/data
+      - ./uploads:/app/uploads
+    environment:
+      - PORT=2020
+    restart: always
