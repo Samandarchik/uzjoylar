@@ -35,14 +35,26 @@
   },
   "user_4b455be2": {
     "id": "user_4b455be2",
-    "number": "770451119",
-    "password": "6637e8eaf7621f4164dbaf5a1da35332",
+    "number": "711154077",
+    "password": "85ea3a87933142788b2d7217ddc62222",
     "role": "admin",
     "full_name": "Samandar Admin",
     "email": "admin@restaurant.uz",
     "created_at": "2025-07-05T18:13:05.974281+05:00",
     "is_active": true,
     "tg_id": 1713329317,
+    "language": "ru"
+  },
+  "user_9eb6d18a": {
+    "id": "user_9eb6d18a",
+    "number": "770451119",
+    "password": "6637e8eaf7621f4164dbaf5a1da35332",
+    "role": "admin",
+    "full_name": "Samandar Admin",
+    "email": "admin@restaurant.uz",
+    "created_at": "2025-12-21T15:39:24.461105+05:00",
+    "is_active": true,
+    "tg_id": 1066137436,
     "language": "ru"
   },
   "user_c14acec9": {
@@ -54,6 +66,16 @@
     "created_at": "2025-07-12T15:54:40.139263+05:00",
     "is_active": true,
     "tg_id": 1719272430,
+    "language": "ru"
+  },
+  "user_c8c21599": {
+    "id": "user_c8c21599",
+    "number": "770001100",
+    "password": "85ea3a87933142788b2d7217ddc62222",
+    "role": "user",
+    "full_name": "Super Admin",
+    "created_at": "2025-12-21T15:45:04.972183+05:00",
+    "is_active": true,
     "language": "ru"
   }
 }
